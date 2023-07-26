@@ -1,6 +1,6 @@
 //
 //  ExpenseTypes.swift
-//  iExpense
+//  iSpent
 //
 //  Created by Spencer Marks on 7/20/23.
 //

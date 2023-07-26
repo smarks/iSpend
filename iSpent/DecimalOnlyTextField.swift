@@ -1,3 +1,10 @@
+//
+//  DecimalOnlyTextField.swift
+//  iSpent
+//
+//  Original code created by ChatGPT on 07/25/2023
+//  Extended by Spencer Marks starting on 07/25/2023
+//
 import SwiftUI
 
 struct NumericTextField: View {

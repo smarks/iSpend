@@ -1,14 +1,17 @@
 //
 //  View-ExpenseStyling.swift
-//  iExpense
+//  iSpent
 //
-//  Created by Paul Hudson on 06/11/2021.
+//  Original code created by Paul Hudson on 01/11/2021.
+//  Extended by Spencer Marks starting on 07/25/2023
 //
 
 import SwiftUI
 
 extension View {
     func style(for item: ExpenseItem) -> some View {
+        return self.font(.body)
+        /*
         if item.amount < 10 {
             return self.font(.body)
         } else if item.amount < 100 {
@@ -16,5 +19,6 @@ extension View {
         } else {
             return self.font(.title)
         }
+         */
     }
 }

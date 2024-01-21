@@ -1,8 +1,9 @@
 //
 //  ContentView.swift
-//  iExpense
+//  iSpent
 //
-//  Created by Paul Hudson on 01/11/2021.
+//  Original code created by Paul Hudson on 01/11/2021.
+//  Extended by Spencer Marks starting on 07/25/2023
 //
 
 import SwiftUI
@@ -10,8 +11,8 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var expenses = Expenses()
     @State private var showingAddExpense = false
-    let discretionaryTitle = "\(ExpenseType.discretionary)".capitalized
-    let necessaryTitle = "\(ExpenseType.necessary)".capitalized
+    let discretionaryTitle = "\(ExpenseType.Discretionary)".capitalized
+    let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
 
     var body: some View {
         NavigationView {
@@ -20,7 +21,7 @@ struct ContentView: View {
 
                 ExpenseSection(title: necessaryTitle, expenses: expenses.personalItems, deleteItems: removePersonalItems)
             }
-            .navigationTitle(discretionaryTitle)
+            .navigationTitle("iSpend")
             .toolbar {
                 Button {
                     showingAddExpense = true

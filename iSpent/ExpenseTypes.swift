@@ -9,6 +9,6 @@ import Foundation
 
 enum ExpenseType: Codable, Equatable {
 
-    case necessary
-    case discretionary
+    case Necessary
+    case Discretionary
 }

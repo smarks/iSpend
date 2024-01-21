@@ -31,8 +31,6 @@
 		2276FE002A71515C00E0B60F /* DecimalOnlyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDFE2A71515C00E0B60F /* DecimalOnlyTextField.swift */; };
 		2276FE022A7192E700E0B60F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2276FE012A7192E700E0B60F /* README.md */; };
 		2276FE032A7192E700E0B60F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2276FE012A7192E700E0B60F /* README.md */; };
-		2276FE052A719F7100E0B60F /* license.txt in Sources */ = {isa = PBXBuildFile; fileRef = 2276FE042A719F7100E0B60F /* license.txt */; };
-		2276FE062A719F7100E0B60F /* license.txt in Sources */ = {isa = PBXBuildFile; fileRef = 2276FE042A719F7100E0B60F /* license.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,7 +58,6 @@
 		2276FDE92A70526300E0B60F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2276FDFE2A71515C00E0B60F /* DecimalOnlyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalOnlyTextField.swift; sourceTree = "<group>"; };
 		2276FE012A7192E700E0B60F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		2276FE042A719F7100E0B60F /* license.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = license.txt; sourceTree = "<group>"; };
 		515A85BA272FD57B00C6A00C /* iSpent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSpent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -104,7 +101,6 @@
 		515A85B1272FD57B00C6A00C = {
 			isa = PBXGroup;
 			children = (
-				2276FE042A719F7100E0B60F /* license.txt */,
 				2276FE012A7192E700E0B60F /* README.md */,
 				2276FD942A70512900E0B60F /* iSpent */,
 				515A85BB272FD57B00C6A00C /* Products */,
@@ -230,7 +226,6 @@
 				2276FE002A71515C00E0B60F /* DecimalOnlyTextField.swift in Sources */,
 				2276FDF52A70526300E0B60F /* AddView.swift in Sources */,
 				2276FDF12A70526300E0B60F /* ContentView.swift in Sources */,
-				2276FE062A719F7100E0B60F /* license.txt in Sources */,
 				2276FDED2A70526300E0B60F /* ExpenseItem.swift in Sources */,
 				2276FDFB2A70526300E0B60F /* ExpenseTypes.swift in Sources */,
 				2276FDF92A70526300E0B60F /* iSpentApp.swift in Sources */,
@@ -248,7 +243,6 @@
 				2276FDFF2A71515C00E0B60F /* DecimalOnlyTextField.swift in Sources */,
 				2276FDF42A70526300E0B60F /* AddView.swift in Sources */,
 				2276FDF02A70526300E0B60F /* ContentView.swift in Sources */,
-				2276FE052A719F7100E0B60F /* license.txt in Sources */,
 				2276FDEC2A70526300E0B60F /* ExpenseItem.swift in Sources */,
 				2276FDFA2A70526300E0B60F /* ExpenseTypes.swift in Sources */,
 				2276FDF82A70526300E0B60F /* iSpentApp.swift in Sources */,
@@ -449,6 +443,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -456,6 +451,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.orgiamisoftware.ispent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "iExpense-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -483,6 +482,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -490,6 +490,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.orgiamisoftware.ispent;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "iExpense-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

@@ -18,11 +18,11 @@ class Expenses: ObservableObject {
     }
 
     var personalItems: [ExpenseItem] {
-        items.filter { $0.type == ExpenseType.necessary }
+        items.filter { $0.type == ExpenseType.Necessary }
     }
 
     var businessItems: [ExpenseItem] {
-        items.filter { $0.type == ExpenseType.discretionary }
+        items.filter { $0.type == ExpenseType.Discretionary }
     }
 
     init() {

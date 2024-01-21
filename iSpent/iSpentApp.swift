@@ -9,7 +9,7 @@
 import SwiftUI
 
 @main
-struct iSpentApp: App {
+ struct iSpentApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

@@ -10,6 +10,8 @@ import SwiftUI
 
 extension View {
     func style(for item: ExpenseItem) -> some View {
+        return self.font(.body)
+        /*
         if item.amount < 10 {
             return self.font(.body)
         } else if item.amount < 100 {
@@ -17,5 +19,6 @@ extension View {
         } else {
             return self.font(.title)
         }
+         */
     }
 }

@@ -14,10 +14,22 @@ struct NumericTextField: View {
     var body: some View {
         TextField("Amount", text: $numericText)
             .keyboardType(.decimalPad)
-            .onChange(of: numericText) { newValue in
-                numericText = filterNumericText(from: newValue)
+            .onChange(of: numericText) {
+                numericText = filterNumericText(from: numericText)
                 amountDouble = Double(numericText) ??  0.0
+            }.onReceive(NotificationCenter.default.publisher(for: UITextField.textDidBeginEditingNotification)) { obj in
+                if let textField = obj.object as? UITextField {
+                   
+                    textField.selectedTextRange = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument)
+
+                   // textField.selectAll(nil)
+                }
+ 
+            }.onTapGesture {
+                 
             }
+             
+
     }
 
     private func filterNumericText(from text: String) -> String {

@@ -27,20 +27,21 @@ struct AddView: View {
     
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
     
-  
     var disableSave: Bool {
         name.isEmpty
     }
     
+    var messageToRelectOn:String {
+        let index = Int.random(in: 1..<mediations.items.count)
+        return  mediations.items[index]
+    }
  
     
     var body: some View {
-        let length = mediations.items.count
-        var index = Int.random(in: 1..<length)
-        var messageToRelectOn = mediations.items[index]
-
+     
         NavigationView {
             Form {
+               
                 Text(messageToRelectOn).frame(
                     maxWidth: .infinity,
                     maxHeight: .infinity,
@@ -65,11 +66,6 @@ struct AddView: View {
                     } else {
                         sliderValue = 1
                     }
-                }.onAppear(){
-                    messageToRelectOn = mediations.items[index]
-                      index = Int.random(in: 1..<length)
-
-                  
                 }
                 
                 ZStack {

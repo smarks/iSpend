@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var expenses = Expenses()
+    @StateObject var mediations = Mediations()
     @State private var showingAddExpense = false
     let discretionaryTitle = "\(ExpenseType.Discretionary)".capitalized
     let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
@@ -17,9 +18,9 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                ExpenseSection(title: discretionaryTitle, expenses: expenses.businessItems, deleteItems: removeBusinessItems)
+                ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems,  deleteItems: removeNecessaryItems)
 
-                ExpenseSection(title: necessaryTitle, expenses: expenses.personalItems, deleteItems: removePersonalItems)
+                ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems )
             }
             .navigationTitle("iSpend")
             .toolbar {
@@ -30,31 +31,36 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showingAddExpense) {
-                AddView(expenses: expenses)
+                AddView(expenses: expenses, mediations: mediations)
             }
         }
     }
-
+    
+   
+    
     func removeItems(at offsets: IndexSet, in inputArray: [ExpenseItem]) {
         var objectsToDelete = IndexSet()
-
-        for offset in offsets {
-            let item = inputArray[offset]
-
-            if let index = expenses.items.firstIndex(of: item) {
-                objectsToDelete.insert(index)
+        
+       // bug does delete last element  if inputArray.count != 0 {
+        // https://github.com/smarks/iSpend/issues/3
+            for offset in offsets {
+                
+                let item = inputArray[offset]
+                
+                if let index = expenses.items.firstIndex(of: item) {
+                    objectsToDelete.insert(index)
+                }
             }
-        }
-
+       // }
         expenses.items.remove(atOffsets: objectsToDelete)
     }
 
-    func removePersonalItems(at offsets: IndexSet) {
-        removeItems(at: offsets, in: expenses.personalItems)
+    func removeNecessaryItems(at offsets: IndexSet) {
+        removeItems(at: offsets, in: expenses.discretionaryItems)
     }
 
-    func removeBusinessItems(at offsets: IndexSet) {
-        removeItems(at: offsets, in: expenses.businessItems)
+    func removeDiscretionaryItems(at offsets: IndexSet) {
+        removeItems(at: offsets, in: expenses.necessaryItems)
     }
 }
 

@@ -11,8 +11,9 @@ import SwiftUI
 struct ExpenseSection: View {
     let title: String
     let expenses: [ExpenseItem]
+  
     let deleteItems: (IndexSet) -> Void
-
+ 
     var body: some View {
         Section(title) {
             ForEach(expenses) { item in
@@ -31,12 +32,8 @@ struct ExpenseSection: View {
                 }
             }
             .onDelete(perform: deleteItems)
+           
         }
     }
 }
-
-struct ExpenseSection_Previews: PreviewProvider {
-    static var previews: some View {
-        ExpenseSection(title: "Example", expenses: []) { _ in }
-    }
-}
+ 

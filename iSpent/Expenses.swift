@@ -17,11 +17,11 @@ class Expenses: ObservableObject {
         }
     }
 
-    var personalItems: [ExpenseItem] {
+    var discretionaryItems: [ExpenseItem] {
         items.filter { $0.type == ExpenseType.Necessary }
     }
 
-    var businessItems: [ExpenseItem] {
+    var necessaryItems: [ExpenseItem] {
         items.filter { $0.type == ExpenseType.Discretionary }
     }
 

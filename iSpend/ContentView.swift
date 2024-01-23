@@ -17,7 +17,9 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
+           
             List {
+               
                 ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems,  deleteItems: removeNecessaryItems)
 
                 ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems )

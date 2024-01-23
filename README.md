@@ -1,12 +1,12 @@
-# iSpent
+# iSpend
 
 ### About
-iSpent is an iOS application written in Swift using SwiftUI that allows users to record expenditures and categorize them as either "necessary" or "discretionary"
+iSpend is an iOS application written in Swift using SwiftUI that allows users to record expenditures and categorize them as either "necessary" or "discretionary"
 Of course, those terms are subjective, but the gist is that necessary expenditures are things like your mortgage, telephone bill, basic food stuffs, fixing your car, while discretionary expenditures as basically "nice to haves" a new pair of headphones, that shiny red car, etc. 
 
 The idea is, if you use this app as you are about to spend some money, it will get you thinking about whether you really need and / or want to spend it. It might help reduce impulse spending. It could help with a budget. It might help you see where all your money actually goes. You can easily see how much money “you gotta spend” vs. self indulgences. 
 
-I wrote this for me. Your milage may vary. I welcome feedback and suggestions. If I like the suggestion, I will implement it. If I can't or won’t, you are free to fork this codebase and add it yourself. 
+I wrote this for me. Your mileage may vary. I welcome feedback and suggestions. If I like the suggestion, I will implement it. If I can't or won’t, you are free to fork this codebase and add it yourself. 
 
 ### Thanks and Acknowledgements 
 I could not have written this without the help of Paul Hudson, a most excellent teacher and purveyor of the Hacking with Swift website / learning center. 

@@ -21,8 +21,8 @@
 		2276FDF52A70526300E0B60F /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE52A70526200E0B60F /* AddView.swift */; };
 		2276FDF62A70526300E0B60F /* ExpenseSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE62A70526200E0B60F /* ExpenseSection.swift */; };
 		2276FDF72A70526300E0B60F /* ExpenseSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE62A70526200E0B60F /* ExpenseSection.swift */; };
-		2276FDF82A70526300E0B60F /* iSpentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE72A70526200E0B60F /* iSpentApp.swift */; };
-		2276FDF92A70526300E0B60F /* iSpentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE72A70526200E0B60F /* iSpentApp.swift */; };
+		2276FDF82A70526300E0B60F /* iSpendApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE72A70526200E0B60F /* iSpendApp.swift */; };
+		2276FDF92A70526300E0B60F /* iSpendApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE72A70526200E0B60F /* iSpendApp.swift */; };
 		2276FDFA2A70526300E0B60F /* ExpenseTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE82A70526300E0B60F /* ExpenseTypes.swift */; };
 		2276FDFB2A70526300E0B60F /* ExpenseTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE82A70526300E0B60F /* ExpenseTypes.swift */; };
 		2276FDFC2A70526300E0B60F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2276FDE92A70526300E0B60F /* Assets.xcassets */; };
@@ -55,7 +55,7 @@
 		2276FDE42A70526200E0B60F /* View-ExpenseStyling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View-ExpenseStyling.swift"; sourceTree = "<group>"; };
 		2276FDE52A70526200E0B60F /* AddView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
 		2276FDE62A70526200E0B60F /* ExpenseSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseSection.swift; sourceTree = "<group>"; };
-		2276FDE72A70526200E0B60F /* iSpentApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iSpentApp.swift; sourceTree = "<group>"; };
+		2276FDE72A70526200E0B60F /* iSpendApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iSpendApp.swift; sourceTree = "<group>"; };
 		2276FDE82A70526300E0B60F /* ExpenseTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseTypes.swift; sourceTree = "<group>"; };
 		2276FDE92A70526300E0B60F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2276FDFE2A71515C00E0B60F /* DecimalOnlyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalOnlyTextField.swift; sourceTree = "<group>"; };
@@ -94,7 +94,7 @@
 				2276FDE62A70526200E0B60F /* ExpenseSection.swift */,
 				2276FDE82A70526300E0B60F /* ExpenseTypes.swift */,
 				2276FDE22A70526200E0B60F /* FormatStyle-LocalCurrency.swift */,
-				2276FDE72A70526200E0B60F /* iSpentApp.swift */,
+				2276FDE72A70526200E0B60F /* iSpendApp.swift */,
 				2276FDE42A70526200E0B60F /* View-ExpenseStyling.swift */,
 				2276FDDF2A70526200E0B60F /* iSpentTests-Bridging-Header.h */,
 				2276FDFE2A71515C00E0B60F /* DecimalOnlyTextField.swift */,
@@ -233,7 +233,7 @@
 				2276FDF12A70526300E0B60F /* ContentView.swift in Sources */,
 				2276FDED2A70526300E0B60F /* ExpenseItem.swift in Sources */,
 				2276FDFB2A70526300E0B60F /* ExpenseTypes.swift in Sources */,
-				2276FDF92A70526300E0B60F /* iSpentApp.swift in Sources */,
+				2276FDF92A70526300E0B60F /* iSpendApp.swift in Sources */,
 				2276FDF32A70526300E0B60F /* View-ExpenseStyling.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -251,7 +251,7 @@
 				2276FDF02A70526300E0B60F /* ContentView.swift in Sources */,
 				2276FDEC2A70526300E0B60F /* ExpenseItem.swift in Sources */,
 				2276FDFA2A70526300E0B60F /* ExpenseTypes.swift in Sources */,
-				2276FDF82A70526300E0B60F /* iSpentApp.swift in Sources */,
+				2276FDF82A70526300E0B60F /* iSpendApp.swift in Sources */,
 				2276FDF22A70526300E0B60F /* View-ExpenseStyling.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

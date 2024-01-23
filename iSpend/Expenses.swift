@@ -1,6 +1,6 @@
 //
 //  Expenses.swift
-//  iSpent
+//  iSpend
 //
 //  Original code created by Paul Hudson on 01/11/2021.
 //  Extended by Spencer Marks starting on 07/25/2023
@@ -17,11 +17,11 @@ class Expenses: ObservableObject {
         }
     }
 
-    var personalItems: [ExpenseItem] {
+    var discretionaryItems: [ExpenseItem] {
         items.filter { $0.type == ExpenseType.Necessary }
     }
 
-    var businessItems: [ExpenseItem] {
+    var necessaryItems: [ExpenseItem] {
         items.filter { $0.type == ExpenseType.Discretionary }
     }
 

@@ -21,8 +21,8 @@
 		2276FDF52A70526300E0B60F /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE52A70526200E0B60F /* AddView.swift */; };
 		2276FDF62A70526300E0B60F /* ExpenseSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE62A70526200E0B60F /* ExpenseSection.swift */; };
 		2276FDF72A70526300E0B60F /* ExpenseSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE62A70526200E0B60F /* ExpenseSection.swift */; };
-		2276FDF82A70526300E0B60F /* iSpentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE72A70526200E0B60F /* iSpentApp.swift */; };
-		2276FDF92A70526300E0B60F /* iSpentApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE72A70526200E0B60F /* iSpentApp.swift */; };
+		2276FDF82A70526300E0B60F /* iSpendApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE72A70526200E0B60F /* iSpendApp.swift */; };
+		2276FDF92A70526300E0B60F /* iSpendApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE72A70526200E0B60F /* iSpendApp.swift */; };
 		2276FDFA2A70526300E0B60F /* ExpenseTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE82A70526300E0B60F /* ExpenseTypes.swift */; };
 		2276FDFB2A70526300E0B60F /* ExpenseTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE82A70526300E0B60F /* ExpenseTypes.swift */; };
 		2276FDFC2A70526300E0B60F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2276FDE92A70526300E0B60F /* Assets.xcassets */; };
@@ -31,6 +31,8 @@
 		2276FE002A71515C00E0B60F /* DecimalOnlyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDFE2A71515C00E0B60F /* DecimalOnlyTextField.swift */; };
 		2276FE022A7192E700E0B60F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2276FE012A7192E700E0B60F /* README.md */; };
 		2276FE032A7192E700E0B60F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2276FE012A7192E700E0B60F /* README.md */; };
+		22CACF9E2B5F05F100F80071 /* Mediations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CACF9D2B5F05F100F80071 /* Mediations.swift */; };
+		22CACF9F2B5F05F100F80071 /* Mediations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CACF9D2B5F05F100F80071 /* Mediations.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,7 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		2276FD892A703E9300E0B60F /* iSpentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iSpentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2276FD892A703E9300E0B60F /* iSpendTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iSpendTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2276FDDF2A70526200E0B60F /* iSpentTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iSpentTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		2276FDE02A70526200E0B60F /* Expenses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expenses.swift; sourceTree = "<group>"; };
 		2276FDE12A70526200E0B60F /* ExpenseItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseItem.swift; sourceTree = "<group>"; };
@@ -53,12 +55,13 @@
 		2276FDE42A70526200E0B60F /* View-ExpenseStyling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View-ExpenseStyling.swift"; sourceTree = "<group>"; };
 		2276FDE52A70526200E0B60F /* AddView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
 		2276FDE62A70526200E0B60F /* ExpenseSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseSection.swift; sourceTree = "<group>"; };
-		2276FDE72A70526200E0B60F /* iSpentApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iSpentApp.swift; sourceTree = "<group>"; };
+		2276FDE72A70526200E0B60F /* iSpendApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iSpendApp.swift; sourceTree = "<group>"; };
 		2276FDE82A70526300E0B60F /* ExpenseTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseTypes.swift; sourceTree = "<group>"; };
 		2276FDE92A70526300E0B60F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2276FDFE2A71515C00E0B60F /* DecimalOnlyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalOnlyTextField.swift; sourceTree = "<group>"; };
 		2276FE012A7192E700E0B60F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		515A85BA272FD57B00C6A00C /* iSpent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSpent.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		22CACF9D2B5F05F100F80071 /* Mediations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mediations.swift; sourceTree = "<group>"; };
+		515A85BA272FD57B00C6A00C /* iSpend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSpend.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +82,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2276FD942A70512900E0B60F /* iSpent */ = {
+		2276FD942A70512900E0B60F /* iSpend */ = {
 			isa = PBXGroup;
 			children = (
 				2276FDE52A70526200E0B60F /* AddView.swift */,
@@ -87,22 +90,23 @@
 				2276FDE32A70526200E0B60F /* ContentView.swift */,
 				2276FDE12A70526200E0B60F /* ExpenseItem.swift */,
 				2276FDE02A70526200E0B60F /* Expenses.swift */,
+				22CACF9D2B5F05F100F80071 /* Mediations.swift */,
 				2276FDE62A70526200E0B60F /* ExpenseSection.swift */,
 				2276FDE82A70526300E0B60F /* ExpenseTypes.swift */,
 				2276FDE22A70526200E0B60F /* FormatStyle-LocalCurrency.swift */,
-				2276FDE72A70526200E0B60F /* iSpentApp.swift */,
+				2276FDE72A70526200E0B60F /* iSpendApp.swift */,
 				2276FDE42A70526200E0B60F /* View-ExpenseStyling.swift */,
 				2276FDDF2A70526200E0B60F /* iSpentTests-Bridging-Header.h */,
 				2276FDFE2A71515C00E0B60F /* DecimalOnlyTextField.swift */,
 			);
-			path = iSpent;
+			path = iSpend;
 			sourceTree = "<group>";
 		};
 		515A85B1272FD57B00C6A00C = {
 			isa = PBXGroup;
 			children = (
 				2276FE012A7192E700E0B60F /* README.md */,
-				2276FD942A70512900E0B60F /* iSpent */,
+				2276FD942A70512900E0B60F /* iSpend */,
 				515A85BB272FD57B00C6A00C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -110,8 +114,8 @@
 		515A85BB272FD57B00C6A00C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				515A85BA272FD57B00C6A00C /* iSpent.app */,
-				2276FD892A703E9300E0B60F /* iSpentTests.xctest */,
+				515A85BA272FD57B00C6A00C /* iSpend.app */,
+				2276FD892A703E9300E0B60F /* iSpendTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,9 +123,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		2276FD882A703E9300E0B60F /* iSpentTests */ = {
+		2276FD882A703E9300E0B60F /* iSpendTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2276FD8F2A703E9300E0B60F /* Build configuration list for PBXNativeTarget "iSpentTests" */;
+			buildConfigurationList = 2276FD8F2A703E9300E0B60F /* Build configuration list for PBXNativeTarget "iSpendTests" */;
 			buildPhases = (
 				2276FD852A703E9300E0B60F /* Sources */,
 				2276FD862A703E9300E0B60F /* Frameworks */,
@@ -132,14 +136,14 @@
 			dependencies = (
 				2276FD8E2A703E9300E0B60F /* PBXTargetDependency */,
 			);
-			name = iSpentTests;
+			name = iSpendTests;
 			productName = iSpentTests;
-			productReference = 2276FD892A703E9300E0B60F /* iSpentTests.xctest */;
+			productReference = 2276FD892A703E9300E0B60F /* iSpendTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		515A85B9272FD57B00C6A00C /* iSpent */ = {
+		515A85B9272FD57B00C6A00C /* iSpend */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 515A85C8272FD57D00C6A00C /* Build configuration list for PBXNativeTarget "iSpent" */;
+			buildConfigurationList = 515A85C8272FD57D00C6A00C /* Build configuration list for PBXNativeTarget "iSpend" */;
 			buildPhases = (
 				515A85B6272FD57B00C6A00C /* Sources */,
 				515A85B7272FD57B00C6A00C /* Frameworks */,
@@ -149,9 +153,9 @@
 			);
 			dependencies = (
 			);
-			name = iSpent;
+			name = iSpend;
 			productName = iExpense;
-			productReference = 515A85BA272FD57B00C6A00C /* iSpent.app */;
+			productReference = 515A85BA272FD57B00C6A00C /* iSpend.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -162,7 +166,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1310;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					2276FD882A703E9300E0B60F = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -175,7 +179,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 515A85B5272FD57B00C6A00C /* Build configuration list for PBXProject "iSpent" */;
+			buildConfigurationList = 515A85B5272FD57B00C6A00C /* Build configuration list for PBXProject "iSpend" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -188,8 +192,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				515A85B9272FD57B00C6A00C /* iSpent */,
-				2276FD882A703E9300E0B60F /* iSpentTests */,
+				515A85B9272FD57B00C6A00C /* iSpend */,
+				2276FD882A703E9300E0B60F /* iSpendTests */,
 			);
 		};
 /* End PBXProject section */
@@ -220,6 +224,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22CACF9F2B5F05F100F80071 /* Mediations.swift in Sources */,
 				2276FDEF2A70526300E0B60F /* FormatStyle-LocalCurrency.swift in Sources */,
 				2276FDF72A70526300E0B60F /* ExpenseSection.swift in Sources */,
 				2276FDEB2A70526300E0B60F /* Expenses.swift in Sources */,
@@ -228,7 +233,7 @@
 				2276FDF12A70526300E0B60F /* ContentView.swift in Sources */,
 				2276FDED2A70526300E0B60F /* ExpenseItem.swift in Sources */,
 				2276FDFB2A70526300E0B60F /* ExpenseTypes.swift in Sources */,
-				2276FDF92A70526300E0B60F /* iSpentApp.swift in Sources */,
+				2276FDF92A70526300E0B60F /* iSpendApp.swift in Sources */,
 				2276FDF32A70526300E0B60F /* View-ExpenseStyling.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -237,6 +242,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22CACF9E2B5F05F100F80071 /* Mediations.swift in Sources */,
 				2276FDEE2A70526300E0B60F /* FormatStyle-LocalCurrency.swift in Sources */,
 				2276FDF62A70526300E0B60F /* ExpenseSection.swift in Sources */,
 				2276FDEA2A70526300E0B60F /* Expenses.swift in Sources */,
@@ -245,7 +251,7 @@
 				2276FDF02A70526300E0B60F /* ContentView.swift in Sources */,
 				2276FDEC2A70526300E0B60F /* ExpenseItem.swift in Sources */,
 				2276FDFA2A70526300E0B60F /* ExpenseTypes.swift in Sources */,
-				2276FDF82A70526300E0B60F /* iSpentApp.swift in Sources */,
+				2276FDF82A70526300E0B60F /* iSpendApp.swift in Sources */,
 				2276FDF22A70526300E0B60F /* View-ExpenseStyling.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -255,7 +261,7 @@
 /* Begin PBXTargetDependency section */
 		2276FD8E2A703E9300E0B60F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 515A85B9272FD57B00C6A00C /* iSpent */;
+			target = 515A85B9272FD57B00C6A00C /* iSpend */;
 			targetProxy = 2276FD8D2A703E9300E0B60F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -281,7 +287,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iSpent.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/iSpent";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iSpend.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/iSpend";
 			};
 			name = Debug;
 		};
@@ -304,7 +310,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "iSpent/iSpentTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iSpent.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/iSpent";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iSpend.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/iSpend";
 			};
 			name = Release;
 		};
@@ -312,6 +318,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -345,6 +352,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -373,6 +381,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -406,6 +415,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -432,11 +442,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"iSpent/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"iSpend/Preview Content\"";
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = iSpent;
+				INFOPLIST_KEY_CFBundleDisplayName = "iSpend-CBT";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -471,11 +481,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"iSpent/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"iSpend/Preview Content\"";
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = iSpent;
+				INFOPLIST_KEY_CFBundleDisplayName = "iSpend-CBT";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -504,7 +514,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2276FD8F2A703E9300E0B60F /* Build configuration list for PBXNativeTarget "iSpentTests" */ = {
+		2276FD8F2A703E9300E0B60F /* Build configuration list for PBXNativeTarget "iSpendTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2276FD902A703E9300E0B60F /* Debug */,
@@ -513,7 +523,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		515A85B5272FD57B00C6A00C /* Build configuration list for PBXProject "iSpent" */ = {
+		515A85B5272FD57B00C6A00C /* Build configuration list for PBXProject "iSpend" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				515A85C6272FD57D00C6A00C /* Debug */,
@@ -522,7 +532,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		515A85C8272FD57D00C6A00C /* Build configuration list for PBXNativeTarget "iSpent" */ = {
+		515A85C8272FD57D00C6A00C /* Build configuration list for PBXNativeTarget "iSpend" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				515A85C9272FD57D00C6A00C /* Debug */,

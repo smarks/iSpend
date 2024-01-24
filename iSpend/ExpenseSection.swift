@@ -11,10 +11,10 @@ import SwiftUI
 struct ExpenseSection: View {
     let title: String
     let expenses: [ExpenseItem]
-
+    
     let deleteItems: (IndexSet) -> Void
-    let budget: Double = 10000.00
-
+    @State var budget: Double = 10000.00
+    
     var total: Double {
         var t: Double = 0.0
         for item in expenses {
@@ -22,7 +22,7 @@ struct ExpenseSection: View {
         }
         return t
     }
-
+    
     var color: Color {
         if budget > total {
             return Color.blue
@@ -30,43 +30,53 @@ struct ExpenseSection: View {
             return Color.red
         }
     }
-
+    
     var body: some View {
-        Section(title) {
-            HStack {
-                Text("Budget:").font(.headline)
-                Text(budget, format: .localCurrency)
-it                Button(action: {
-                    print("edit budget here")
-                }) {
-                    Image(systemName: "ellipsis.circle").foregroundColor(Color.black)
-                }
-            }
-            HStack{
-                Text("Total: ").font(.headline)
-                Text(total, format: .localCurrency).foregroundColor(color)
-
-            
-            }
-
-            ForEach(expenses) {
-                item in
-
+        NavigationStack {
+            Section(title) {
                 HStack {
-                    VStack(alignment: .leading) {
-                        Text(item.name)
-
-                        //   let typeString = "\(item.type)"
-                        //   Text(typeString)
+                    Text("Budget:").font(.headline)
+                    Text(budget, format: .localCurrency)
+                    NavigationLink {
+                        Text("Edit Screen")
+                    } label: {
+                        Text("Edit")
                     }
-
-                    Spacer()
-
-                    Text(item.amount, format: .localCurrency)
-                        .style(for: item)
                 }
+                                 
+                HStack {
+                    Text("Total: ").font(.headline)
+                    Text(total, format: .localCurrency).foregroundColor(color)
+                }
+                
+                ForEach(expenses) {
+                    item in
+                    
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(item.name)
+                            
+                            //   let typeString = "\(item.type)"
+                            //   Text(typeString)
+                        }
+                        
+                        Spacer()
+                        
+                        Text(item.amount, format: .localCurrency)
+                            .style(for: item)
+                    }
+                }
+                .onDelete(perform: deleteItems)
+          
+                
+                // section
             }
-            .onDelete(perform: deleteItems)
+        
+        // Navigation stack
         }
+        
+    // view
     }
+    
+    // struct
 }

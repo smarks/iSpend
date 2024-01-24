@@ -12,7 +12,7 @@ import SwiftUI
 struct AddView: View {
     @ObservedObject var expenses: Expenses
     @ObservedObject var mediations: Mediations
-    
+ 
     @Environment(\.dismiss) var dismiss
     
     @State private var name = ""
@@ -35,8 +35,7 @@ struct AddView: View {
         let index = Int.random(in: 1..<mediations.items.count)
         return  mediations.items[index]
     }
- 
-    
+  
     var body: some View {
      
         NavigationView {

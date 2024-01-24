@@ -11,18 +11,53 @@ import SwiftUI
 struct ExpenseSection: View {
     let title: String
     let expenses: [ExpenseItem]
-  
+
     let deleteItems: (IndexSet) -> Void
- 
+    let budget: Double = 10000.00
+
+    var total: Double {
+        var t: Double = 0.0
+        for item in expenses {
+            t = t + item.amount
+        }
+        return t
+    }
+
+    var color: Color {
+        if budget > total {
+            return Color.blue
+        } else {
+            return Color.red
+        }
+    }
+
     var body: some View {
         Section(title) {
-            ForEach(expenses) { item in
+            HStack {
+                Text("Budget:").font(.headline)
+                Text(budget, format: .localCurrency)
+it                Button(action: {
+                    print("edit budget here")
+                }) {
+                    Image(systemName: "ellipsis.circle").foregroundColor(Color.black)
+                }
+            }
+            HStack{
+                Text("Total: ").font(.headline)
+                Text(total, format: .localCurrency).foregroundColor(color)
+
+            
+            }
+
+            ForEach(expenses) {
+                item in
+
                 HStack {
                     VStack(alignment: .leading) {
                         Text(item.name)
-                            .font(.headline)
-                        let typeString = "\(item.type)"
-                        Text(typeString)
+
+                        //   let typeString = "\(item.type)"
+                        //   Text(typeString)
                     }
 
                     Spacer()
@@ -32,8 +67,6 @@ struct ExpenseSection: View {
                 }
             }
             .onDelete(perform: deleteItems)
-           
         }
     }
 }
- 

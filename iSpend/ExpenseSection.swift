@@ -32,16 +32,18 @@ struct ExpenseSection: View {
     }
     
     var body: some View {
-        NavigationStack {
+     //   NavigationStack {
             Section(title) {
+              
                 HStack {
-                    Text("Budget:").font(.headline)
-                    Text(budget, format: .localCurrency)
+                    Text("Budget:").font(.headline).padding()
+                    Text(budget, format: .localCurrency).padding()
                     NavigationLink {
-                        Text("Edit Screen")
-                    } label: {
-                        Text("Edit")
-                    }
+                                           Text("Edit Screen")
+                                       } label: {
+                                           Text("Edit")
+                                       }
+                  
                 }
                                  
                 HStack {
@@ -73,7 +75,7 @@ struct ExpenseSection: View {
             }
         
         // Navigation stack
-        }
+      //  }
         
     // view
     }

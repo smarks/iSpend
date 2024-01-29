@@ -14,7 +14,8 @@ struct ContentView: View {
     @State private var showingAddExpense = false
     let discretionaryTitle = "\(ExpenseType.Discretionary)".capitalized
     let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
-
+    @StateObject var settings = Settings()
+    
     var body: some View {
         NavigationView {
            
@@ -35,7 +36,7 @@ struct ContentView: View {
             .sheet(isPresented: $showingAddExpense) {
                 AddView(expenses: expenses, mediations: mediations)
             }
-        }
+        }.environmentObject(settings)
     }
     
    

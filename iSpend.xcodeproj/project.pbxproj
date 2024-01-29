@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		224E5D7A2B61696D00EDA195 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E5D792B61696D00EDA195 /* SettingsView.swift */; };
+		224E5D7B2B61696D00EDA195 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E5D792B61696D00EDA195 /* SettingsView.swift */; };
 		2276FDEA2A70526300E0B60F /* Expenses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE02A70526200E0B60F /* Expenses.swift */; };
 		2276FDEB2A70526300E0B60F /* Expenses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE02A70526200E0B60F /* Expenses.swift */; };
 		2276FDEC2A70526300E0B60F /* ExpenseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE12A70526200E0B60F /* ExpenseItem.swift */; };
@@ -46,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		224E5D792B61696D00EDA195 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		2276FD892A703E9300E0B60F /* iSpendTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iSpendTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2276FDDF2A70526200E0B60F /* iSpentTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iSpentTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		2276FDE02A70526200E0B60F /* Expenses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expenses.swift; sourceTree = "<group>"; };
@@ -85,6 +88,7 @@
 		2276FD942A70512900E0B60F /* iSpend */ = {
 			isa = PBXGroup;
 			children = (
+				224E5D792B61696D00EDA195 /* SettingsView.swift */,
 				2276FDE52A70526200E0B60F /* AddView.swift */,
 				2276FDE92A70526300E0B60F /* Assets.xcassets */,
 				2276FDE32A70526200E0B60F /* ContentView.swift */,
@@ -233,6 +237,7 @@
 				2276FDF12A70526300E0B60F /* ContentView.swift in Sources */,
 				2276FDED2A70526300E0B60F /* ExpenseItem.swift in Sources */,
 				2276FDFB2A70526300E0B60F /* ExpenseTypes.swift in Sources */,
+				224E5D7B2B61696D00EDA195 /* SettingsView.swift in Sources */,
 				2276FDF92A70526300E0B60F /* iSpendApp.swift in Sources */,
 				2276FDF32A70526300E0B60F /* View-ExpenseStyling.swift in Sources */,
 			);
@@ -251,6 +256,7 @@
 				2276FDF02A70526300E0B60F /* ContentView.swift in Sources */,
 				2276FDEC2A70526300E0B60F /* ExpenseItem.swift in Sources */,
 				2276FDFA2A70526300E0B60F /* ExpenseTypes.swift in Sources */,
+				224E5D7A2B61696D00EDA195 /* SettingsView.swift in Sources */,
 				2276FDF82A70526300E0B60F /* iSpendApp.swift in Sources */,
 				2276FDF22A70526300E0B60F /* View-ExpenseStyling.swift in Sources */,
 			);

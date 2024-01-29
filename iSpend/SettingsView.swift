@@ -13,12 +13,14 @@ struct SettingView: View {
     @State private var stringAmount = "0.0"
 
     var body: some View {
-        Text("Settings").bold()
-        Section() {
+        VStack {
+            Text("Settings").bold()
+            HStack{
+                Text("Current Budget:")
+                Text(settings.budget, format: .localCurrency)
+            }
             HStack {
-                Text("Current Budget:").padding()
-                Text(settings.budget, format: .localCurrency).padding()            }
-            HStack {
+                Text("Revised Budget:") 
                 NumericTextField(numericText: $stringAmount, amountDouble: $settings.budget)
             }
         }

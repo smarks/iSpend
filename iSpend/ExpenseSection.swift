@@ -13,10 +13,9 @@ struct ExpenseSection: View {
     let expenses: [ExpenseItem]
 
     let deleteItems: (IndexSet) -> Void
-    
+    let editItems: () -> Void
+
     @EnvironmentObject var settings: Settings
-    
-      
 
     var total: Double {
         var t: Double = 0.0
@@ -27,7 +26,7 @@ struct ExpenseSection: View {
     }
 
     var color: Color {
-        if  settings.budget > total {
+        if settings.budget > total {
             return Color.blue
         } else {
             return Color.red
@@ -39,9 +38,9 @@ struct ExpenseSection: View {
         Section(title) {
             HStack {
                 Text("Budget:").font(.headline)
-                Text( settings.budget, format: .localCurrency)
+                Text(settings.budget, format: .localCurrency)
                 NavigationLink {
-                SettingView()
+                    SettingView()
                 } label: {
                     Text("Edit")
                 }
@@ -58,9 +57,6 @@ struct ExpenseSection: View {
                 HStack {
                     VStack(alignment: .leading) {
                         Text(item.name)
-
-                        //   let typeString = "\(item.type)"
-                        //   Text(typeString)
                     }
 
                     Spacer()
@@ -70,12 +66,10 @@ struct ExpenseSection: View {
                 }
             }
             .onDelete(perform: deleteItems)
+            .onTapGesture(perform: editItems)
 
             // section
         }
-
-        // Navigation stack
-        //  }
 
         // view
     }

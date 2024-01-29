@@ -21,9 +21,9 @@ struct ContentView: View {
            
             List {
                
-                ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems,  deleteItems: removeNecessaryItems)
+                ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems,  deleteItems: removeNecessaryItems, editItems:editNecessaryItems)
 
-                ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems )
+                ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems:editiscretionaryItems)
             }
             .navigationTitle("iSpend")
             .toolbar {
@@ -39,7 +39,22 @@ struct ContentView: View {
         }.environmentObject(settings)
     }
     
-   
+    func editItems(at offsets: IndexSet, in inputArray: [ExpenseItem]) {
+        print("edit items")
+    }
+    func editItems() {
+        print("poop")
+    }
+    func editNecessaryItems() {
+       // editItems(at: offsets, in: expenses.discretionaryItems)
+        editItems()
+      
+    }
+    
+    func editiscretionaryItems() {
+       // editItems(at: offsets, in: expenses.necessaryItems)
+        editItems()
+    }
     
     func removeItems(at offsets: IndexSet, in inputArray: [ExpenseItem]) {
         var objectsToDelete = IndexSet()

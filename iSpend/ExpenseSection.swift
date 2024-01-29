@@ -13,7 +13,10 @@ struct ExpenseSection: View {
     let expenses: [ExpenseItem]
 
     let deleteItems: (IndexSet) -> Void
-    let budget: Double = 10000.00
+    
+    @EnvironmentObject var settings: Settings
+    
+      
 
     var total: Double {
         var t: Double = 0.0
@@ -24,7 +27,7 @@ struct ExpenseSection: View {
     }
 
     var color: Color {
-        if budget > total {
+        if  settings.budget > total {
             return Color.blue
         } else {
             return Color.red
@@ -32,21 +35,29 @@ struct ExpenseSection: View {
     }
 
     var body: some View {
+        //   NavigationStack {
         Section(title) {
             HStack {
                 Text("Budget:").font(.headline)
+ 
                 Text(budget, format: .localCurrency)
               Button(action: {
                     print("edit budget here")
                 }) {
                     Image(systemName: "ellipsis.circle").foregroundColor(Color.black)
+ 
+                Text( settings.budget, format: .localCurrency)
+                NavigationLink {
+                SettingView()
+                } label: {
+                    Text("Edit")
+ 
                 }
             }
-            HStack{
+
+            HStack {
                 Text("Total: ").font(.headline)
                 Text(total, format: .localCurrency).foregroundColor(color)
-
-            
             }
 
             ForEach(expenses) {
@@ -67,6 +78,15 @@ struct ExpenseSection: View {
                 }
             }
             .onDelete(perform: deleteItems)
+
+            // section
         }
+
+        // Navigation stack
+        //  }
+
+        // view
     }
+
+    // struct
 }

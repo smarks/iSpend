@@ -36,7 +36,7 @@ struct ExpenseSection: View {
             HStack {
                 Text("Budget:").font(.headline)
                 Text(budget, format: .localCurrency)
-it                Button(action: {
+              Button(action: {
                     print("edit budget here")
                 }) {
                     Image(systemName: "ellipsis.circle").foregroundColor(Color.black)

@@ -10,24 +10,37 @@ import SwiftUI
 
 struct SettingView: View {
     @EnvironmentObject var settings: Settings
-    @State private var stringAmount = "0.0"
+    @State private var stringNecessaryAmount = "0.0"
+    @State private var stringDiscretionaryAmount = "0.0"
 
     var body: some View {
         VStack {
             Text("Settings").bold()
-            HStack{
-                Text("Current Budget:")
-                Text(settings.budget, format: .localCurrency)
-            }
+      
             HStack {
-                Text("Revised Budget:") 
-                NumericTextField(numericText: $stringAmount, amountDouble: $settings.budget)
-            }
+                Text("Current Discretionary Budget:")
+                Text(settings.discretionaryBudget, format: .localCurrency)
+            }.fixedSize()
+            
+            HStack{
+                Text("Revised Discretionary Budget:")
+                NumericTextField(numericText: $stringDiscretionaryAmount, amountDouble: $settings.discretionaryBudget).border(Color.blue, width: 1)
+            }.fixedSize()
+            
+            HStack {
+                Text("Current Necessary Budget:")
+                Text(settings.necessaryBudget, format: .localCurrency)
+            }.fixedSize()
+            HStack {
+                Text("Revised Necessary Budget:")
+                NumericTextField(numericText: $stringNecessaryAmount, amountDouble: $settings.necessaryBudget).border(Color.blue, width: 1)
+            }.fixedSize()
         }
     }
 }
 
 // new class Theme inherting from ObservableObject
 final class Settings: ObservableObject {
-    @Published var budget: Double = 0.0
+    @Published var discretionaryBudget: Double = 0.0
+    @Published var necessaryBudget: Double = 0.0
 }

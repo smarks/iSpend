@@ -14,8 +14,10 @@ struct ExpenseSection: View {
 
     let deleteItems: (IndexSet) -> Void
     let editItems: () -> Void
-
-    @EnvironmentObject var settings: Settings
+    
+    let budget:Double
+    
+  //  @EnvironmentObject var settings: Settings
 
     var total: Double {
         var t: Double = 0.0
@@ -26,7 +28,7 @@ struct ExpenseSection: View {
     }
 
     var color: Color {
-        if settings.budget > total {
+        if budget > total {
             return Color.blue
         } else {
             return Color.red
@@ -38,7 +40,8 @@ struct ExpenseSection: View {
         Section(title) {
             HStack {
                 Text("Budget:").font(.headline)
-                Text(settings.budget, format: .localCurrency)
+
+                Text(budget, format: .localCurrency)
                 NavigationLink {
                     SettingView()
                 } label: {

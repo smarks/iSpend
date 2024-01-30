@@ -65,12 +65,12 @@ struct ContentView: View {
                 
                 let item = inputArray[offset]
                 
-                if let index = expenses.items.firstIndex(of: item) {
+                if let index = expenses.allItems.firstIndex(of: item) {
                     objectsToDelete.insert(index)
                 }
             }
        // }
-        expenses.items.remove(atOffsets: objectsToDelete)
+        expenses.allItems.remove(atOffsets: objectsToDelete)
     }
 
     func removeNecessaryItems(at offsets: IndexSet) {

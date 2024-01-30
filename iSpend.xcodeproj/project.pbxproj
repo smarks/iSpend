@@ -88,20 +88,20 @@
 		2276FD942A70512900E0B60F /* iSpend */ = {
 			isa = PBXGroup;
 			children = (
-				224E5D792B61696D00EDA195 /* SettingsView.swift */,
 				2276FDE52A70526200E0B60F /* AddView.swift */,
 				2276FDE92A70526300E0B60F /* Assets.xcassets */,
 				2276FDE32A70526200E0B60F /* ContentView.swift */,
+				2276FDFE2A71515C00E0B60F /* DecimalOnlyTextField.swift */,
 				2276FDE12A70526200E0B60F /* ExpenseItem.swift */,
 				2276FDE02A70526200E0B60F /* Expenses.swift */,
-				22CACF9D2B5F05F100F80071 /* Mediations.swift */,
 				2276FDE62A70526200E0B60F /* ExpenseSection.swift */,
 				2276FDE82A70526300E0B60F /* ExpenseTypes.swift */,
 				2276FDE22A70526200E0B60F /* FormatStyle-LocalCurrency.swift */,
 				2276FDE72A70526200E0B60F /* iSpendApp.swift */,
-				2276FDE42A70526200E0B60F /* View-ExpenseStyling.swift */,
 				2276FDDF2A70526200E0B60F /* iSpentTests-Bridging-Header.h */,
-				2276FDFE2A71515C00E0B60F /* DecimalOnlyTextField.swift */,
+				22CACF9D2B5F05F100F80071 /* Mediations.swift */,
+				224E5D792B61696D00EDA195 /* SettingsView.swift */,
+				2276FDE42A70526200E0B60F /* View-ExpenseStyling.swift */,
 			);
 			path = iSpend;
 			sourceTree = "<group>";

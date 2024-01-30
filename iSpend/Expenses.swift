@@ -9,21 +9,21 @@
 import Foundation
 
 class Expenses: ObservableObject {
-    @Published var items = [ExpenseItem]() {
+    @Published var allItems = [ExpenseItem]() {
         didSet {
             
-            if let encoded = try? JSONEncoder().encode(items) {
+            if let encoded = try? JSONEncoder().encode(allItems) {
                 UserDefaults.standard.set(encoded, forKey: "Items")
             }
         }
     }
 
     var discretionaryItems: [ExpenseItem] {
-        items.filter { $0.type == ExpenseType.Necessary }
+        allItems.filter { $0.type == ExpenseType.Necessary }
     }
 
     var necessaryItems: [ExpenseItem] {
-        items.filter { $0.type == ExpenseType.Discretionary }
+        allItems.filter { $0.type == ExpenseType.Discretionary }
     }
 
     init() {
@@ -33,11 +33,11 @@ class Expenses: ObservableObject {
     func loadData() {
         if let savedItems = UserDefaults.standard.data(forKey: "Items") {
             if let decodedItems = try? JSONDecoder().decode([ExpenseItem].self, from: savedItems) {
-                items = decodedItems
+                allItems = decodedItems
                 return
             }
         }
 
-        items = []
+        allItems = []
     }
 }

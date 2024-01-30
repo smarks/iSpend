@@ -17,7 +17,7 @@ struct ExpenseSection: View {
     
     let budget:Double
     
-  //  @EnvironmentObject var settings: Settings
+   @EnvironmentObject var settings: Settings
 
     var total: Double {
         var t: Double = 0.0

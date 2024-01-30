@@ -12,6 +12,8 @@ struct ContentView: View {
     @StateObject var expenses = Expenses()
     @StateObject var mediations = Mediations()
     @State private var showingAddExpense = false
+    @State private var showingSettings = false
+
     let discretionaryTitle = "\(ExpenseType.Discretionary)".capitalized
     let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
     @StateObject var settings = Settings()
@@ -32,10 +34,19 @@ struct ContentView: View {
                 } label: {
                     Image(systemName: "plus")
                 }
+                Button {
+                    showingSettings = true
+                } label: {
+                    Image(systemName: "gear")
+                }
             }
             .sheet(isPresented: $showingAddExpense) {
                 AddView(expenses: expenses, mediations: mediations)
             }
+            .sheet(isPresented: $showingSettings) {
+                SettingView()
+            }
+            
         }.environmentObject(settings)
             .environmentObject(expenses)
     }

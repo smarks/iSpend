@@ -28,6 +28,7 @@ struct SettingView: View {
             HStack {
                 Text("Revised Discretionary Budget:")
                 NumericTextField(numericText: $stringDiscretionaryAmount, amountDouble: $settings.discretionaryBudget).border(Color.blue, width: 1)
+                    
             }.fixedSize()
 
             HStack {
@@ -37,7 +38,8 @@ struct SettingView: View {
             HStack {
                 Text("Revised Necessary Budget:")
                 NumericTextField(numericText: $stringNecessaryAmount, amountDouble: $settings.necessaryBudget).border(Color.blue, width: 1)
-            }.fixedSize()
+            }.fixedSize()  
+                 
         }
         Section {
             Spacer()

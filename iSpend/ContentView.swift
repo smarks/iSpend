@@ -37,18 +37,18 @@ struct ContentView: View {
                 AddView(expenses: expenses, mediations: mediations)
             }
         }.environmentObject(settings)
+            .environmentObject(expenses)
     }
     
     func editItems(at offsets: IndexSet, in inputArray: [ExpenseItem]) {
         print("edit items")
     }
     func editItems() {
-        print("poop")
+        print("dataChanged")
     }
     func editNecessaryItems() {
        // editItems(at: offsets, in: expenses.discretionaryItems)
         editItems()
-      
     }
     
     func editiscretionaryItems() {

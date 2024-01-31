@@ -42,11 +42,7 @@ struct ExpenseSection: View {
                 Text("Budget:").font(.headline)
 
                 Text(budget, format: .localCurrency)
-                NavigationLink {
-                    SettingView()
-                } label: {
-                    Text("Edit")
-                }
+              
             }
 
             HStack {

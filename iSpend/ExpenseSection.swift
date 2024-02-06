@@ -28,7 +28,7 @@ struct ExpenseSection: View {
     }
 
     var color: Color {
-        if budget > total {
+        if budget >= total {
             return Color.blue
         } else {
             return Color.red
@@ -42,11 +42,7 @@ struct ExpenseSection: View {
                 Text("Budget:").font(.headline)
 
                 Text(budget, format: .localCurrency)
-                NavigationLink {
-                    SettingView()
-                } label: {
-                    Text("Edit")
-                }
+              
             }
 
             HStack {

@@ -22,7 +22,7 @@ struct NumericTextField: View {
                    
                     textField.selectedTextRange = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument)
 
-                   // textField.selectAll(nil)
+                    textField.selectAll(nil)
                 }
  
             }.onTapGesture {

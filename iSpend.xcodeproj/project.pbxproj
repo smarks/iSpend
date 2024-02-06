@@ -35,6 +35,7 @@
 		2276FE032A7192E700E0B60F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2276FE012A7192E700E0B60F /* README.md */; };
 		22CACF9E2B5F05F100F80071 /* Mediations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CACF9D2B5F05F100F80071 /* Mediations.swift */; };
 		22CACF9F2B5F05F100F80071 /* Mediations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CACF9D2B5F05F100F80071 /* Mediations.swift */; };
+		22D9D7382B72711E00E84407 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 22D9D7372B72711E00E84407 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 		2276FDFE2A71515C00E0B60F /* DecimalOnlyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecimalOnlyTextField.swift; sourceTree = "<group>"; };
 		2276FE012A7192E700E0B60F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		22CACF9D2B5F05F100F80071 /* Mediations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mediations.swift; sourceTree = "<group>"; };
+		22D9D7372B72711E00E84407 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		515A85BA272FD57B00C6A00C /* iSpend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSpend.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -102,6 +104,7 @@
 				22CACF9D2B5F05F100F80071 /* Mediations.swift */,
 				224E5D792B61696D00EDA195 /* SettingsView.swift */,
 				2276FDE42A70526200E0B60F /* View-ExpenseStyling.swift */,
+				22D9D7372B72711E00E84407 /* Info.plist */,
 			);
 			path = iSpend;
 			sourceTree = "<group>";
@@ -218,6 +221,7 @@
 			files = (
 				2276FE022A7192E700E0B60F /* README.md in Resources */,
 				2276FDFC2A70526300E0B60F /* Assets.xcassets in Resources */,
+				22D9D7382B72711E00E84407 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -98,6 +98,7 @@ struct AddView: View {
                         let item = ExpenseItem(name: name, type: type, amount: amount, note: notes, date: date)
                         expenses.allItems.append(item)
                         dismiss()
+                        
                     }.disabled(disableSave)
                 }
             }

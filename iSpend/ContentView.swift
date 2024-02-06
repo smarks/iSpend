@@ -17,15 +17,13 @@ struct ContentView: View {
     let discretionaryTitle = "\(ExpenseType.Discretionary)".capitalized
     let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
     @StateObject var settings = Settings()
-    
+
     var body: some View {
         NavigationView {
-           
             List {
-               
-                ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems,  deleteItems: removeNecessaryItems, editItems:editNecessaryItems, budget:settings.discretionaryBudget)
+                ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems, deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: settings.discretionaryBudget)
 
-                ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems:editiscretionaryItems,budget:settings.necessaryBudget)
+                ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems: editiscretionaryItems, budget: settings.necessaryBudget)
             }
             .navigationTitle("iSpend")
             .toolbar {
@@ -46,41 +44,42 @@ struct ContentView: View {
             .sheet(isPresented: $showingSettings) {
                 SettingView()
             }
-            
+
         }.environmentObject(settings)
             .environmentObject(expenses)
     }
-    
+
     func editItems(at offsets: IndexSet, in inputArray: [ExpenseItem]) {
         print("edit items")
     }
+
     func editItems() {
         print("dataChanged")
     }
+
     func editNecessaryItems() {
-       // editItems(at: offsets, in: expenses.discretionaryItems)
+        // editItems(at: offsets, in: expenses.discretionaryItems)
         editItems()
     }
-    
+
     func editiscretionaryItems() {
-       // editItems(at: offsets, in: expenses.necessaryItems)
+        // editItems(at: offsets, in: expenses.necessaryItems)
         editItems()
     }
-    
+
     func removeItems(at offsets: IndexSet, in inputArray: [ExpenseItem]) {
         var objectsToDelete = IndexSet()
-        
-       // bug does delete last element  if inputArray.count != 0 {
+
+        // bug does delete last element  if inputArray.count != 0 {
         // https://github.com/smarks/iSpend/issues/3
-            for offset in offsets {
-                
-                let item = inputArray[offset]
-                
-                if let index = expenses.allItems.firstIndex(of: item) {
-                    objectsToDelete.insert(index)
-                }
+        for offset in offsets {
+            let item = inputArray[offset]
+
+            if let index = expenses.allItems.firstIndex(of: item) {
+                objectsToDelete.insert(index)
             }
-       // }
+        }
+        // }
         expenses.allItems.remove(atOffsets: objectsToDelete)
     }
 

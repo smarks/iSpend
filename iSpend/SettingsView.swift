@@ -18,30 +18,36 @@ struct SettingView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            List {
-                NavigationLink(value: SettingsTypes.budgets) {
-                    Text("Budgets")
-                }
-                NavigationLink(value: SettingsTypes.dataManagement) {
-                    Text("Data Management")
-                }
-                NavigationLink(value: SettingsTypes.about) {
-                    Text("About")
-                }
-                .navigationDestination(for: SettingsTypes.self) { type in
-                    switch type {
-                    case .budgets:
-                        let budgets: Budgets = Budgets(name: "Budgets", discretionaryBudget: settings.discretionaryBudget, necessaryBudget: settings.necessaryBudget)
-                        BudgetsView(budgets: budgets)
-                    case .dataManagement:
-                        DataManagementView()
-                    case .about:
-                        AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
+       
+            NavigationStack{
+                List {
+                    NavigationLink(value: SettingsTypes.budgets) {
+                        Text("Budgets")
                     }
-                }.navigationBarTitleDisplayMode(.large)
+                    NavigationLink(value: SettingsTypes.dataManagement) {
+                        Text("Data Management")
+                    }
+                    NavigationLink(value: SettingsTypes.about) {
+                        Text("About")
+                    }
+                    .navigationDestination(for: SettingsTypes.self) { type in
+                        switch type {
+                        case .budgets:
+                            let budgets: Budgets = Budgets(name: "Budgets", discretionaryBudget: settings.discretionaryBudget, necessaryBudget: settings.necessaryBudget)
+                            BudgetsView(budgets: budgets)
+                        case .dataManagement:
+                            DataManagementView()
+                        case .about:
+                            AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
+                        }
+                    }.navigationBarTitleDisplayMode(.large).toolbar {
+                        Button("Done") {
+                            dismiss()
+                        }
+                    }
+                }
             }
-        }
+         
     }
 }
 

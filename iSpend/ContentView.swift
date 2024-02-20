@@ -17,7 +17,7 @@ struct ContentView: View {
     let discretionaryTitle = "\(ExpenseType.Discretionary)".capitalized
     let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
     @StateObject var settings = Settings()
-
+    
     var body: some View {
         NavigationView {
             List {

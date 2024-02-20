@@ -16,8 +16,7 @@ struct SettingView: View {
     var disableSave: Bool {
         isDirty
     }
-
-    var body: some View {
+     var body: some View {
        
             NavigationStack{
                 List {
@@ -55,14 +54,29 @@ struct BudgetsView: View {
     @State private var stringNecessaryAmount = "0.0"
     @State private var stringDiscretionaryAmount = "0.0"
     @State var budgets: Budgets
-
+    @EnvironmentObject var settings: Settings
+    var disableSave: Bool {
+        return settings.discretionaryBudget == budgets.discretionaryBudget &&
+        settings.necessaryBudget == budgets.necessaryBudget
+    }
     var body: some View {
-        VStack {
-            Text("Discretionary Budget:")
-            NumericTextField(numericText: $stringDiscretionaryAmount, amountDouble: $budgets.discretionaryBudget).border(Color.blue, width: 1)
-
-            Text("Necessary Budget:")
-            NumericTextField(numericText: $stringNecessaryAmount, amountDouble: $budgets.necessaryBudget).border(Color.blue, width: 1)
+        NavigationView {
+            VStack {
+                List{
+                    Text("Discretionary Budget:").padding().bold()
+                    NumericTextField(numericText: $stringDiscretionaryAmount, amountDouble: $budgets.discretionaryBudget).fixedSize()
+                    
+                    Text("Necessary Budget:").padding().bold()
+                    NumericTextField(numericText: $stringNecessaryAmount, amountDouble: $budgets.necessaryBudget).fixedSize()
+                }.padding()
+            }
+           
+        }.navigationBarTitleDisplayMode(.large).toolbar {
+            Button("Save") {
+                settings.necessaryBudget = budgets.necessaryBudget
+                settings.discretionaryBudget  = budgets.discretionaryBudget
+            }.disabled(disableSave)
+            
         }
     }
 }
@@ -117,18 +131,23 @@ struct AboutView: View {
         Text("iSpend").bold().font(.system(size: 18))
         if let image = UIImage(named: appIcon) {
             Image(uiImage: image)
-        }
+        }  
+        Text("Thoughtful spending made easier").italic().font(.system(size: 12))
+        Spacer()
         Text("Version \(version) ").font(.system(size: 14))
-        Text("(build \(buildNumber))").font(.system(size: 12))
-        Text("Programmed and Designed by:").font(.system(size: 12))
+        Text("(build \(buildNumber))").font(.system(size: 12))     
+        Spacer()
+        Text("Designed &  Programmed by:").font(.system(size: 12))
         Text("Spencer Marks ⌭ Origami Software").font(.system(size: 12))
         Spacer()
         let link = "[Origami Software](https://origamisoftware.com)"
         Text(.init(link))
+        Spacer()
         let sourceCode = "[M.I.T. licensed Source Code](https://github.com/smarks/iSpend)"
-        Text(.init(sourceCode)).font(.system(size: 10))
+        Text(.init(sourceCode)).font(.system(size: 12))
+        Spacer()
         let privacyPolicyLink = "[Privacy Policy](https://origamisoftware.com/about/ispend-privacy)"
-        Text(.init(privacyPolicyLink)).font(.system(size: 10))
+        Text(.init(privacyPolicyLink)).font(.system(size: 12))
         Spacer()
         let hackWithSwiftURL = "[Thanks Paul](https://www.hackingwithswift.com)"
         Text(.init(hackWithSwiftURL))
@@ -174,19 +193,13 @@ final class Settings: ObservableObject {
     @Published var discretionaryBudget: Double {
         didSet { if let encoded = try? JSONEncoder().encode(discretionaryBudget) {
             UserDefaults.standard.set(encoded, forKey: "discretionaryBudget")
-
-        } else {
-            discretionaryBudget = 0.0
-        }}
+        }  }
     }
 
     @Published var necessaryBudget: Double {
         didSet {
             if let encoded = try? JSONEncoder().encode(necessaryBudget) {
                 UserDefaults.standard.set(encoded, forKey: "necessaryBudget")
-
-            } else {
-                necessaryBudget = 0.0
             }
         }
     }
@@ -198,8 +211,8 @@ final class Settings: ObservableObject {
     }
 
     init() {
-        necessaryBudget = 0.0
-        discretionaryBudget = 0.0
+        necessaryBudget = UserDefaults.standard.double(forKey: "necessaryBudget")
+        discretionaryBudget = UserDefaults.standard.double(forKey: "discretionaryBudget")
         appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!
     }
 }

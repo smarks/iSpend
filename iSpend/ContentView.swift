@@ -21,9 +21,9 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems, deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: settings.discretionaryBudget)
+                ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems, deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: settings.budgets.discretionaryBudget)
 
-                ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems: editiscretionaryItems, budget: settings.necessaryBudget)
+                ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems: editiscretionaryItems, budget: settings.budgets.necessaryBudget)
             }
             .navigationTitle("iSpend")
             .toolbar {

@@ -16,68 +16,105 @@ struct SettingView: View {
     var disableSave: Bool {
         isDirty
     }
-     var body: some View {
-       
-            NavigationStack{
-                List {
-                    NavigationLink(value: SettingsTypes.budgets) {
-                        Text("Budgets")
+
+    var body: some View {
+        NavigationStack {
+            List {
+                NavigationLink(value: SettingsTypes.budgets) {
+                    Text("Budgets")
+                }
+                NavigationLink(value: SettingsTypes.dataManagement) {
+                    Text("Data Management")
+                }
+                NavigationLink(value: SettingsTypes.about) {
+                    Text("About")
+                }
+                .navigationDestination(for: SettingsTypes.self) { type in
+                    switch type {
+                    case .budgets:
+                        BudgetsView()
+                    case .dataManagement:
+                        DataManagementView()
+                    case .about:
+                        AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
                     }
-                    NavigationLink(value: SettingsTypes.dataManagement) {
-                        Text("Data Management")
-                    }
-                    NavigationLink(value: SettingsTypes.about) {
-                        Text("About")
-                    }
-                    .navigationDestination(for: SettingsTypes.self) { type in
-                        switch type {
-                        case .budgets:
-                            let budgets: Budgets = Budgets(name: "Budgets", discretionaryBudget: settings.discretionaryBudget, necessaryBudget: settings.necessaryBudget)
-                            BudgetsView(budgets: budgets)
-                        case .dataManagement:
-                            DataManagementView()
-                        case .about:
-                            AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
-                        }
-                    }.navigationBarTitleDisplayMode(.large).toolbar {
-                        Button("Done") {
-                            dismiss()
-                        }
+                }.navigationBarTitleDisplayMode(.large).toolbar {
+                    Button("Done") {
+                        dismiss()
                     }
                 }
             }
-         
+        }
     }
 }
 
 struct BudgetsView: View {
     @State private var stringNecessaryAmount = "0.0"
     @State private var stringDiscretionaryAmount = "0.0"
-    @State var budgets: Budgets
-    @EnvironmentObject var settings: Settings
-    var disableSave: Bool {
-        return settings.discretionaryBudget == budgets.discretionaryBudget &&
-        settings.necessaryBudget == budgets.necessaryBudget
+   // @EnvironmentObject var settings: Settings
+   @State var discretionaryBudget: Double {
+        get {
+            if let discretionaryBudgetAmount = UserDefaults.standard.data(forKey: "discretionaryBudget") {
+                if let decodedItem = try? JSONDecoder().decode(Double.self, from: discretionaryBudgetAmount) {
+                    return decodedItem
+                } else {
+                    return 0
+                }
+            } else {
+                return 0
+            }
+        }
+        set(value) {
+            if let encoded = try? JSONEncoder().encode(value) {
+                UserDefaults.standard.set(encoded, forKey: "discretionaryBudget")
+            }
+        }
     }
+    
+    var necessaryBudget: Double {
+        get {
+            if let discretionaryBudgetAmount = UserDefaults.standard.data(forKey: "necessaryBudget") {
+                if let decodedItem = try? JSONDecoder().decode(Double.self, from: discretionaryBudgetAmount) {
+                    return decodedItem
+                } else {
+                    return 0
+                }
+            } else {
+                return 0
+            }
+        }
+        set(value) {
+            if let encoded = try? JSONEncoder().encode(value) {
+                UserDefaults.standard.set(encoded, forKey: "necessaryBudget")
+            }
+        }
+    }
+
+  //  var disableSave: Bool {
+    //    return settings.budgets.discretionaryBudget == discretionaryBudget &&
+     //       settings.budgets.necessaryBudget == necessaryBudget
+    //}
+
     var body: some View {
         NavigationView {
             VStack {
-                List{
+                List {
                     Text("Discretionary Budget:").padding().bold()
-                    NumericTextField(numericText: $stringDiscretionaryAmount, amountDouble: $budgets.discretionaryBudget).fixedSize()
-                    
+                    NumericTextField(numericText: $stringDiscretionaryAmount, amountDouble: discretionaryBudget).fixedSize()
+
                     Text("Necessary Budget:").padding().bold()
-                    NumericTextField(numericText: $stringNecessaryAmount, amountDouble: $budgets.necessaryBudget).fixedSize()
+                    NumericTextField(numericText: $stringNecessaryAmount, amountDouble: necessaryBudget).fixedSize()
                 }.padding()
             }
-           
-        }.navigationBarTitleDisplayMode(.large).toolbar {
+
+        }//.navigationBarTitleDisplayMode(.large).toolbar
+        /*{
             Button("Save") {
-                settings.necessaryBudget = budgets.necessaryBudget
-                settings.discretionaryBudget  = budgets.discretionaryBudget
+                settings.budgets.necessaryBudget = necessaryBudget
+                settings.budgets.discretionaryBudget = discretionaryBudget
             }.disabled(disableSave)
-            
         }
+         */
     }
 }
 
@@ -131,11 +168,11 @@ struct AboutView: View {
         Text("iSpend").bold().font(.system(size: 18))
         if let image = UIImage(named: appIcon) {
             Image(uiImage: image)
-        }  
+        }
         Text("Thoughtful spending made easier").italic().font(.system(size: 12))
         Spacer()
         Text("Version \(version) ").font(.system(size: 14))
-        Text("(build \(buildNumber))").font(.system(size: 12))     
+        Text("(build \(buildNumber))").font(.system(size: 12))
         Spacer()
         Text("Designed &  Programmed by:").font(.system(size: 12))
         Text("Spencer Marks ⌭ Origami Software").font(.system(size: 12))
@@ -160,49 +197,13 @@ enum SettingsTypes: String, CaseIterable, Hashable {
     case about
 }
 
-struct Budgets: Identifiable, Hashable {
-    static var idGenerator = 0 // Static property to keep track of the last ID assigned
-
-    let id: Int
-    let name: String
-    var discretionaryBudget: Double
-    var necessaryBudget: Double
-
-    // Custom initializer
-    init(name: String, discretionaryBudget: Double, necessaryBudget: Double) {
-        id = Budgets.generateNextId()
-        self.name = name
-        self.discretionaryBudget = discretionaryBudget
-        self.necessaryBudget = necessaryBudget
-    }
-
-    // Static method to increment and return the next ID
-    private static func generateNextId() -> Int {
-        idGenerator += 1
-        return idGenerator
-    }
-}
-
 struct About: Identifiable, Hashable {
     let name: String
     let id: Int
 }
 
-// new class Theme inherting from ObservableObject
 final class Settings: ObservableObject {
-    @Published var discretionaryBudget: Double {
-        didSet { if let encoded = try? JSONEncoder().encode(discretionaryBudget) {
-            UserDefaults.standard.set(encoded, forKey: "discretionaryBudget")
-        }  }
-    }
-
-    @Published var necessaryBudget: Double {
-        didSet {
-            if let encoded = try? JSONEncoder().encode(necessaryBudget) {
-                UserDefaults.standard.set(encoded, forKey: "necessaryBudget")
-            }
-        }
-    }
+    let budgets: Budgets
 
     @Published var appVersion: String {
         didSet {
@@ -211,8 +212,7 @@ final class Settings: ObservableObject {
     }
 
     init() {
-        necessaryBudget = UserDefaults.standard.double(forKey: "necessaryBudget")
-        discretionaryBudget = UserDefaults.standard.double(forKey: "discretionaryBudget")
+        budgets = Budgets()
         appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!
     }
 }

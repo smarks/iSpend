@@ -12,7 +12,6 @@ import SwiftUI
 struct AddView: View {
     @ObservedObject var expenses: Expenses
     @ObservedObject var mediations: Mediations
- 
     @Environment(\.dismiss) var dismiss
     
     @State private var name = ""

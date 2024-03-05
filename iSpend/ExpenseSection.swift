@@ -11,14 +11,13 @@ import SwiftUI
 struct ExpenseSection: View {
     let title: String
     let expenses: [ExpenseItem]
-
+    
     let deleteItems: (IndexSet) -> Void
     let editItems: () -> Void
     
     let budget:Double
     
-   @EnvironmentObject var settings: Settings
-
+    
     var total: Double {
         var t: Double = 0.0
         for item in expenses {
@@ -26,7 +25,7 @@ struct ExpenseSection: View {
         }
         return t
     }
-
+    
     var color: Color {
         if budget >= total {
             return Color.blue
@@ -34,22 +33,22 @@ struct ExpenseSection: View {
             return Color.red
         }
     }
-
+    
     var body: some View {
         //   NavigationStack {
         Section(title) {
             HStack {
                 Text("Budget:").font(.headline)
-
+                
                 Text(budget, format: .localCurrency)
-              
+                
             }
-
+            
             HStack {
                 Text("Total: ").font(.headline)
                 Text(total, format: .localCurrency).foregroundColor(color)
             }
-
+            
             ForEach(expenses) {
                 item in
 
@@ -57,14 +56,9 @@ struct ExpenseSection: View {
                     VStack(alignment: .leading) {
                         Text(item.name)
                     }
-
-                    Spacer()
-
-                    Text(item.amount, format: .localCurrency)
-                        .style(for: item)
                 }
             }
-            .onDelete(perform: deleteItems)
+        //    .onDelete(perform: deleteItems)
             .onTapGesture(perform: editItems)
 
             // section
@@ -72,6 +66,4 @@ struct ExpenseSection: View {
 
         // view
     }
-
-    // struct
 }

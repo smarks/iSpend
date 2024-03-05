@@ -15,9 +15,8 @@ struct ExpenseSection: View {
     let deleteItems: (IndexSet) -> Void
     let editItems: () -> Void
     
-    let budget:Double
-    
-    
+    let budget:Budget
+   
     var total: Double {
         var t: Double = 0.0
         for item in expenses {
@@ -27,7 +26,7 @@ struct ExpenseSection: View {
     }
     
     var color: Color {
-        if budget >= total {
+        if Double(budget.amount) ?? 0 >= total {
             return Color.blue
         } else {
             return Color.red
@@ -40,7 +39,7 @@ struct ExpenseSection: View {
             HStack {
                 Text("Budget:").font(.headline)
                 
-                Text(budget, format: .localCurrency)
+                Text(Double(budget.amount) ?? 0, format: .localCurrency)
                 
             }
             

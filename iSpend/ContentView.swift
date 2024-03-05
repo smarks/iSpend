@@ -26,7 +26,6 @@ struct ContentView: View {
         NavigationView {
             List {
                 ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems, deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: discretionaryBudget)
-
                 ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems: editiscretionaryItems, budget: necessaryBudget)
             }
             .navigationTitle("iSpend")

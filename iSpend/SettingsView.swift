@@ -54,32 +54,6 @@ struct SettingView: View {
 }
 
 
-
-struct DataManagementView: View {
-    @State var isPresentingConfirm: Bool = false
-    @EnvironmentObject var expenses: Expenses
-    var body: some View {
-        List {
-            Button("Reset", role: .destructive) {
-                isPresentingConfirm = true
-
-            }.confirmationDialog("Are you sure?",
-                                 isPresented: $isPresentingConfirm) {
-                Button("Delete all data and restore defaults?", role: .destructive) {
-                    for key in Array(UserDefaults.standard.dictionaryRepresentation().keys) {
-                        UserDefaults.standard.removeObject(forKey: key)
-                    }
-                    expenses.loadData()
-                }
-            }
-
-            Button("Export") {
-                print("Export")
-            }
-        }
-    }
-}
-
 enum AppIconProvider {
     static func appIcon(in bundle: Bundle = .main) -> String {
         guard let icons = bundle.object(forInfoDictionaryKey: "CFBundleIcons") as? [String: Any],

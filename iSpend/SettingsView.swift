@@ -5,12 +5,15 @@
 //  Created by Spencer Marks on 1/24/24.
 //
 
+import Combine
 import Foundation
 import SwiftUI
 
 struct SettingView: View {
     @EnvironmentObject var settings: Settings
     @Environment(\.dismiss) var dismiss
+    @ObservedObject var discretionaryBudget = DiscretionaryBudget()
+    @ObservedObject var necessaryBudget = NecessaryBudget()
 
     var isDirty: Bool = false
     var disableSave: Bool {
@@ -32,7 +35,9 @@ struct SettingView: View {
                 .navigationDestination(for: SettingsTypes.self) { type in
                     switch type {
                     case .budgets:
-                        BudgetsView()
+
+                        BudgetsView( )
+                         
                     case .dataManagement:
                         DataManagementView()
                     case .about:
@@ -48,100 +53,6 @@ struct SettingView: View {
     }
 }
 
-struct BudgetsView: View {
-    @State private var stringNecessaryAmount = "0.0"
-    @State private var stringDiscretionaryAmount = "0.0"
-   // @EnvironmentObject var settings: Settings
-   @State var discretionaryBudget: Double {
-        get {
-            if let discretionaryBudgetAmount = UserDefaults.standard.data(forKey: "discretionaryBudget") {
-                if let decodedItem = try? JSONDecoder().decode(Double.self, from: discretionaryBudgetAmount) {
-                    return decodedItem
-                } else {
-                    return 0
-                }
-            } else {
-                return 0
-            }
-        }
-        set(value) {
-            if let encoded = try? JSONEncoder().encode(value) {
-                UserDefaults.standard.set(encoded, forKey: "discretionaryBudget")
-            }
-        }
-    }
-    
-    var necessaryBudget: Double {
-        get {
-            if let discretionaryBudgetAmount = UserDefaults.standard.data(forKey: "necessaryBudget") {
-                if let decodedItem = try? JSONDecoder().decode(Double.self, from: discretionaryBudgetAmount) {
-                    return decodedItem
-                } else {
-                    return 0
-                }
-            } else {
-                return 0
-            }
-        }
-        set(value) {
-            if let encoded = try? JSONEncoder().encode(value) {
-                UserDefaults.standard.set(encoded, forKey: "necessaryBudget")
-            }
-        }
-    }
-
-  //  var disableSave: Bool {
-    //    return settings.budgets.discretionaryBudget == discretionaryBudget &&
-     //       settings.budgets.necessaryBudget == necessaryBudget
-    //}
-
-    var body: some View {
-        NavigationView {
-            VStack {
-                List {
-                    Text("Discretionary Budget:").padding().bold()
-                    NumericTextField(numericText: $stringDiscretionaryAmount, amountDouble: discretionaryBudget).fixedSize()
-
-                    Text("Necessary Budget:").padding().bold()
-                    NumericTextField(numericText: $stringNecessaryAmount, amountDouble: necessaryBudget).fixedSize()
-                }.padding()
-            }
-
-        }//.navigationBarTitleDisplayMode(.large).toolbar
-        /*{
-            Button("Save") {
-                settings.budgets.necessaryBudget = necessaryBudget
-                settings.budgets.discretionaryBudget = discretionaryBudget
-            }.disabled(disableSave)
-        }
-         */
-    }
-}
-
-struct DataManagementView: View {
-    @State var isPresentingConfirm: Bool = false
-    @EnvironmentObject var expenses: Expenses
-    var body: some View {
-        List {
-            Button("Reset", role: .destructive) {
-                isPresentingConfirm = true
-
-            }.confirmationDialog("Are you sure?",
-                                 isPresented: $isPresentingConfirm) {
-                Button("Delete all data and restore defaults?", role: .destructive) {
-                    for key in Array(UserDefaults.standard.dictionaryRepresentation().keys) {
-                        UserDefaults.standard.removeObject(forKey: key)
-                    }
-                    expenses.loadData()
-                }
-            }
-
-            Button("Export") {
-                print("Export")
-            }
-        }
-    }
-}
 
 enum AppIconProvider {
     static func appIcon(in bundle: Bundle = .main) -> String {
@@ -200,19 +111,4 @@ enum SettingsTypes: String, CaseIterable, Hashable {
 struct About: Identifiable, Hashable {
     let name: String
     let id: Int
-}
-
-final class Settings: ObservableObject {
-    let budgets: Budgets
-
-    @Published var appVersion: String {
-        didSet {
-            appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!
-        }
-    }
-
-    init() {
-        budgets = Budgets()
-        appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!
-    }
 }

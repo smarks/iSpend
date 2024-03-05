@@ -13,17 +13,20 @@ struct ContentView: View {
     @StateObject var mediations = Mediations()
     @State private var showingAddExpense = false
     @State private var showingSettings = false
+    
+    @ObservedObject var discretionaryBudget = DiscretionaryBudget()
+    @ObservedObject var necessaryBudget = NecessaryBudget()
 
     let discretionaryTitle = "\(ExpenseType.Discretionary)".capitalized
     let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
+
     @StateObject var settings = Settings()
     
     var body: some View {
         NavigationView {
             List {
-                ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems, deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: settings.budgets.discretionaryBudget)
-
-                ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems: editiscretionaryItems, budget: settings.budgets.necessaryBudget)
+                ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems, deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: discretionaryBudget)
+                ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems: editiscretionaryItems, budget: necessaryBudget)
             }
             .navigationTitle("iSpend")
             .toolbar {

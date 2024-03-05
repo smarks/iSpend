@@ -1,11 +1,10 @@
 //
 //  DecimalOnlyTextField.swift
 //  iSpend
-//
-//  Original code created by ChatGPT on 07/25/2023
-//  Extended by Spencer Marks starting on 07/25/2023
+//  by Spencer Marks starting on 07/25/2023
 //
 import SwiftUI
+
 
 struct NumericTextField: View {
     @Binding var numericText: String
@@ -21,7 +20,6 @@ struct NumericTextField: View {
                 if let textField = obj.object as? UITextField {
                    
                     textField.selectedTextRange = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument)
-
                     textField.selectAll(nil)
                 }
  

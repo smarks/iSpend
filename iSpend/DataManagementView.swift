@@ -28,7 +28,33 @@ struct DataManagementView: View {
 
             Button("Export") {
                 print("Export")
+                let csvString = generateCSV(from: expenses.allItems)
+                UIPasteboard.general.string = csvString
+                print("CSV string copied to clipboard.")
             }
+
+            
         }
     }
 }
+
+func generateCSV(from expenses: [ExpenseItem]) -> String {
+    var csvString = "id,name,type,amount,note,date\n"
+    
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateStyle = .short
+    dateFormatter.timeStyle = .none
+    
+    for expense in expenses {
+        let dateString = dateFormatter.string(from: expense.date)
+        let escapedNote = expense.note.replacingOccurrences(of: "\"", with: "\"\"") // Escape double quotes
+        let csvRow = """
+        "\(expense.id.uuidString)",\(expense.name),\(expense.type.rawValue),\(expense.amount),"\(escapedNote)",\(dateString)\n
+        """
+        csvString.append(contentsOf: csvRow)
+    }
+    
+    return csvString
+}
+
+    

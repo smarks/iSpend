@@ -8,15 +8,29 @@
 
 import SwiftUI
 
+struct ItemRow: View {
+    var expense: ExpenseItem
+    var backgroundColor: Color
+
+    var body: some View {
+        HStack {
+            Text(expense.name)
+            Text(expense.amount, format: .localCurrency)
+        }
+    }
+}
+
 struct ExpenseSection: View {
     let title: String
     let expenses: [ExpenseItem]
-    
+
     let deleteItems: (IndexSet) -> Void
     let editItems: () -> Void
-    
-    let budget:Budget
-   
+
+    let budget: Budget
+
+    var rowNumber: Int = 0
+
     var total: Double {
         var t: Double = 0.0
         for item in expenses {
@@ -24,7 +38,7 @@ struct ExpenseSection: View {
         }
         return t
     }
-    
+
     var color: Color {
         if Double(budget.amount) ?? 0 >= total {
             return Color.blue
@@ -32,37 +46,40 @@ struct ExpenseSection: View {
             return Color.red
         }
     }
-    
+
+    var backgroundColor: Color {
+        if rowNumber % 2 == 0 {
+            return Color.white
+        } else {
+            return Color.gray
+        }
+    }
+
     var body: some View {
-        //   NavigationStack {
         Section(title) {
             HStack {
                 Text("Budget:").font(.headline)
-                
                 Text(Double(budget.amount) ?? 0, format: .localCurrency)
-                
             }
-            
+
             HStack {
                 Text("Total: ").font(.headline)
                 Text(total, format: .localCurrency).foregroundColor(color)
             }
-            
-            ForEach(expenses) {
-                item in
 
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(item.name)
-                    }
+          //ScrollView(.vertical) {
+                ForEach(expenses) {
+                    item in
+                        HStack  {
+                            Text(item.name)
+                            Text(item.amount, format: .localCurrency).padding()
+                        }.frame(maxWidth: .infinity, alignment: .leading)
+                  
                 }
-            }
-        //    .onDelete(perform: deleteItems)
+         //  }
+
+            //    .onDelete(perform: deleteItems)
             .onTapGesture(perform: editItems)
-
-            // section
         }
-
-        // view
     }
 }

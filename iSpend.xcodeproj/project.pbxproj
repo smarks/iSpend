@@ -72,6 +72,7 @@
 		2276FE012A7192E700E0B60F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		229828A12B93F69600348C97 /* Budgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budgets.swift; sourceTree = "<group>"; };
 		22C7D9622B97E06D00FA6A4D /* DataManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementView.swift; sourceTree = "<group>"; };
+		22C7D9652B97E27E00FA6A4D /* iSpend.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iSpend.entitlements; sourceTree = "<group>"; };
 		22CACF9D2B5F05F100F80071 /* Mediations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mediations.swift; sourceTree = "<group>"; };
 		515A85BA272FD57B00C6A00C /* iSpend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSpend.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -97,6 +98,7 @@
 		2276FD942A70512900E0B60F /* iSpend */ = {
 			isa = PBXGroup;
 			children = (
+				22C7D9652B97E27E00FA6A4D /* iSpend.entitlements */,
 				2276FDE52A70526200E0B60F /* AddView.swift */,
 				2276FDE92A70526300E0B60F /* Assets.xcassets */,
 				229828A12B93F69600348C97 /* Budgets.swift */,
@@ -464,8 +466,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = iSpend/iSpend.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.1;
 				DEVELOPMENT_ASSET_PATHS = "\"iSpend/Preview Content\"";
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				ENABLE_PREVIEWS = YES;
@@ -482,11 +485,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = "1,1";
 				PRODUCT_BUNDLE_IDENTIFIER = com.orgiamisoftware.ispend;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -503,8 +506,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = iSpend/iSpend.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.1;
 				DEVELOPMENT_ASSET_PATHS = "\"iSpend/Preview Content\"";
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				ENABLE_PREVIEWS = YES;
@@ -521,11 +525,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.orgiamisoftware.ispend;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;

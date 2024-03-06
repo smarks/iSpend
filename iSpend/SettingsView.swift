@@ -56,12 +56,15 @@ struct SettingView: View {
 
 enum AppIconProvider {
     static func appIcon(in bundle: Bundle = .main) -> String {
+        // Attempt to retrieve the macOS app icon name
+        if let iconFileName = bundle.object(forInfoDictionaryKey: "CFBundleIconFile") as? String {
+            return iconFileName
+        }
+        
+        // Attempt to retrieve the iOS app icon name
         guard let icons = bundle.object(forInfoDictionaryKey: "CFBundleIcons") as? [String: Any],
-
               let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
-
               let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
-
               let iconFileName = iconFiles.last else {
             fatalError("Could not find icons in bundle")
         }
@@ -70,6 +73,7 @@ enum AppIconProvider {
     }
 }
 
+
 struct AboutView: View {
     let version: String
     let buildNumber: String
@@ -77,9 +81,11 @@ struct AboutView: View {
 
     var body: some View {
         Text("iSpend").bold().font(.system(size: 18))
+
         if let image = UIImage(named: appIcon) {
             Image(uiImage: image)
         }
+
         Text("Thoughtful spending made easier").italic().font(.system(size: 12))
         Spacer()
         Text("Version \(version) ").font(.system(size: 14))

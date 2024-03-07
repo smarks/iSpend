@@ -78,7 +78,7 @@ struct ExpenseSection: View {
                 }
          //  }
 
-            //    .onDelete(perform: deleteItems)
+             .onDelete(perform: deleteItems)
             .onTapGesture(perform: editItems)
         }
     }

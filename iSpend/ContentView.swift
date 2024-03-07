@@ -25,8 +25,8 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems, deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: discretionaryBudget)
-                ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems: editiscretionaryItems, budget: necessaryBudget)
+                ExpenseSection(title: discretionaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems: editDiscretionaryItems, budget: discretionaryBudget)
+                ExpenseSection(title: necessaryTitle, expenses: expenses.necessaryItems, deleteItems: removeNecessaryItems , editItems: editNecessaryItems, budget: necessaryBudget)
             }
             .navigationTitle("iSpend")
             .toolbar {
@@ -65,7 +65,7 @@ struct ContentView: View {
         editItems()
     }
 
-    func editiscretionaryItems() {
+    func editDiscretionaryItems() {
         // editItems(at: offsets, in: expenses.necessaryItems)
         editItems()
     }
@@ -87,11 +87,11 @@ struct ContentView: View {
     }
 
     func removeNecessaryItems(at offsets: IndexSet) {
-        removeItems(at: offsets, in: expenses.discretionaryItems)
+        removeItems(at: offsets, in: expenses.necessaryItems)
     }
 
     func removeDiscretionaryItems(at offsets: IndexSet) {
-        removeItems(at: offsets, in: expenses.necessaryItems)
+        removeItems(at: offsets, in: expenses.discretionaryItems)
     }
 }
 

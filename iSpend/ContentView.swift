@@ -13,7 +13,7 @@ struct ContentView: View {
     @StateObject var mediations = Mediations()
     @State private var showingAddExpense = false
     @State private var showingSettings = false
-    
+
     @ObservedObject var discretionaryBudget = DiscretionaryBudget()
     @ObservedObject var necessaryBudget = NecessaryBudget()
 
@@ -21,12 +21,12 @@ struct ContentView: View {
     let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
 
     @StateObject var settings = Settings()
-    
+
     var body: some View {
         NavigationView {
             List {
-                ExpenseSection(title: discretionaryTitle, expenses: expenses.necessaryItems, deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: discretionaryBudget)
-                ExpenseSection(title: necessaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems: editiscretionaryItems, budget: necessaryBudget)
+                ExpenseSection(title: discretionaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems: editDiscretionaryItems, budget: discretionaryBudget)
+                ExpenseSection(title: necessaryTitle, expenses: expenses.necessaryItems, deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: necessaryBudget)
             }
             .navigationTitle("iSpend")
             .toolbar {
@@ -52,29 +52,30 @@ struct ContentView: View {
             .environmentObject(expenses)
     }
 
+    func edit(in item: ExpenseItem) {
+        print("edit \(item)")
+    }
+
     func editItems(at offsets: IndexSet, in inputArray: [ExpenseItem]) {
-        print("edit items")
+        for offset in offsets {
+            let item = inputArray[offset]
+            edit(in: item)
+        }
     }
 
-    func editItems() {
-        print("dataChanged")
+    func editNecessaryItems( ) {
+      //  editItems(at: offsets, in: expenses.necessaryItems)
+        print("e n")
     }
 
-    func editNecessaryItems() {
-        // editItems(at: offsets, in: expenses.discretionaryItems)
-        editItems()
-    }
-
-    func editiscretionaryItems() {
-        // editItems(at: offsets, in: expenses.necessaryItems)
-        editItems()
+    func editDiscretionaryItems( ) {
+       // editItems(at: offsets, in: expenses.discretionaryItems)
+        print("e d")
     }
 
     func removeItems(at offsets: IndexSet, in inputArray: [ExpenseItem]) {
         var objectsToDelete = IndexSet()
 
-        // bug does delete last element  if inputArray.count != 0 {
-        // https://github.com/smarks/iSpend/issues/3
         for offset in offsets {
             let item = inputArray[offset]
 
@@ -87,11 +88,11 @@ struct ContentView: View {
     }
 
     func removeNecessaryItems(at offsets: IndexSet) {
-        removeItems(at: offsets, in: expenses.discretionaryItems)
+        removeItems(at: offsets, in: expenses.necessaryItems)
     }
 
     func removeDiscretionaryItems(at offsets: IndexSet) {
-        removeItems(at: offsets, in: expenses.necessaryItems)
+        removeItems(at: offsets, in: expenses.discretionaryItems)
     }
 }
 

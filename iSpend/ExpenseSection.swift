@@ -66,20 +66,41 @@ struct ExpenseSection: View {
                 Text("Total: ").font(.headline)
                 Text(total, format: .localCurrency).foregroundColor(color)
             }
+ 
+            ForEach(expenses) {
+                item in
+                HStack {
+                    Text(item.name)
+                    Text(item.amount, format: .localCurrency).padding()
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                    .onTapGesture {
+                        print(item)
+                    }
+            }
+            .onDelete(perform: deleteItems)
+        }
+    }
 
-          //ScrollView(.vertical) {
-                ForEach(expenses) {
-                    item in
-                        HStack  {
-                            Text(item.name)
-                            Text(item.amount, format: .localCurrency).padding()
-                        }.frame(maxWidth: .infinity, alignment: .leading)
-                  
-                }
-         //  }
+    struct ExpenseEditView: View {
+        var expenseItem: ExpenseItem
+        var onSave: (ExpenseItem) -> Void
+        @State private var name: String
+        @State private var amount: Double
 
-            //    .onDelete(perform: deleteItems)
-            .onTapGesture(perform: editItems)
+        init(expenseItem: ExpenseItem, onSave: @escaping (ExpenseItem) -> Void) {
+            self.expenseItem = expenseItem
+            self.onSave = onSave
+            _name = State(initialValue: expenseItem.name)
+            _amount = State(initialValue: expenseItem.amount)
+        }
+
+        var body: some View {
+            TextField("Name", text: $name)
+            TextField("Amount", value: $amount, format: .number)
+            Button("Save") {
+                // onSave(ExpenseItem(id: expenseItem.id, name: name, amount: amount))
+                print("Saved")
+            }
         }
     }
 }

@@ -10,6 +10,16 @@ import SwiftUI
 
 struct DataManagementView: View {
     @State var isPresentingConfirm: Bool = false
+    @State private var showAlert = false
+
+    var exportButtonLabel:String {
+        if expenses.allItems.isEmpty {
+             "Export (No data to export)"
+        } else {
+            "Export"
+        }
+    }
+
     @EnvironmentObject var expenses: Expenses
     var body: some View {
         List {
@@ -25,14 +35,22 @@ struct DataManagementView: View {
                     expenses.loadData()
                 }
             }
-
-            Button("Export") {
-                print("Export")
+           
+            Button(exportButtonLabel) {
+                
                 let csvString = generateCSV(from: expenses.allItems)
                 UIPasteboard.general.string = csvString
                 print("CSV string copied to clipboard.")
-            }
+                showAlert = true
 
+            }.alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("\(expenses.allItems.count) exported "),
+                    message: Text("Your data is now in  ready to paste into a file. Save the file with a .csv extension and view in your favorite spreadsheet program"),
+                    dismissButton: .default(Text("OK"))
+                )
+            }.disabled(expenses.allItems.isEmpty)
+             
             
         }
     }

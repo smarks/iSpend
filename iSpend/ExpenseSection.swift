@@ -23,6 +23,13 @@ struct ItemRow: View {
 struct ExpenseSection: View {
     let title: String
     let expenses: [ExpenseItem]
+    // Create a DateFormatter instance
+    
+      var dateFormatter: DateFormatter = {
+          let formatter = DateFormatter()
+          formatter.dateFormat = "MM-dd"
+          return formatter
+      }()
 
     let deleteItems: (IndexSet) -> Void
     let editItems: () -> Void
@@ -30,7 +37,7 @@ struct ExpenseSection: View {
     let budget: Budget
 
     var rowNumber: Int = 0
-
+    
     var total: Double {
         var t: Double = 0.0
         for item in expenses {
@@ -65,14 +72,21 @@ struct ExpenseSection: View {
             HStack {
                 Text("Total: ").font(.headline)
                 Text(total, format: .localCurrency).foregroundColor(color)
+              
+
             }
- 
-            ForEach(expenses) {
-                item in
+            
+            HStack {
+                Text("Date").font(.headline).bold().frame(maxWidth: .infinity, alignment: .leading)
+                Text("Description").font(.headline).bold().frame(maxWidth: .infinity, alignment: .center)
+                Text("Amount").font(.headline).bold().frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            ForEach(Array(expenses.enumerated()), id: \.element.id) { index, item in
                 HStack {
-                    Text(item.name)
-                    Text(item.amount, format: .localCurrency).padding()
-                }.frame(maxWidth: .infinity, alignment: .leading)
+                    Text(dateFormatter.string(from: item.date)).frame(maxWidth: .infinity, alignment: .leading).lineLimit(1)
+                    Text(item.name).frame(maxWidth: .infinity, alignment: .center).lineLimit(1)
+                    Text(item.amount, format: .localCurrency).frame(maxWidth: .infinity, alignment: .trailing).lineLimit(1)
+                }.frame(maxWidth: .infinity, alignment: .leading).background(index % 2 != 0 ? Color.clear : Color.gray.opacity(0.2))
                     .onTapGesture {
                         print(item)
                     }

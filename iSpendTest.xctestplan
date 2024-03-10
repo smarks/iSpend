@@ -1,0 +1,28 @@
+{
+  "configurations" : [
+    {
+      "id" : "7FB6B98F-8738-41FF-BCD7-9EA5FDA57805",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:iSpend.xcodeproj",
+      "identifier" : "515A85B9272FD57B00C6A00C",
+      "name" : "iSpend"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:iSpend.xcodeproj",
+        "identifier" : "2276FD882A703E9300E0B60F",
+        "name" : "iSpendTests"
+      }
+    }
+  ],
+  "version" : 1
+}

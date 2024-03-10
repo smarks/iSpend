@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "09387E63-AE12-4C4B-A406-7B28F866E106",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:iSpend.xcodeproj",
+        "identifier" : "2270D4F02B9B8E4A004D26B8",
+        "name" : "iSpendUITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:iSpend.xcodeproj",
+        "identifier" : "2276FD882A703E9300E0B60F",
+        "name" : "iSpendTests"
+      }
+    }
+  ],
+  "version" : 1
+}

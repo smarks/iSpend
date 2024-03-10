@@ -14,12 +14,12 @@ struct AddView: View {
     @ObservedObject var mediations: Mediations
     @Environment(\.dismiss) var dismiss
     
-    @State private var name = ""
-    @State private var type = ExpenseType.Necessary
-    @State private var amount = 0.0
-    @State private var notes = ""
-    @State private var date = Date.now
-    @State private var stringAmount = "0.0"
+    @State   var name = ""
+    @State   var type = ExpenseType.Necessary
+    @State   var amount = 0.0
+    @State   var notes = ""
+    @State   var date = Date.now
+    @State   var stringAmount = "0.0"
     
     let types = [ExpenseType.Necessary, ExpenseType.Discretionary]
     @State private var sliderValue: Double = .zero
@@ -95,6 +95,7 @@ struct AddView: View {
                     
                     Button("Save") {
                         let item = ExpenseItem(name: name, type: type, amount: amount, note: notes, date: date)
+                       print(item)
                         expenses.allItems.append(item)
                         dismiss()
                         

@@ -11,6 +11,13 @@
 		223825152B97CBAD001BA45B /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223825142B97CBAD001BA45B /* BudgetView.swift */; };
 		224E5D7A2B61696D00EDA195 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E5D792B61696D00EDA195 /* SettingsView.swift */; };
 		224E5D7B2B61696D00EDA195 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224E5D792B61696D00EDA195 /* SettingsView.swift */; };
+		2270D4E72B9B8167004D26B8 /* AddItemTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */; };
+		2270D4E82B9B8473004D26B8 /* Budgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229828A12B93F69600348C97 /* Budgets.swift */; };
+		2270D4E92B9B8473004D26B8 /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223825142B97CBAD001BA45B /* BudgetView.swift */; };
+		2270D4EA2B9B8473004D26B8 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 2276FE012A7192E700E0B60F /* README.md */; };
+		2270D4EB2B9B8473004D26B8 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223825122B977838001BA45B /* Settings.swift */; };
+		2270D4F42B9B8E4A004D26B8 /* iSpendUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4F32B9B8E4A004D26B8 /* iSpendUITests.swift */; };
+		2270D4F62B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4F52B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift */; };
 		2276FDEA2A70526300E0B60F /* Expenses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE02A70526200E0B60F /* Expenses.swift */; };
 		2276FDEB2A70526300E0B60F /* Expenses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE02A70526200E0B60F /* Expenses.swift */; };
 		2276FDEC2A70526300E0B60F /* ExpenseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE12A70526200E0B60F /* ExpenseItem.swift */; };
@@ -43,12 +50,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		2270D4F72B9B8E4A004D26B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 515A85B2272FD57B00C6A00C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 515A85B9272FD57B00C6A00C;
+			remoteInfo = iSpend;
+		};
 		2276FD8D2A703E9300E0B60F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 515A85B2272FD57B00C6A00C /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 515A85B9272FD57B00C6A00C;
-			remoteInfo = iSpent;
+			remoteInfo = iSpend;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -56,8 +70,14 @@
 		223825122B977838001BA45B /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		223825142B97CBAD001BA45B /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
 		224E5D792B61696D00EDA195 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemTestCase.swift; sourceTree = "<group>"; };
+		2270D4EC2B9B8AC6004D26B8 /* iSpendTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = iSpendTest.xctestplan; sourceTree = "<group>"; };
+		2270D4F12B9B8E4A004D26B8 /* iSpendUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iSpendUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2270D4F32B9B8E4A004D26B8 /* iSpendUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iSpendUITests.swift; sourceTree = "<group>"; };
+		2270D4F52B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iSpendUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		2270D4FC2B9B8F29004D26B8 /* iSpendUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = iSpendUITests.xctestplan; sourceTree = "<group>"; };
 		2276FD892A703E9300E0B60F /* iSpendTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iSpendTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		2276FDDF2A70526200E0B60F /* iSpentTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iSpentTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		2276FDDF2A70526200E0B60F /* iSpendTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iSpendTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		2276FDE02A70526200E0B60F /* Expenses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expenses.swift; sourceTree = "<group>"; };
 		2276FDE12A70526200E0B60F /* ExpenseItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpenseItem.swift; sourceTree = "<group>"; };
 		2276FDE22A70526200E0B60F /* FormatStyle-LocalCurrency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FormatStyle-LocalCurrency.swift"; sourceTree = "<group>"; };
@@ -78,6 +98,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2270D4EE2B9B8E4A004D26B8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2276FD862A703E9300E0B60F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -95,9 +122,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2270D4E52B9B8142004D26B8 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */,
+			);
+			path = tests;
+			sourceTree = "<group>";
+		};
+		2270D4F22B9B8E4A004D26B8 /* iSpendUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2270D4F32B9B8E4A004D26B8 /* iSpendUITests.swift */,
+				2270D4F52B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift */,
+			);
+			path = iSpendUITests;
+			sourceTree = "<group>";
+		};
 		2276FD942A70512900E0B60F /* iSpend */ = {
 			isa = PBXGroup;
 			children = (
+				2270D4E52B9B8142004D26B8 /* tests */,
 				22C7D9652B97E27E00FA6A4D /* iSpend.entitlements */,
 				2276FDE52A70526200E0B60F /* AddView.swift */,
 				2276FDE92A70526300E0B60F /* Assets.xcassets */,
@@ -113,7 +158,6 @@
 				22C7D9622B97E06D00FA6A4D /* DataManagementView.swift */,
 				2276FDE22A70526200E0B60F /* FormatStyle-LocalCurrency.swift */,
 				2276FDE72A70526200E0B60F /* iSpendApp.swift */,
-				2276FDDF2A70526200E0B60F /* iSpentTests-Bridging-Header.h */,
 				22CACF9D2B5F05F100F80071 /* Mediations.swift */,
 				223825122B977838001BA45B /* Settings.swift */,
 				224E5D792B61696D00EDA195 /* SettingsView.swift */,
@@ -125,7 +169,11 @@
 		515A85B1272FD57B00C6A00C = {
 			isa = PBXGroup;
 			children = (
+				2270D4FC2B9B8F29004D26B8 /* iSpendUITests.xctestplan */,
+				2270D4EC2B9B8AC6004D26B8 /* iSpendTest.xctestplan */,
+				2276FDDF2A70526200E0B60F /* iSpendTests-Bridging-Header.h */,
 				2276FD942A70512900E0B60F /* iSpend */,
+				2270D4F22B9B8E4A004D26B8 /* iSpendUITests */,
 				515A85BB272FD57B00C6A00C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -135,6 +183,7 @@
 			children = (
 				515A85BA272FD57B00C6A00C /* iSpend.app */,
 				2276FD892A703E9300E0B60F /* iSpendTests.xctest */,
+				2270D4F12B9B8E4A004D26B8 /* iSpendUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,6 +191,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2270D4F02B9B8E4A004D26B8 /* iSpendUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2270D4F92B9B8E4A004D26B8 /* Build configuration list for PBXNativeTarget "iSpendUITests" */;
+			buildPhases = (
+				2270D4ED2B9B8E4A004D26B8 /* Sources */,
+				2270D4EE2B9B8E4A004D26B8 /* Frameworks */,
+				2270D4EF2B9B8E4A004D26B8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2270D4F82B9B8E4A004D26B8 /* PBXTargetDependency */,
+			);
+			name = iSpendUITests;
+			productName = iSpendUITests;
+			productReference = 2270D4F12B9B8E4A004D26B8 /* iSpendUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		2276FD882A703E9300E0B60F /* iSpendTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2276FD8F2A703E9300E0B60F /* Build configuration list for PBXNativeTarget "iSpendTests" */;
@@ -156,7 +223,7 @@
 				2276FD8E2A703E9300E0B60F /* PBXTargetDependency */,
 			);
 			name = iSpendTests;
-			productName = iSpentTests;
+			productName = iSpendTests;
 			productReference = 2276FD892A703E9300E0B60F /* iSpendTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -184,9 +251,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1430;
+				LastSwiftUpdateCheck = 1520;
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
+					2270D4F02B9B8E4A004D26B8 = {
+						CreatedOnToolsVersion = 15.2;
+						TestTargetID = 515A85B9272FD57B00C6A00C;
+					};
 					2276FD882A703E9300E0B60F = {
 						CreatedOnToolsVersion = 14.3.1;
 						LastSwiftMigration = 1430;
@@ -213,11 +284,19 @@
 			targets = (
 				515A85B9272FD57B00C6A00C /* iSpend */,
 				2276FD882A703E9300E0B60F /* iSpendTests */,
+				2270D4F02B9B8E4A004D26B8 /* iSpendUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2270D4EF2B9B8E4A004D26B8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2276FD872A703E9300E0B60F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -239,10 +318,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2270D4ED2B9B8E4A004D26B8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2270D4F42B9B8E4A004D26B8 /* iSpendUITests.swift in Sources */,
+				2270D4F62B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2276FD852A703E9300E0B60F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2270D4E82B9B8473004D26B8 /* Budgets.swift in Sources */,
+				2270D4E92B9B8473004D26B8 /* BudgetView.swift in Sources */,
+				2270D4EA2B9B8473004D26B8 /* README.md in Sources */,
+				2270D4EB2B9B8473004D26B8 /* Settings.swift in Sources */,
 				22C7D9642B97E06D00FA6A4D /* DataManagementView.swift in Sources */,
 				22CACF9F2B5F05F100F80071 /* Mediations.swift in Sources */,
 				2276FDEF2A70526300E0B60F /* FormatStyle-LocalCurrency.swift in Sources */,
@@ -251,6 +343,7 @@
 				2276FE002A71515C00E0B60F /* DecimalOnlyTextField.swift in Sources */,
 				2276FDF52A70526300E0B60F /* AddView.swift in Sources */,
 				2276FDF12A70526300E0B60F /* ContentView.swift in Sources */,
+				2270D4E72B9B8167004D26B8 /* AddItemTestCase.swift in Sources */,
 				2276FDED2A70526300E0B60F /* ExpenseItem.swift in Sources */,
 				2276FDFB2A70526300E0B60F /* ExpenseTypes.swift in Sources */,
 				224E5D7B2B61696D00EDA195 /* SettingsView.swift in Sources */,
@@ -285,6 +378,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2270D4F82B9B8E4A004D26B8 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 515A85B9272FD57B00C6A00C /* iSpend */;
+			targetProxy = 2270D4F72B9B8E4A004D26B8 /* PBXContainerItemProxy */;
+		};
 		2276FD8E2A703E9300E0B60F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 515A85B9272FD57B00C6A00C /* iSpend */;
@@ -293,6 +391,49 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		2270D4FA2B9B8E4A004D26B8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NJ55UC9QDK;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.origamisoftware.iSpendUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = iSpend;
+			};
+			name = Debug;
+		};
+		2270D4FB2B9B8E4A004D26B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NJ55UC9QDK;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.origamisoftware.iSpendUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = iSpend;
+			};
+			name = Release;
+		};
 		2276FD902A703E9300E0B60F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -304,12 +445,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = origamisoftware.iSpentTests;
+				PRODUCT_BUNDLE_IDENTIFIER = origamisoftware.iSpendTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "iSpent/iSpentTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "iSpend/iSpendTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -328,12 +469,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = origamisoftware.iSpentTests;
+				PRODUCT_BUNDLE_IDENTIFIER = origamisoftware.iSpendTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_OBJC_BRIDGING_HEADER = "iSpent/iSpentTests-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "iSpend/iSpendTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iSpend.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/iSpend";
@@ -472,7 +613,7 @@
 				CODE_SIGN_ENTITLEMENTS = iSpend/iSpend.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"iSpend/Preview Content\"";
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				ENABLE_PREVIEWS = YES;
@@ -489,7 +630,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4;
+				MARKETING_VERSION = 6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.orgiamisoftware.ispend;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -514,7 +655,7 @@
 				CODE_SIGN_ENTITLEMENTS = iSpend/iSpend.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"iSpend/Preview Content\"";
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				ENABLE_PREVIEWS = YES;
@@ -531,7 +672,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4;
+				MARKETING_VERSION = 6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.orgiamisoftware.ispend;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -549,6 +690,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2270D4F92B9B8E4A004D26B8 /* Build configuration list for PBXNativeTarget "iSpendUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2270D4FA2B9B8E4A004D26B8 /* Debug */,
+				2270D4FB2B9B8E4A004D26B8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2276FD8F2A703E9300E0B60F /* Build configuration list for PBXNativeTarget "iSpendTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

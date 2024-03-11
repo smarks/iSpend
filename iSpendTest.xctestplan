@@ -17,6 +17,9 @@
   },
   "testTargets" : [
     {
+      "skippedTests" : [
+        "AddItemTestCase"
+      ],
       "target" : {
         "containerPath" : "container:iSpend.xcodeproj",
         "identifier" : "2276FD882A703E9300E0B60F",

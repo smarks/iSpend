@@ -22,14 +22,18 @@ struct ItemRow: View {
 
 struct ExpenseSection: View {
     let title: String
-    let expenses: [ExpenseItem]
-    // Create a DateFormatter instance
+    let expenseItems: [ExpenseItem]
+    @ObservedObject var expenses: Expenses
+    @ObservedObject var categories: Categories
     
-      var dateFormatter: DateFormatter = {
-          let formatter = DateFormatter()
-          formatter.dateFormat = "MM-dd"
-          return formatter
-      }()
+    @State private var selectedCategory: String?
+    @State private var selectedExpenseItem: ExpenseItem? // Track the selected item
+
+    static var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM-dd"
+        return formatter
+    }()
 
     let deleteItems: (IndexSet) -> Void
     let editItems: () -> Void
@@ -37,13 +41,15 @@ struct ExpenseSection: View {
     let budget: Budget
 
     var rowNumber: Int = 0
-    
+
     var total: Double {
-        var t: Double = 0.0
-        for item in expenses {
-            t = t + item.amount
-        }
-        return t
+        /*  var t: Double = 0.0
+         for item in expenses {
+         t = t + item.amount
+         }
+         return t
+         */
+        expenseItems.reduce(0) { $0 + $1.amount }
     }
 
     var color: Color {
@@ -63,7 +69,8 @@ struct ExpenseSection: View {
     }
 
     var body: some View {
-        Section(title) {
+        //  Section() {
+        Section(header: Text(title)) {
             HStack {
                 Text("Budget:").font(.headline)
                 Text(Double(budget.amount) ?? 0, format: .localCurrency)
@@ -72,49 +79,47 @@ struct ExpenseSection: View {
             HStack {
                 Text("Total: ").font(.headline)
                 Text(total, format: .localCurrency).foregroundColor(color)
-              
-
             }
-            
+
             HStack {
                 Text("Date").font(.headline).bold().frame(maxWidth: .infinity, alignment: .leading)
                 Text("Description").font(.headline).bold().frame(maxWidth: .infinity, alignment: .center)
                 Text("Amount").font(.headline).bold().frame(maxWidth: .infinity, alignment: .trailing)
+
             }
-            ForEach(Array(expenses.enumerated()), id: \.element.id) { index, item in
+
+            ForEach(expenseItems) { item in
                 HStack {
-                    Text(dateFormatter.string(from: item.date)).frame(maxWidth: .infinity, alignment: .leading).lineLimit(1)
+                    Text(ExpenseSection.dateFormatter.string(from: item.date)).frame(maxWidth: .infinity, alignment: .leading).lineLimit(1)
                     Text(item.name).frame(maxWidth: .infinity, alignment: .center).lineLimit(1)
+                    Text(item.category.name)
+
                     Text(item.amount, format: .localCurrency).frame(maxWidth: .infinity, alignment: .trailing).lineLimit(1)
-                }.frame(maxWidth: .infinity, alignment: .leading).background(index % 2 != 0 ? Color.clear : Color.gray.opacity(0.2))
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                    .background(self.backgroundColor(for: item))
                     .onTapGesture {
                         print(item)
+                        self.selectedExpenseItem = item // Set the selected item
                     }
             }
             .onDelete(perform: deleteItems)
         }
+        .sheet(item: $selectedExpenseItem) { item in
+            // Present the sheet for editing
+            AddEditExpenseItemView(expenseItem: item, expenses: expenses, categories: categories)
+        }
     }
 
-    struct ExpenseEditView: View {
-        var expenseItem: ExpenseItem
-        var onSave: (ExpenseItem) -> Void
-        @State private var name: String
-        @State private var amount: Double
+    private func dismiss() {
+        selectedExpenseItem = nil // Reset the selected item
+    }
 
-        init(expenseItem: ExpenseItem, onSave: @escaping (ExpenseItem) -> Void) {
-            self.expenseItem = expenseItem
-            self.onSave = onSave
-            _name = State(initialValue: expenseItem.name)
-            _amount = State(initialValue: expenseItem.amount)
-        }
-
-        var body: some View {
-            TextField("Name", text: $name)
-            TextField("Amount", value: $amount, format: .number)
-            Button("Save") {
-                // onSave(ExpenseItem(id: expenseItem.id, name: name, amount: amount))
-                print("Saved")
-            }
+    // Helper method to determine the background color for each row
+    private func backgroundColor(for item: ExpenseItem) -> Color {
+        if let index = expenseItems.firstIndex(where: { $0.id == item.id }) {
+            return index % 2 == 0 ? Color.white : Color.gray.opacity(0.2)
+        } else {
+            return Color.white
         }
     }
 }

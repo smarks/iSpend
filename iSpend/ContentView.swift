@@ -10,7 +10,6 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var expenses = Expenses()
-    @StateObject var mediations = Mediations()
     @State private var showingAddExpense = false
     @State private var showingSettings = false
 
@@ -25,8 +24,10 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                ExpenseSection(title: discretionaryTitle, expenses: expenses.discretionaryItems, deleteItems: removeDiscretionaryItems, editItems: editDiscretionaryItems, budget: discretionaryBudget)
-                ExpenseSection(title: necessaryTitle, expenses: expenses.necessaryItems, deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: necessaryBudget)
+                
+                ExpenseSection(title: discretionaryTitle, expenseItems: expenses.discretionaryItems, expenses: expenses, deleteItems: removeDiscretionaryItems, editItems: editDiscretionaryItems, budget: discretionaryBudget)
+                
+                ExpenseSection(title: necessaryTitle, expenseItems: expenses.necessaryItems, expenses: expenses,deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: necessaryBudget)
             }
             .navigationTitle("iSpend")
             .toolbar {
@@ -42,7 +43,8 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showingAddExpense) {
-                AddView(expenses: expenses, mediations: mediations)
+                let newExpenseItem:ExpenseItem = ExpenseItem()
+                AddView(expenseItem: newExpenseItem, expenses: expenses)
             }
             .sheet(isPresented: $showingSettings) {
                 SettingView()

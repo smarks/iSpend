@@ -10,16 +10,24 @@ import SwiftUI
 
 
 struct AddView: View {
-    @ObservedObject var expenses: Expenses
-    @ObservedObject var mediations: Mediations
-    @Environment(\.dismiss) var dismiss
+    @StateObject var mediations = Mediations()
+
+    @State var expenseItem: ExpenseItem
     
-    @State   var name = ""
-    @State   var type = ExpenseType.Necessary
-    @State   var amount = 0.0
-    @State   var notes = ""
-    @State   var date = Date.now
-    @State   var stringAmount = "0.0"
+    @ObservedObject var expenses: Expenses
+    @Environment(\.dismiss) var dismiss
+    @State var stringAmount:String = ""
+
+    /*
+    @State   var name = expenseItem.name
+    @State   var type = expenseItem.type
+    @State   var amount = expenseItem.amount
+    @State   var notes = expenseItem.note
+    @State   var date = expenseItem.date
+     */
+    
+    
+   
     
     let types = [ExpenseType.Necessary, ExpenseType.Discretionary]
     @State private var sliderValue: Double = .zero
@@ -27,7 +35,7 @@ struct AddView: View {
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
     
     var disableSave: Bool {
-        name.isEmpty
+        expenseItem.name.isEmpty
     }
     
     var messageToRelectOn:String {
@@ -36,7 +44,7 @@ struct AddView: View {
     }
   
     var body: some View {
-     
+
         NavigationView {
             Form {
                
@@ -45,21 +53,21 @@ struct AddView: View {
                     maxHeight: .infinity,
                     alignment: .center).italic()
                 
-                TextField("Name", text: $name)
+                TextField("Name", text: $expenseItem.name)
                 
-                Picker("Type", selection: $type) {
+                Picker("Type", selection: $expenseItem.type) {
                     ForEach(types, id: \.self) {
                         let label = "\($0)"
                         Text(label)
                     }
                 }.onChange(of: sliderValue) { _, _ in
                     if sliderValue < 2 {
-                        type = ExpenseType.Necessary
+                        expenseItem.type = ExpenseType.Necessary
                     } else {
-                        type = ExpenseType.Discretionary
+                        expenseItem.type = ExpenseType.Discretionary
                     }
-                }.onChange(of: type) { _, _ in
-                    if type == ExpenseType.Discretionary {
+                }.onChange(of: expenseItem.type) { _, _ in
+                    if expenseItem.type == ExpenseType.Discretionary {
                         sliderValue = 7
                     } else {
                         sliderValue = 1
@@ -78,12 +86,11 @@ struct AddView: View {
                     Slider(value: $sliderValue, in: 1 ... 7, step: 1)
                         .opacity(0.05) // Opacity is the trick here.
                 }
+                NumericTextField(numericText: $stringAmount, amountDouble: $expenseItem.amount)
                 
-                NumericTextField(numericText: $stringAmount, amountDouble: $amount)
+                TextField("Notes", text: $expenseItem.note)
                 
-                TextField("Notes", text: $notes)
-                
-                DatePicker(selection: $date, in: ...Date.now, displayedComponents: .date) {
+                DatePicker(selection: $expenseItem.date, in: ...Date.now, displayedComponents: .date) {
                     Text("Date")
                 }
                 
@@ -94,9 +101,11 @@ struct AddView: View {
                     }
                     
                     Button("Save") {
-                        let item = ExpenseItem(name: name, type: type, amount: amount, note: notes, date: date)
-                       print(item)
-                        expenses.allItems.append(item)
+                        if let index = expenses.allItems.firstIndex(where: { $0.id == expenseItem.id }) {
+                            expenses.allItems.remove(at: index)
+                        }
+                        expenses.allItems.append(expenseItem)
+                        expenses.loadData()
                         dismiss()
                         
                     }.disabled(disableSave)
@@ -105,9 +114,4 @@ struct AddView: View {
         }
     }
 }
-
-struct AddView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddView(expenses: Expenses(), mediations:Mediations())
-    }
-}
+ 

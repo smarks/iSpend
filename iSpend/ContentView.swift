@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var expenses = Expenses()
+    @StateObject var categories = Categories()
+
     @State private var showingAddExpense = false
     @State private var showingSettings = false
 
@@ -25,9 +27,9 @@ struct ContentView: View {
         NavigationView {
             List {
                 
-                ExpenseSection(title: discretionaryTitle, expenseItems: expenses.discretionaryItems, expenses: expenses, deleteItems: removeDiscretionaryItems, editItems: editDiscretionaryItems, budget: discretionaryBudget)
+                ExpenseSection(title: discretionaryTitle, expenseItems: expenses.discretionaryItems, expenses: expenses, categories: categories, deleteItems: removeDiscretionaryItems, editItems: editDiscretionaryItems, budget: discretionaryBudget)
                 
-                ExpenseSection(title: necessaryTitle, expenseItems: expenses.necessaryItems, expenses: expenses,deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: necessaryBudget)
+                ExpenseSection(title: necessaryTitle, expenseItems: expenses.necessaryItems, expenses: expenses, categories: categories,deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: necessaryBudget)
             }
             .navigationTitle("iSpend")
             .toolbar {
@@ -44,7 +46,7 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showingAddExpense) {
                 let newExpenseItem:ExpenseItem = ExpenseItem()
-                AddView(expenseItem: newExpenseItem, expenses: expenses)
+                AddEditExpenseItemView(expenseItem: newExpenseItem, expenses: expenses, categories: categories)
             }
             .sheet(isPresented: $showingSettings) {
                 SettingView()

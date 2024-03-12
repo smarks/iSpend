@@ -9,7 +9,7 @@
 import Foundation
 
 struct ExpenseItem: Identifiable, Codable, Equatable {
-  
+    
     var id = UUID()
     var name: String
     var type: ExpenseType
@@ -17,7 +17,7 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
     var note: String
     var date: Date
     var category:Category
-
+   
     init() {
         id = UUID()
         name = ""
@@ -25,7 +25,7 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
         amount = 0.0
         note = ""
         date = Date.now
-        category = Categories().all[0]
+        category = Categories().defaultValue
     }
 
     init(id: UUID, name: String, type: ExpenseType, amount: Double, note: String, date: Date, category: Category) {
@@ -36,6 +36,5 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
         self.note = note
         self.date = date
         self.category = category
-
     }
 }

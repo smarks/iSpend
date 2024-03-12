@@ -12,9 +12,9 @@ struct DataManagementView: View {
     @State var isPresentingConfirm: Bool = false
     @State private var showAlert = false
 
-    var exportButtonLabel:String {
+    var exportButtonLabel: String {
         if expenses.allItems.isEmpty {
-             "Export (No data to export)"
+            "Export (No data to export)"
         } else {
             "Export"
         }
@@ -35,9 +35,8 @@ struct DataManagementView: View {
                     expenses.loadData()
                 }
             }
-           
+
             Button(exportButtonLabel) {
-                
                 let csvString = generateCSV(from: expenses.allItems)
                 UIPasteboard.general.string = csvString
                 print("CSV string copied to clipboard.")
@@ -50,19 +49,17 @@ struct DataManagementView: View {
                     dismissButton: .default(Text("OK"))
                 )
             }.disabled(expenses.allItems.isEmpty)
-             
-            
         }
     }
 }
 
 func generateCSV(from expenses: [ExpenseItem]) -> String {
     var csvString = "id,name,type,amount,note,date\n"
-    
+
     let dateFormatter = DateFormatter()
     dateFormatter.dateStyle = .short
     dateFormatter.timeStyle = .none
-    
+
     for expense in expenses {
         let dateString = dateFormatter.string(from: expense.date)
         let escapedNote = expense.note.replacingOccurrences(of: "\"", with: "\"\"") // Escape double quotes
@@ -71,8 +68,6 @@ func generateCSV(from expenses: [ExpenseItem]) -> String {
         """
         csvString.append(contentsOf: csvRow)
     }
-    
+
     return csvString
 }
-
-    

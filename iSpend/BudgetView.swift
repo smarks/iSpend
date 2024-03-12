@@ -5,12 +5,11 @@
 //  Created by Spencer Marks on 3/5/24.
 //
 
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
 struct BudgetsView: View {
-     
     @EnvironmentObject var settings: Settings
     @ObservedObject var discretionaryBudget = DiscretionaryBudget()
     @ObservedObject var necessaryBudget = NecessaryBudget()
@@ -35,13 +34,11 @@ struct BudgetsView: View {
                             let filtered = newValue.filter { "0123456789.".contains($0) }
                             if filtered != newValue {
                                 necessaryBudget.amount = filtered
-                                
                             }
                         }
                 }
 
             }.padding()
-
-        }
         }
     }
+}

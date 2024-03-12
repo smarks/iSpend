@@ -25,8 +25,6 @@ class DiscretionaryBudget: Budget {
         set {
             _amount = newValue
             objectWillChange.send()
-            print("new DiscretionaryBudget \(newValue)")
-            print(_amount)
         }
     }
 
@@ -40,8 +38,6 @@ class NecessaryBudget: Budget {
         set {
             _amount = newValue
             objectWillChange.send()
-            print("new NecessaryBudget \(newValue) ")
-            print(amount)
         }
     }
 

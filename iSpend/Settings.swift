@@ -8,8 +8,6 @@
 import Foundation
 
 final class Settings: ObservableObject {
-    
-    
     @Published var appVersion: String {
         didSet {
             appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!
@@ -17,7 +15,6 @@ final class Settings: ObservableObject {
     }
 
     init() {
-       
-        self.appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!
+        appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!
     }
 }

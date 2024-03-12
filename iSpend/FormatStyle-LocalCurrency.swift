@@ -13,4 +13,3 @@ extension FormatStyle where Self == FloatingPointFormatStyle<Double>.Currency {
         .currency(code: Locale.current.currency?.identifier ?? "USD")
     }
 }
-    

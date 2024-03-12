@@ -5,29 +5,24 @@
 //
 import SwiftUI
 
-
 struct NumericTextField: View {
     @Binding var numericText: String
     @Binding var amountDouble: Double
-    
+
     var body: some View {
         TextField("Amount", text: $numericText)
             .keyboardType(.decimalPad)
             .onChange(of: numericText) {
                 numericText = filterNumericText(from: numericText)
-                amountDouble = Double(numericText) ??  0.0
+                amountDouble = Double(numericText) ?? 0.0
             }.onReceive(NotificationCenter.default.publisher(for: UITextField.textDidBeginEditingNotification)) { obj in
                 if let textField = obj.object as? UITextField {
-                   
                     textField.selectedTextRange = textField.textRange(from: textField.beginningOfDocument, to: textField.endOfDocument)
                     textField.selectAll(nil)
                 }
- 
-            }.onTapGesture {
-                 
-            }
-             
 
+            }.onTapGesture {
+            }
     }
 
     private func filterNumericText(from text: String) -> String {
@@ -36,12 +31,12 @@ struct NumericTextField: View {
         let tokens = text.components(separatedBy: ".")
 
         // allow only one '.' decimal character
-        if tokens.count > 2   {
+        if tokens.count > 2 {
             return String(text.dropLast(1))
         }
-        
+
         // allow only two digits after ater '.' decimal character
-        if (tokens.count > 1 && tokens[1].count > 2) {
+        if tokens.count > 1 && tokens[1].count > 2 {
             return String(text.dropLast(1))
         }
 

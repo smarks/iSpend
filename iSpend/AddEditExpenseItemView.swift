@@ -14,6 +14,9 @@ struct AddEditExpenseItemView: View {
 
     let types = [ExpenseType.Necessary, ExpenseType.Discretionary]
 
+    // Add the @State property for the selected category ID
+    @State private var selectedCategoryId: UUID
+
     var disableSave: Bool {
         expenseItem.name.isEmpty
     }
@@ -22,7 +25,24 @@ struct AddEditExpenseItemView: View {
         let index = Int.random(in: 1 ..< mediations.items.count)
         return mediations.items[index]
     }
+
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
+
+    // Initialize the selectedCategoryId with the category ID of the expenseItem
+    init(expenseItem: ExpenseItem, expenses: Expenses, categories: Categories) {
+        _expenseItem = State(initialValue: expenseItem)
+        self.expenses = expenses
+        self.categories = categories
+
+        // Find the category in categories.all that matches expenseItem.category
+        if let existingCategory = categories.all.first(where: { $0.id == expenseItem.category.id }) {
+            // If found, use its ID as the initial value for selectedCategoryId
+            _selectedCategoryId = State(initialValue: existingCategory.id)
+        } else {
+            // If not found, use the default category's ID as the initial value
+            _selectedCategoryId = State(initialValue: categories.defaultValue.id)
+        }
+    }
 
     var body: some View {
         NavigationView {
@@ -32,18 +52,12 @@ struct AddEditExpenseItemView: View {
                     .italic()
 
                 TextField("Name", text: $expenseItem.name)
-                Picker("Category", selection: $expenseItem.category) {
-                    ForEach(categories.all, id: \.id) { category in
-                        Text(category.name).tag(category)
-                    }
-                }
-
 
                 ZStack {
                     LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing)
-                        .mask(Slider(value: $sliderValue, in: 1...7, step: 1))
+                        .mask(Slider(value: $sliderValue, in: 1 ... 7, step: 1))
 
-                    Slider(value: $sliderValue, in: 1...7, step: 1)
+                    Slider(value: $sliderValue, in: 1 ... 7, step: 1)
                         .opacity(0.05) // Allows sliding
                 }
                 .onChange(of: sliderValue) { _, _ in
@@ -57,13 +71,17 @@ struct AddEditExpenseItemView: View {
 
                 TextField("Notes", text: $expenseItem.note)
 
-                     Picker("Category", selection: $expenseItem.category) {
-                        ForEach(0..<categories.all.count, id: \.self) { index in
-                            Text(categories.all[index].name).tag(categories.all[index].name as String)
-                        }
+                Picker("Category", selection: $selectedCategoryId) {
+                    ForEach(categories.all, id: \.id) { category in
+                        Text(category.name).tag(category.id)
                     }
-                    .pickerStyle(MenuPickerStyle())
-               
+                }
+                .onChange(of: selectedCategoryId) { _, newValue in
+                    if let newCategory = categories.all.first(where: { $0.id == newValue }) {
+                        expenseItem.category = newCategory
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
 
                 DatePicker(selection: $expenseItem.date, in: ...Date(), displayedComponents: .date) {
                     Text("Date")

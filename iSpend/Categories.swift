@@ -7,48 +7,45 @@
 //
 
 import Foundation
-//
 
 struct Category: Identifiable, Codable, Equatable, Hashable {
   
     var id = UUID()
     var name: String
 
-
     init() {
         id = UUID()
         name = ""
- 
     }
 
     init(id: UUID, name: String){
-
         self.id = id
         self.name = name
-    
     }
+    
 }
+
+let defaultCategory = Category(id:UUID(), name:"None")
+let resturantCategory = Category(id:UUID(), name:"Resturant")
+let hobbyCategory = Category(id:UUID(), name:"Hobby")
+let houseHoldCategory = Category(id:UUID(), name:"HouseHold")
 
 class Categories: ObservableObject {
     
-     let defaultCategory = Category(id:UUID(), name:"None")
-     let resurantCategory = Category(id:UUID(), name:"Resturant")
-     let hobbyCategory = Category(id:UUID(), name:"Hobby")
-     let houseHoldCategory = Category(id:UUID(), name:"HouseHold")
+     let defaultCategories: [Category] = [defaultCategory,resturantCategory,hobbyCategory,houseHoldCategory]
 
-    
     @Published var all = [Category]() {
         
         didSet {
-
             if let encoded = try? JSONEncoder().encode(all) {
                 UserDefaults.standard.set(encoded, forKey: "Categories")
             }
         }
     }
-
    
+    var defaultValue:Category = defaultCategory
 
+    
     init() {
       loadData()
     }
@@ -58,20 +55,11 @@ class Categories: ObservableObject {
             if let decodedItems = try? JSONDecoder().decode([Category].self, from: savedItems) {
                 all = decodedItems
                 if all.isEmpty {
-                    all.append(defaultCategory)
-                    all.append(resurantCategory)
-                    all.append(houseHoldCategory)
-                    all.append(hobbyCategory)
+                   all = defaultCategories
                 }
-              
-                return
+                 return
             }
         }
-        all = []
-        all.append(defaultCategory)
-        all.append(resurantCategory)
-        all.append(houseHoldCategory)
-        all.append(hobbyCategory)
-
+        all = defaultCategories
     }
 }

@@ -11,7 +11,6 @@ import Foundation
 class Expenses: ObservableObject {
     @Published var allItems = [ExpenseItem]() {
         didSet {
-            
             if let encoded = try? JSONEncoder().encode(allItems) {
                 UserDefaults.standard.set(encoded, forKey: "Items")
             }
@@ -23,13 +22,13 @@ class Expenses: ObservableObject {
     }
 
     var necessaryItems: [ExpenseItem] {
-        allItems.filter { $0.type == ExpenseType.Necessary  }
+        allItems.filter { $0.type == ExpenseType.Necessary }
     }
 
     init() {
-      loadData()
+        loadData()
     }
-    
+
     func loadData() {
         if let savedItems = UserDefaults.standard.data(forKey: "Items") {
             if let decodedItems = try? JSONDecoder().decode([ExpenseItem].self, from: savedItems) {

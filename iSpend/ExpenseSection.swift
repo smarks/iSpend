@@ -36,7 +36,6 @@ struct ExpenseSection: View {
     }()
 
     let deleteItems: (IndexSet) -> Void
-    let editItems: () -> Void
 
     let budget: Budget
 

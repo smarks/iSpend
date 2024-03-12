@@ -36,8 +36,8 @@ struct SettingView: View {
                     switch type {
                     case .budgets:
 
-                        BudgetsView( )
-                         
+                        BudgetsView()
+
                     case .dataManagement:
                         DataManagementView()
                     case .about:
@@ -53,14 +53,13 @@ struct SettingView: View {
     }
 }
 
-
 enum AppIconProvider {
     static func appIcon(in bundle: Bundle = .main) -> String {
         // Attempt to retrieve the macOS app icon name
         if let iconFileName = bundle.object(forInfoDictionaryKey: "CFBundleIconFile") as? String {
             return iconFileName
         }
-        
+
         // Attempt to retrieve the iOS app icon name
         guard let icons = bundle.object(forInfoDictionaryKey: "CFBundleIcons") as? [String: Any],
               let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
@@ -72,7 +71,6 @@ enum AppIconProvider {
         return iconFileName
     }
 }
-
 
 struct AboutView: View {
     let version: String

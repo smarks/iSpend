@@ -26,10 +26,9 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                
-                ExpenseSection(title: discretionaryTitle, expenseItems: expenses.discretionaryItems, expenses: expenses, categories: categories, deleteItems: removeDiscretionaryItems, editItems: editDiscretionaryItems, budget: discretionaryBudget)
-                
-                ExpenseSection(title: necessaryTitle, expenseItems: expenses.necessaryItems, expenses: expenses, categories: categories,deleteItems: removeNecessaryItems, editItems: editNecessaryItems, budget: necessaryBudget)
+                ExpenseSection(title: discretionaryTitle, expenseItems: expenses.discretionaryItems, expenses: expenses, categories: categories, deleteItems: removeDiscretionaryItems, budget: discretionaryBudget)
+
+                ExpenseSection(title: necessaryTitle, expenseItems: expenses.necessaryItems, expenses: expenses, categories: categories, deleteItems: removeNecessaryItems, budget: necessaryBudget)
             }
             .navigationTitle("iSpend")
             .toolbar {
@@ -45,7 +44,7 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showingAddExpense) {
-                let newExpenseItem:ExpenseItem = ExpenseItem()
+                let newExpenseItem: ExpenseItem = ExpenseItem()
                 AddEditExpenseItemView(expenseItem: newExpenseItem, expenses: expenses, categories: categories)
             }
             .sheet(isPresented: $showingSettings) {
@@ -54,27 +53,6 @@ struct ContentView: View {
 
         }.environmentObject(settings)
             .environmentObject(expenses)
-    }
-
-    func edit(in item: ExpenseItem) {
-        print("edit \(item)")
-    }
-
-    func editItems(at offsets: IndexSet, in inputArray: [ExpenseItem]) {
-        for offset in offsets {
-            let item = inputArray[offset]
-            edit(in: item)
-        }
-    }
-
-    func editNecessaryItems( ) {
-      //  editItems(at: offsets, in: expenses.necessaryItems)
-        print("e n")
-    }
-
-    func editDiscretionaryItems( ) {
-       // editItems(at: offsets, in: expenses.discretionaryItems)
-        print("e d")
     }
 
     func removeItems(at offsets: IndexSet, in inputArray: [ExpenseItem]) {
@@ -97,11 +75,5 @@ struct ContentView: View {
 
     func removeDiscretionaryItems(at offsets: IndexSet) {
         removeItems(at: offsets, in: expenses.discretionaryItems)
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }

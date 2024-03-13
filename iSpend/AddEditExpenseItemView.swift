@@ -1,24 +1,30 @@
 import SwiftUI
+//
+//  AddEditExpenseItemView.swift
+//  iSpend
+//
+//  Created by Spencer Marks
+//
+// This view allows the user to add or edit expense items.
 
 struct AddEditExpenseItemView: View {
-    @StateObject var mediations = Mediations()
-
-    @State var expenseItem: ExpenseItem
+    @StateObject private var mediations = Mediations()
+    @State private var expenseItem: ExpenseItem
+    @State private var stringAmount: String = ""
+    @State private var sliderValue: Double = .zero
+    @State private var selectedCategoryId: UUID
+    @State private var originalExpenseItem: ExpenseItem
 
     @ObservedObject var expenses: Expenses
     @ObservedObject var categories: Categories
 
     @Environment(\.dismiss) var dismiss
-    @State var stringAmount: String = ""
-    @State private var sliderValue: Double = .zero
-
+    
     let types = [ExpenseType.Necessary, ExpenseType.Discretionary]
-
-    // Add the @State property for the selected category ID
-    @State private var selectedCategoryId: UUID
-
+    
+    // if expense record is incomplete, disable save button.
     var disableSave: Bool {
-        expenseItem.name.isEmpty
+        expenseItem.name.isEmpty || originalExpenseItem == expenseItem
     }
 
     var messageToReflectOn: String {
@@ -31,6 +37,7 @@ struct AddEditExpenseItemView: View {
     // Initialize the selectedCategoryId with the category ID of the expenseItem
     init(expenseItem: ExpenseItem, expenses: Expenses, categories: Categories) {
         _expenseItem = State(initialValue: expenseItem)
+        _originalExpenseItem = State(initialValue: expenseItem)  
         self.expenses = expenses
         self.categories = categories
 
@@ -67,6 +74,7 @@ struct AddEditExpenseItemView: View {
                         expenseItem.type = ExpenseType.Discretionary
                     }
                 }
+                
                 NumericTextField(numericText: $stringAmount, amountDouble: $expenseItem.amount)
 
                 TextField("Notes", text: $expenseItem.note)

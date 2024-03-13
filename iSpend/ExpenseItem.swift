@@ -17,7 +17,18 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
     var note: String
     var date: Date
     var category:Category
-   
+    
+    static func == (lhs: ExpenseItem, rhs: ExpenseItem) -> Bool {
+          // Implement your comparison logic here
+          // Compare all the properties that determine if the record has changed
+          return lhs.id == rhs.id &&
+                 lhs.name == rhs.name &&
+                 lhs.amount == rhs.amount &&
+                 lhs.category == rhs.category &&
+                 lhs.date == rhs.date &&
+                 lhs.type == rhs.type &&
+                 lhs.note == rhs.note
+      }
     init() {
         id = UUID()
         name = ""

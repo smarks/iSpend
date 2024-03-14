@@ -24,7 +24,7 @@ struct ExpenseSection: View {
     let title: String
     let expenseItems: [ExpenseItem]
     @ObservedObject var expenses: Expenses
-    @ObservedObject var categories: Categories
+    var categories:[Category] = ItemsManager<Category>(itemsKey: "Categories").items
     
     @State private var selectedCategory: String?
     @State private var selectedExpenseItem: ExpenseItem? // Track the selected item
@@ -105,7 +105,7 @@ struct ExpenseSection: View {
         }
         .sheet(item: $selectedExpenseItem) { item in
             // Present the sheet for editing
-            AddEditExpenseItemView(expenseItem: item, expenses: expenses, categories: categories)
+            AddEditExpenseItemView(expenseItem: item, expenses: expenses, mediations: Mediations(), categories: Categories())
         }
     }
 

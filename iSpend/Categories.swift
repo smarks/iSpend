@@ -1,65 +1,40 @@
-//
-//  Expenses.swift
-//  iSpend
-//
-//  Original code created by Paul Hudson on 01/11/2021.
-//  Extended by Spencer Marks starting on 07/25/2023
-//
-
 import Foundation
-
-struct Category: Identifiable, Codable, Equatable, Hashable {
-  
-    var id = UUID()
+import SwiftUI
+ 
+struct Category: NamedItem {
+    var id: UUID = UUID()
     var name: String
-
-    init() {
-        id = UUID()
-        name = ""
-    }
-
-    init(id: UUID, name: String){
-        self.id = id
-        self.name = name
-    }
     
+    init(name:String) {
+        self.name = name
+     }
 }
 
-let defaultCategory = Category(id:UUID(), name:"None")
-let resturantCategory = Category(id:UUID(), name:"Resturant")
-let hobbyCategory = Category(id:UUID(), name:"Hobby")
-let houseHoldCategory = Category(id:UUID(), name:"HouseHold")
+// Default categories
+let defaultCategory = Category(name: "None")
+let restaurantCategory = Category(name: "Restaurant")
+let hobbyCategory = Category(name: "Hobby")
+let houseHoldCategory = Category(name: "HouseHold")
+
+// Initialize your ItemsManager with a specific key for UserDefaults
+let categoriesManager = ItemsManager<Category>(itemsKey: "Categories")
 
 class Categories: ObservableObject {
+    @Published var items: [Category] = categoriesManager.items
     
-     let defaultCategories: [Category] = [defaultCategory,resturantCategory,hobbyCategory,houseHoldCategory]
-
-    @Published var all = [Category]() {
-        
-        didSet {
-            if let encoded = try? JSONEncoder().encode(all) {
-                UserDefaults.standard.set(encoded, forKey: "Categories")
-            }
-        }
-    }
-   
-    var defaultValue:Category = defaultCategory
-
-    
+    let defaultValue = defaultCategory
     init() {
-      loadData()
+        loadDefaultCategoriesIfNeeded()
     }
-    
-    func loadData() {
-        if let savedItems = UserDefaults.standard.data(forKey: "Categories") {
-            if let decodedItems = try? JSONDecoder().decode([Category].self, from: savedItems) {
-                all = decodedItems
-                if all.isEmpty {
-                   all = defaultCategories
-                }
-                 return
-            }
+
+    func loadDefaultCategoriesIfNeeded() {
+        // Load categories from UserDefaults via categoriesManager
+        // If empty, use default categories
+        if categoriesManager.items.isEmpty {
+            categoriesManager.items.append(contentsOf: [defaultCategory, restaurantCategory, hobbyCategory, houseHoldCategory])
+            categoriesManager.saveItems() // Save the default categories to UserDefaults
         }
-        all = defaultCategories
+        // Assign loaded categories to the published items property
+        items = categoriesManager.items
     }
 }

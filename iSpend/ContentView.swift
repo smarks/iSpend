@@ -10,8 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var expenses = Expenses()
-    @StateObject var categories = Categories()
-
+    
     @State private var showingAddExpense = false
     @State private var showingSettings = false
 
@@ -22,13 +21,15 @@ struct ContentView: View {
     let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
 
     @StateObject var settings = Settings()
-
+    var mediations:Mediations = Mediations()
+    var categories:Categories = Categories()
+    
     var body: some View {
         NavigationView {
             List {
-                ExpenseSection(title: discretionaryTitle, expenseItems: expenses.discretionaryItems, expenses: expenses, categories: categories, deleteItems: removeDiscretionaryItems, budget: discretionaryBudget)
+                ExpenseSection(title: discretionaryTitle, expenseItems: expenses.discretionaryItems, expenses: expenses, deleteItems: removeDiscretionaryItems, budget: discretionaryBudget)
 
-                ExpenseSection(title: necessaryTitle, expenseItems: expenses.necessaryItems, expenses: expenses, categories: categories, deleteItems: removeNecessaryItems, budget: necessaryBudget)
+                ExpenseSection(title: necessaryTitle, expenseItems: expenses.necessaryItems, expenses: expenses, deleteItems: removeNecessaryItems, budget: necessaryBudget)
             }
             .navigationTitle("iSpend")
             .toolbar {
@@ -45,10 +46,10 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showingAddExpense) {
                 let newExpenseItem: ExpenseItem = ExpenseItem()
-                AddEditExpenseItemView(expenseItem: newExpenseItem, expenses: expenses, categories: categories)
+                AddEditExpenseItemView(expenseItem: newExpenseItem, expenses: expenses,mediations: mediations, categories: categories)
             }
             .sheet(isPresented: $showingSettings) {
-                SettingView()
+                SettingView(categories: categories, mediations: mediations)
             }
 
         }.environmentObject(settings)

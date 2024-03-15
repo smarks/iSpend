@@ -10,6 +10,9 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var expenses = Expenses()
+    @StateObject var settings = Settings()
+//@StateObject var mediations: Mediations = Mediations.singleInstance
+//    @StateObject var categories: Categories = Categories.singleInstance
     
     @State private var showingAddExpense = false
     @State private var showingSettings = false
@@ -20,10 +23,6 @@ struct ContentView: View {
     let discretionaryTitle = "\(ExpenseType.Discretionary)".capitalized
     let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
 
-    @StateObject var settings = Settings()
-    var mediations:Mediations = Mediations()
-    var categories:Categories = Categories()
-    
     var body: some View {
         NavigationView {
             List {
@@ -46,11 +45,11 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showingAddExpense) {
                 let newExpenseItem: ExpenseItem = ExpenseItem()
-                AddEditExpenseItemView(expenseItem: newExpenseItem, expenses: expenses,mediations: mediations, categories: categories)
+                AddEditExpenseItemView(expenseItem: newExpenseItem)
             }
             .sheet(isPresented: $showingSettings) {
-                SettingView(categories: categories, mediations: mediations)
-            }
+                SettingView()
+            } 
 
         }.environmentObject(settings)
             .environmentObject(expenses)
@@ -66,7 +65,6 @@ struct ContentView: View {
                 objectsToDelete.insert(index)
             }
         }
-        // }
         expenses.allItems.remove(atOffsets: objectsToDelete)
     }
 

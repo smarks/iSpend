@@ -8,24 +8,24 @@ import SwiftUI
 // This view allows the user to add or edit expense items.
 
 struct AddEditExpenseItemView: View {
-    
     @State private var expenseItem: ExpenseItem
     @State private var stringAmount: String = ""
     @State private var sliderValue: Double = .zero
     @State private var selectedCategoryId: UUID
     @State private var originalExpenseItem: ExpenseItem
-
-    @ObservedObject var expenses: Expenses
-    @ObservedObject var categories:Categories
-    @ObservedObject var mediations:Mediations
-
+    
+    @EnvironmentObject() var expenses: Expenses
+    
+    @ObservedObject var categories: Categories = Categories.singleInstance
+    @ObservedObject var mediations: Mediations = Mediations.singleInstance
+  
     @Environment(\.dismiss) var dismiss
-    
+ 
     let types = [ExpenseType.Necessary, ExpenseType.Discretionary]
-    
-    // if expense record is incomplete, disable save button.
+
+    // if expense record is incomplete or hasn't changed, disable save button.
     var disableSave: Bool {
-        expenseItem.name.isEmpty || originalExpenseItem == expenseItem
+        expenseItem.name.isEmpty || originalExpenseItem == expenseItem || expenseItem.amount == 0.0
     }
 
     var messageToReflectOn: String {
@@ -35,14 +35,13 @@ struct AddEditExpenseItemView: View {
 
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
 
-    // Initialize the selectedCategoryId with the category ID of the expenseItem
-    init(expenseItem: ExpenseItem, expenses: Expenses,mediations:Mediations, categories: Categories) {
+    init(expenseItem: ExpenseItem) {
         _expenseItem = State(initialValue: expenseItem)
-        _originalExpenseItem = State(initialValue: expenseItem)  
-        self.expenses = expenses
-        self.categories = categories
-        self.mediations = mediations
-        
+        _originalExpenseItem = State(initialValue: expenseItem)
+
+        sliderValue = expenseItem.discretionaryValue
+        selectedCategoryId = expenseItem.id
+     
         // Find the category in categories.all that matches expenseItem.category
         if let existingCategory = categories.items.first(where: { $0.id == expenseItem.category.id }) {
             // If found, use its ID as the initial value for selectedCategoryId
@@ -70,13 +69,14 @@ struct AddEditExpenseItemView: View {
                         .opacity(0.05) // Allows sliding
                 }
                 .onChange(of: sliderValue) { _, _ in
+                    expenseItem.discretionaryValue = sliderValue
                     if sliderValue < 2 {
                         expenseItem.type = ExpenseType.Necessary
                     } else {
                         expenseItem.type = ExpenseType.Discretionary
                     }
                 }
-              //  stringAmount = String(expenseItem.amount)
+                //  stringAmount = String(expenseItem.amount)
                 NumericTextField(numericText: $stringAmount, amountDouble: $expenseItem.amount)
 
                 TextField("Notes", text: $expenseItem.note)

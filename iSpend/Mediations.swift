@@ -28,9 +28,12 @@ let kungfo_panda = Mediation(name: "Learn from the past, and plan for the future
 let mediationManager = ItemsManager<Mediation>(itemsKey: "Mediations")
 
 class Mediations: ObservableObject {
+
+    static let singleInstance: Mediations = Mediations()
+    
     @Published var items: [Mediation] = mediationManager.items
 
-    init() {
+    private init() {
         loadDefaultCategoriesIfNeeded()
     }
 
@@ -38,10 +41,22 @@ class Mediations: ObservableObject {
         // Load categories from UserDefaults via categoriesManager
         // If empty, use default categories
         if mediationManager.items.isEmpty {
-            mediationManager.items.append(contentsOf: [what, dont, future, sometimes_ok,kungfo_panda])
-            mediationManager.saveItems() // Save the default categories to UserDefaults
+            mediationManager.items.append(contentsOf: [what, dont, future, sometimes_ok, kungfo_panda])
+            mediationManager.appendItem(item: what)
+            mediationManager.appendItem(item: future)
+            mediationManager.appendItem(item: dont)
+            mediationManager.appendItem(item: sometimes_ok)
+            mediationManager.appendItem(item: kungfo_panda)
         }
+        
         // Assign loaded categories to the published items property
         items = mediationManager.items
+    }
+
+    func refreshData(){
+    items = mediationManager.items
+    }
+    func appendItem(mediation:Mediation){
+        mediationManager.appendItem(item: mediation)
     }
 }

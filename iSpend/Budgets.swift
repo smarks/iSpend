@@ -40,6 +40,6 @@ class NecessaryBudget: Budget {
             objectWillChange.send()
         }
     }
-
+    
     override var label: String { "Necessary Budget" }
 }

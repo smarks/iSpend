@@ -21,8 +21,8 @@ struct SettingView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var discretionaryBudget = DiscretionaryBudget()
     @ObservedObject var necessaryBudget = NecessaryBudget()
-    @ObservedObject var categories: Categories
-    @ObservedObject var mediations: Mediations
+    @ObservedObject var categories: Categories = Categories.singleInstance
+    @ObservedObject var mediations: Mediations = Mediations.singleInstance
 
     var isDirty: Bool = false
     var disableSave: Bool {
@@ -51,7 +51,7 @@ struct SettingView: View {
                     case .dataManagement:
                         DataManagementView()
                     case .configuration:
-                        ConfigurationView(categories: categories, mediations: mediations)
+                        ConfigurationView()
 
                     case .about:
                         AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())

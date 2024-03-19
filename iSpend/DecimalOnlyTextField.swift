@@ -6,8 +6,10 @@
 import SwiftUI
 
 struct NumericTextField: View {
+
+
     @Binding var numericText: String
-    @Binding var amountDouble: Double
+     @Binding var amountDouble: Double
 
     var body: some View {
         TextField("Amount", text: $numericText)

@@ -11,8 +11,6 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var expenses = Expenses()
     @StateObject var settings = Settings()
-//@StateObject var mediations: Mediations = Mediations.singleInstance
-//    @StateObject var categories: Categories = Categories.singleInstance
     
     @State private var showingAddExpense = false
     @State private var showingSettings = false
@@ -24,7 +22,7 @@ struct ContentView: View {
     let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ExpenseSection(title: discretionaryTitle, expenseItems: expenses.discretionaryItems, expenses: expenses, deleteItems: removeDiscretionaryItems, budget: discretionaryBudget)
 

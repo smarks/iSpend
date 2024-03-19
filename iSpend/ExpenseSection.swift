@@ -8,25 +8,11 @@
 
 import SwiftUI
 
-struct ItemRow: View {
-    var expense: ExpenseItem
-    var backgroundColor: Color
-
-    var body: some View {
-        HStack {
-            Text(expense.name)
-            Text(expense.amount, format: .localCurrency)
-        }
-    }
-}
-
 struct ExpenseSection: View {
     let title: String
     let expenseItems: [ExpenseItem]
+
     @ObservedObject var expenses: Expenses
-    var categories:[Category] = Categories.singleInstance.items
-    
-    @State private var selectedCategory: String?
     @State private var selectedExpenseItem: ExpenseItem? // Track the selected item
 
     static var dateFormatter: DateFormatter = {
@@ -42,12 +28,6 @@ struct ExpenseSection: View {
     var rowNumber: Int = 0
 
     var total: Double {
-        /*  var t: Double = 0.0
-         for item in expenses {
-         t = t + item.amount
-         }
-         return t
-         */
         expenseItems.reduce(0) { $0 + $1.amount }
     }
 
@@ -68,8 +48,8 @@ struct ExpenseSection: View {
     }
 
     var body: some View {
-        //  Section() {
         Section(header: Text(title)) {
+            Text(title)
             HStack {
                 Text("Budget:").font(.headline)
                 Text(Double(budget.amount) ?? 0, format: .localCurrency)
@@ -84,7 +64,6 @@ struct ExpenseSection: View {
                 Text("Date").font(.headline).bold().frame(maxWidth: .infinity, alignment: .leading)
                 Text("Description").font(.headline).bold().frame(maxWidth: .infinity, alignment: .center)
                 Text("Amount").font(.headline).bold().frame(maxWidth: .infinity, alignment: .trailing)
-
             }
 
             ForEach(expenseItems) { item in
@@ -104,9 +83,8 @@ struct ExpenseSection: View {
             .onDelete(perform: deleteItems)
         }
         .sheet(item: $selectedExpenseItem) { item in
-            // Present the sheet for editing
             AddEditExpenseItemView(expenseItem: item)
-        }   
+        }
     }
 
     private func dismiss() {

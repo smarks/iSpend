@@ -14,7 +14,7 @@ struct BudgetsView: View {
     @ObservedObject var discretionaryBudget = DiscretionaryBudget()
     @ObservedObject var necessaryBudget = NecessaryBudget()
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 List {
                     Text("Discretionary Budget:").padding().bold()

@@ -19,17 +19,19 @@ enum SettingsTypes: String, CaseIterable, Hashable {
 
 struct SettingView: View {
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject() var expenses: Expenses
+
     @Environment(\.dismiss) var dismiss
     @ObservedObject var discretionaryBudget = DiscretionaryBudget()
     @ObservedObject var necessaryBudget = NecessaryBudget()
     @State var categories: [Category] = Categories.singleInstance.items
     @State var mediations: [Mediation] = Mediations.singleInstance.items
-
+    
     var isDirty: Bool = false
     var disableSave: Bool {
         isDirty
     }
-
+    
     var body: some View {
         NavigationStack {
             List {
@@ -55,9 +57,9 @@ struct SettingView: View {
                     case .dataManagement:
                         DataManagementView()
                     case .categories:
-                        EditListView<Category>(title: "Categories"  , items: $categories)
+                        EditListView<Category>(deleteItems: deleteCategory, title: "Categories"  , items: $categories)
                     case .mediations:
-                        EditListView<Mediation>(title: "Mediations", items: $mediations)
+                        EditListView<Mediation>(deleteItems: deleteMeditations, title: "Mediations", items: $mediations)
                     case .about:
                         AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
                     }
@@ -68,6 +70,22 @@ struct SettingView: View {
                 }
             }
         }
+    }
+    func deleteCategory(at offsets: IndexSet) {
+        var objectsToDelete = IndexSet()
+     
+        for offset in offsets {
+            let item = categories[offset]
+            let filteredExpenseItems = expenses.allItems.filter { $0.category == item }
+            if filteredExpenseItems.isEmpty == false {
+                
+            }
+            
+        }
+    }
+    
+    func deleteMeditations(at offsets: IndexSet) {
+        print(offsets)
     }
 }
 

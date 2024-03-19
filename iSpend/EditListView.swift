@@ -14,7 +14,7 @@ protocol NamedItem: Identifiable, Codable, Equatable, Hashable , Encodable{
 }
 
 struct EditListView<ItemType: NamedItem>: View {
-   // let deleteItems: (IndexSet) -> Void
+   let deleteItems: (IndexSet) -> Void
     var title:String  
     @Binding var items: [ItemType]
 
@@ -24,7 +24,7 @@ struct EditListView<ItemType: NamedItem>: View {
                 ForEach($items, id: \.id) { $item in
                     Text(item.name)
                 }
-                .onDelete(perform: delete)
+                .onDelete(perform: deleteItems)
                 .onTapGesture{
                     print(items)
                 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ExpenseType: String, Codable, Equatable {
+enum ExpenseType: String, Codable, Equatable, CaseIterable {
     case Necessary
     case Discretionary
 }

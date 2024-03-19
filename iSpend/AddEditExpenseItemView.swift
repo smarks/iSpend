@@ -8,17 +8,17 @@ import SwiftUI
 // This view allows the user to add or edit expense items.
 
 struct AddEditExpenseItemView: View {
+    
     @State private var expenseItem: ExpenseItem
     @State private var stringAmount: String = ""
     @State private var selectedCategoryId: UUID
     @State private var originalExpenseItem: ExpenseItem
 
     @EnvironmentObject() var expenses: Expenses
+    @Environment(\.dismiss) var dismiss
 
     @ObservedObject var categories: Categories = Categories.singleInstance
     @ObservedObject var mediations: Mediations = Mediations.singleInstance
-
-    @Environment(\.dismiss) var dismiss
 
     let types = [ExpenseType.Necessary, ExpenseType.Discretionary]
 
@@ -52,7 +52,7 @@ struct AddEditExpenseItemView: View {
     }
 
     var body: some View {
-        NavigationView {
+         NavigationStack {
             Form {
                 Text(messageToReflectOn)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
@@ -107,7 +107,7 @@ struct AddEditExpenseItemView: View {
                 DatePicker(selection: $expenseItem.date, in: ...Date(), displayedComponents: .date) {
                     Text("Date")
                 }
-            }
+           }
             .navigationTitle("Record a New Expense")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

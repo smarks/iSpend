@@ -12,7 +12,8 @@ import SwiftUI
 enum SettingsTypes: String, CaseIterable, Hashable {
     case budgets = "Budgets"
     case dataManagement = "Data Management"
-    case configuration = "Configuration"
+    case mediations = "Mediations"
+    case categories = "Categories"
     case about = "About"
 }
 
@@ -21,8 +22,8 @@ struct SettingView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var discretionaryBudget = DiscretionaryBudget()
     @ObservedObject var necessaryBudget = NecessaryBudget()
-    @ObservedObject var categories: Categories = Categories.singleInstance
-    @ObservedObject var mediations: Mediations = Mediations.singleInstance
+    @State var categories: [Category] = Categories.singleInstance.items
+    @State var mediations: [Mediation] = Mediations.singleInstance.items
 
     var isDirty: Bool = false
     var disableSave: Bool {
@@ -38,8 +39,11 @@ struct SettingView: View {
                 NavigationLink(value: SettingsTypes.dataManagement) {
                     Text("Data Management")
                 }
-                NavigationLink(value: SettingsTypes.configuration) {
-                    Text("Configuration")
+                NavigationLink(value: SettingsTypes.categories) {
+                    Text("Categories")
+                }
+                NavigationLink(value: SettingsTypes.mediations) {
+                    Text("Mediations")
                 }
                 NavigationLink(value: SettingsTypes.about) {
                     Text("About")
@@ -50,9 +54,10 @@ struct SettingView: View {
                         BudgetsView()
                     case .dataManagement:
                         DataManagementView()
-                    case .configuration:
-                        ConfigurationView()
-
+                    case .categories:
+                        EditListView<Category>(title: "Categories"  , items: $categories)
+                    case .mediations:
+                        EditListView<Mediation>(title: "Mediations", items: $mediations)
                     case .about:
                         AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
                     }

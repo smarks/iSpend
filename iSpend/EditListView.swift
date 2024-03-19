@@ -14,24 +14,26 @@ protocol NamedItem: Identifiable, Codable, Equatable, Hashable , Encodable{
 }
 
 struct EditListView<ItemType: NamedItem>: View {
-    let deleteItems: (IndexSet) -> Void
-
+   // let deleteItems: (IndexSet) -> Void
+    var title:String  
     @Binding var items: [ItemType]
 
     var body: some View {
-        List {
-            ForEach($items, id: \.id) { $item in
-                Text(item.name)
-            }
-            .onDelete(perform: deleteItems)  
-            .onTapGesture{
-                print(items)
-            }
+       
+            List {
+                ForEach($items, id: \.id) { $item in
+                    Text(item.name)
+                }
+                .onDelete(perform: delete)
+                .onTapGesture{
+                    print(items)
+                }
+            }.navigationTitle(title)
+            .navigationBarItems(trailing: EditButton())
         }
-        .navigationBarItems(trailing: EditButton())
-    }
     
-  //  private func delete(at offsets: IndexSet) {
-   //     items.remove(atOffsets: offsets)
-   // }
+    
+    private func delete(at offsets: IndexSet) {
+        items.remove(atOffsets: offsets)
+    }
 }

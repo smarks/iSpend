@@ -28,7 +28,7 @@ class Categories: ObservableObject {
     
     static let  singleInstance:Categories = Categories()
     
-    @Published var items: [Category] = categoriesManager.items
+    var items: [Category] = categoriesManager.items
 
     let defaultValue = defaultCategory
     

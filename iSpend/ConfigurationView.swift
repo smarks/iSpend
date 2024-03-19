@@ -1,7 +1,7 @@
 import Combine
 import Foundation
 import SwiftUI
-
+/*
 struct ConfigurationView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var categories: Categories
@@ -22,7 +22,7 @@ struct ConfigurationView: View {
 
     var body: some View {
         NavigationView {
-            EditListView(deleteItems: removeCategories, items: $categoryItems)
+            EditListView(items: $categoryItems)
                 .navigationTitle("Categories")
                 .toolbar {
                     Button {
@@ -118,3 +118,4 @@ struct AddOrEditItemView: View {
         }
     }
 }
+*/

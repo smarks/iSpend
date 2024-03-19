@@ -10,7 +10,6 @@ import SwiftUI
 struct AddEditExpenseItemView: View {
     @State private var expenseItem: ExpenseItem
     @State private var stringAmount: String = ""
-    @State private var sliderValue: Double = .zero
     @State private var selectedCategoryId: UUID
     @State private var originalExpenseItem: ExpenseItem
 
@@ -39,7 +38,6 @@ struct AddEditExpenseItemView: View {
         _expenseItem = State(initialValue: expenseItem)
         _originalExpenseItem = State(initialValue: expenseItem)
 
-        sliderValue = expenseItem.discretionaryValue
         selectedCategoryId = expenseItem.id
 
         // Find the category in categories.all that matches expenseItem.category
@@ -50,6 +48,7 @@ struct AddEditExpenseItemView: View {
             // If not found, use the default category's ID as the initial value
             _selectedCategoryId = State(initialValue: categories.defaultValue.id)
         }
+        
     }
 
     var body: some View {
@@ -60,22 +59,33 @@ struct AddEditExpenseItemView: View {
                     .italic()
 
                 TextField("Name", text: $expenseItem.name)
+                Picker("Type", selection: $expenseItem.type) {
+                                                 ForEach(types, id: \.self) {
+                                                     let label = "\($0)"
+                                                     Text(label)
+                                                 }
+                }.onChange(of: expenseItem.discretionaryValue) { _, _ in
+                                                 if expenseItem.discretionaryValue < 2 {
+                                                     expenseItem.type = ExpenseType.Necessary
+                                                 } else {
+                                                     expenseItem.type = ExpenseType.Discretionary
+                                                 }
+                                             }.onChange(of: expenseItem.type) { _, _ in
+                                                 if expenseItem.type == ExpenseType.Discretionary {
+                                                     expenseItem.discretionaryValue = 7
+                                                 } else {
+                                                     expenseItem.discretionaryValue = 1
+                                                 }
+                                             }
 
                 ZStack {
                     LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing)
-                        .mask(Slider(value: $sliderValue, in: 1 ... 7, step: 1))
+                        .mask(Slider(value: $expenseItem.discretionaryValue, in: 1 ... 7, step: 1))
 
-                    Slider(value: $sliderValue, in: 1 ... 7, step: 1)
+                    Slider(value: $expenseItem.discretionaryValue, in: 1 ... 7, step: 1)
                         .opacity(0.05) // Allows sliding
                 }
-                .onChange(of: sliderValue) { _, _ in
-                    expenseItem.discretionaryValue = sliderValue
-                    if sliderValue < 2 {
-                        expenseItem.type = ExpenseType.Necessary
-                    } else {
-                        expenseItem.type = ExpenseType.Discretionary
-                    }
-                }
+                
                 //  stringAmount = String(expenseItem.amount)
                 NumericTextField(numericText: $stringAmount, amountDouble: $expenseItem.amount)
 

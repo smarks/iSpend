@@ -39,7 +39,7 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
         note = ""
         date = Date.now
         category = Categories.singleInstance.defaultValue
-        discretionaryValue = 0.0
+        discretionaryValue = 7.0
     }
 
     init(id: UUID, name: String, type: ExpenseType, amount: Double, note: String, date: Date, category: Category,discretionaryValue: Double) {

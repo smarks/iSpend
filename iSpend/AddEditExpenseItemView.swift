@@ -60,6 +60,7 @@ struct AddEditExpenseItemView: View {
 
                 TextField("Name", text: $expenseItem.name)
                 Picker("Type", selection: $expenseItem.type) {
+ 
                                                  ForEach(types, id: \.self) {
                                                      let label = "\($0)"
                                                      Text(label)
@@ -77,7 +78,7 @@ struct AddEditExpenseItemView: View {
                                                      expenseItem.discretionaryValue = 1
                                                  }
                                              }
-
+ 
                 ZStack {
                     LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing)
                         .mask(Slider(value: $expenseItem.discretionaryValue, in: 1 ... 7, step: 1))

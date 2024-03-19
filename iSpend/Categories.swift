@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 
+ 
 // Default categories
 let defaultCategory = Category(name: "None")
 let restaurantCategory = Category(name: "Restaurant")
@@ -9,13 +10,14 @@ let houseHoldCategory = Category(name: "HouseHold")
 
 let categoriesManager = ItemsManager<Category>(itemsKey: "Categories")
 
-struct Category: NamedItem{
-   
-    var id: UUID = UUID()
+struct Category: NamedItem, Identifiable, Codable, Equatable, Hashable {
+  
+          var id = UUID()
     var name: String
 
-    init(name: String) {
-        self.name = name
+    init() {
+             id = UUID()
+        name = ""
     }
 }
 

@@ -38,3 +38,8 @@ lane :release do
   build_app
   upload_to_app_store       # Upload the screenshots and the binary to iTunes
 end
+
+lane  :bump do
+        increment_build_number(xcodeproj: "iSpend.xcodeproj")
+end
+

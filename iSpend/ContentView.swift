@@ -10,8 +10,10 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var expenses = Expenses()
-    @StateObject var categories = Categories()
-
+    @StateObject var settings = Settings()
+//@StateObject var mediations: Mediations = Mediations.singleInstance
+//    @StateObject var categories: Categories = Categories.singleInstance
+    
     @State private var showingAddExpense = false
     @State private var showingSettings = false
 
@@ -21,14 +23,12 @@ struct ContentView: View {
     let discretionaryTitle = "\(ExpenseType.Discretionary)".capitalized
     let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
 
-    @StateObject var settings = Settings()
-
     var body: some View {
         NavigationView {
             List {
-                ExpenseSection(title: discretionaryTitle, expenseItems: expenses.discretionaryItems, expenses: expenses, categories: categories, deleteItems: removeDiscretionaryItems, budget: discretionaryBudget)
+                ExpenseSection(title: discretionaryTitle, expenseItems: expenses.discretionaryItems, expenses: expenses, deleteItems: removeDiscretionaryItems, budget: discretionaryBudget)
 
-                ExpenseSection(title: necessaryTitle, expenseItems: expenses.necessaryItems, expenses: expenses, categories: categories, deleteItems: removeNecessaryItems, budget: necessaryBudget)
+                ExpenseSection(title: necessaryTitle, expenseItems: expenses.necessaryItems, expenses: expenses, deleteItems: removeNecessaryItems, budget: necessaryBudget)
             }
             .navigationTitle("iSpend")
             .toolbar {
@@ -45,11 +45,11 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showingAddExpense) {
                 let newExpenseItem: ExpenseItem = ExpenseItem()
-                AddEditExpenseItemView(expenseItem: newExpenseItem, expenses: expenses, categories: categories)
+                AddEditExpenseItemView(expenseItem: newExpenseItem)
             }
             .sheet(isPresented: $showingSettings) {
                 SettingView()
-            }
+            } 
 
         }.environmentObject(settings)
             .environmentObject(expenses)
@@ -65,7 +65,6 @@ struct ContentView: View {
                 objectsToDelete.insert(index)
             }
         }
-        // }
         expenses.allItems.remove(atOffsets: objectsToDelete)
     }
 

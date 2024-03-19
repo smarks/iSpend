@@ -17,6 +17,7 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
     var note: String
     var date: Date
     var category:Category
+    var discretionaryValue:Double
     
     static func == (lhs: ExpenseItem, rhs: ExpenseItem) -> Bool {
           // Implement your comparison logic here
@@ -27,6 +28,7 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
                  lhs.category == rhs.category &&
                  lhs.date == rhs.date &&
                  lhs.type == rhs.type &&
+                 lhs.discretionaryValue == rhs.discretionaryValue &&
                  lhs.note == rhs.note
       }
     init() {
@@ -36,10 +38,11 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
         amount = 0.0
         note = ""
         date = Date.now
-        category = Categories().defaultValue
+        category = Categories.singleInstance.defaultValue
+        discretionaryValue = 7.0
     }
 
-    init(id: UUID, name: String, type: ExpenseType, amount: Double, note: String, date: Date, category: Category) {
+    init(id: UUID, name: String, type: ExpenseType, amount: Double, note: String, date: Date, category: Category,discretionaryValue: Double) {
         self.id = id
         self.name = name
         self.type = type
@@ -47,5 +50,6 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
         self.note = note
         self.date = date
         self.category = category
+        self.discretionaryValue = discretionaryValue
     }
 }

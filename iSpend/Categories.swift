@@ -10,11 +10,11 @@ import Foundation
 
 struct Category: Identifiable, Codable, Equatable, Hashable {
   
-    var id = UUID()
+          var id = UUID()
     var name: String
 
     init() {
-        id = UUID()
+             id = UUID()
         name = ""
     }
 

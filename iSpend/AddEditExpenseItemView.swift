@@ -59,7 +59,24 @@ struct AddEditExpenseItemView: View {
                     .italic()
 
                 TextField("Name", text: $expenseItem.name)
-
+                Picker("Type", selection: $expenseItem.type) {
+                                  ForEach(types, id: \.self) {
+                                      let label = "\($0)"
+                                      Text(label)
+                                  }
+                              }.onChange(of: sliderValue) { _, _ in
+                                  if sliderValue < 2 {
+                                      expenseItem.type = ExpenseType.Necessary
+                                  } else {
+                                      expenseItem.type = ExpenseType.Discretionary
+                                  }
+                              }.onChange(of: expenseItem.type) { _, _ in
+                                  if expenseItem.type == ExpenseType.Discretionary {
+                                      sliderValue = 7
+                                  } else {
+                                      sliderValue = 1
+                                  }
+                              }
                 ZStack {
                     LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing)
                         .mask(Slider(value: $sliderValue, in: 1 ... 7, step: 1))

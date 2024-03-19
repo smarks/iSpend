@@ -11,7 +11,6 @@ let categoriesManager = ItemsManager<Category>(itemsKey: "Categories")
 
 struct Category: NamedItem{
    
-    
     var id: UUID = UUID()
     var name: String
 

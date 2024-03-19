@@ -13,14 +13,14 @@ struct AddEditExpenseItemView: View {
     @State private var sliderValue: Double = .zero
     @State private var selectedCategoryId: UUID
     @State private var originalExpenseItem: ExpenseItem
-    
+
     @EnvironmentObject() var expenses: Expenses
-    
+
     @ObservedObject var categories: Categories = Categories.singleInstance
     @ObservedObject var mediations: Mediations = Mediations.singleInstance
-  
+
     @Environment(\.dismiss) var dismiss
- 
+
     let types = [ExpenseType.Necessary, ExpenseType.Discretionary]
 
     // if expense record is incomplete or hasn't changed, disable save button.
@@ -41,7 +41,7 @@ struct AddEditExpenseItemView: View {
 
         sliderValue = expenseItem.discretionaryValue
         selectedCategoryId = expenseItem.id
-     
+
         // Find the category in categories.all that matches expenseItem.category
         if let existingCategory = categories.items.first(where: { $0.id == expenseItem.category.id }) {
             // If found, use its ID as the initial value for selectedCategoryId

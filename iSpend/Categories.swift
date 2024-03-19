@@ -12,12 +12,12 @@ let categoriesManager = ItemsManager<Category>(itemsKey: "Categories")
 
 struct Category: NamedItem, Identifiable, Codable, Equatable, Hashable {
   
-          var id = UUID()
+    var id: UUID
     var name: String
 
-    init() {
-             id = UUID()
-        name = ""
+    init(name:String) {
+        self.id = UUID()
+        self.name = name
     }
 }
 

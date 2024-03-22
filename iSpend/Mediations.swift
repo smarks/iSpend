@@ -29,11 +29,9 @@ let mediationManager = ItemsManager<Mediation>(itemsKey: "Mediations")
 
 class Mediations: ObservableObject {
 
-    static let singleInstance: Mediations = Mediations()
-    
     @Published var items: [Mediation] = mediationManager.items
 
-    private init() {
+      init() {
         loadDefaultCategoriesIfNeeded()
     }
 

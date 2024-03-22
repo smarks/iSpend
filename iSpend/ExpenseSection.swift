@@ -21,36 +21,30 @@ struct ItemRow: View {
 }
 
 struct ExpenseSection: View {
+    
+    
     let title: String
     let expenseItems: [ExpenseItem]
-    @ObservedObject var expenses: Expenses
-    var categories:[Category] = Categories.singleInstance.items
+    @EnvironmentObject var expenses: Expenses
+    @EnvironmentObject var catories: Categories
     
     @State private var selectedCategory: String?
-    @State private var selectedExpenseItem: ExpenseItem? // Track the selected item
-
+    @State private var selectedExpenseItem: ExpenseItem?
+    
     static var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "MM-dd"
         return formatter
     }()
-
-    let deleteItems: (IndexSet) -> Void
-
+    
+    
     let budget: Budget
-
     var rowNumber: Int = 0
 
     var total: Double {
-        /*  var t: Double = 0.0
-         for item in expenses {
-         t = t + item.amount
-         }
-         return t
-         */
         expenseItems.reduce(0) { $0 + $1.amount }
     }
-
+    
     var color: Color {
         if Double(budget.amount) ?? 0 >= total {
             return Color.blue
@@ -58,7 +52,7 @@ struct ExpenseSection: View {
             return Color.red
         }
     }
-
+    
     var backgroundColor: Color {
         if rowNumber % 2 == 0 {
             return Color.white
@@ -66,7 +60,7 @@ struct ExpenseSection: View {
             return Color.gray
         }
     }
-
+    
     var body: some View {
         //  Section() {
         Section(header: Text(title)) {
@@ -74,25 +68,25 @@ struct ExpenseSection: View {
                 Text("Budget:").font(.headline)
                 Text(Double(budget.amount) ?? 0, format: .localCurrency)
             }
-
+            
             HStack {
                 Text("Total: ").font(.headline)
                 Text(total, format: .localCurrency).foregroundColor(color)
             }
-
+            
             HStack {
                 Text("Date").font(.headline).bold().frame(maxWidth: .infinity, alignment: .leading)
                 Text("Description").font(.headline).bold().frame(maxWidth: .infinity, alignment: .center)
                 Text("Amount").font(.headline).bold().frame(maxWidth: .infinity, alignment: .trailing)
-
+                
             }
-
+            
             ForEach(expenseItems) { item in
                 HStack {
                     Text(ExpenseSection.dateFormatter.string(from: item.date)).frame(maxWidth: .infinity, alignment: .leading).lineLimit(1)
                     Text(item.name).frame(maxWidth: .infinity, alignment: .center).lineLimit(1)
                     Text(item.category.name)
-
+                    
                     Text(item.amount, format: .localCurrency).frame(maxWidth: .infinity, alignment: .trailing).lineLimit(1)
                 }.frame(maxWidth: .infinity, alignment: .leading)
                     .background(self.backgroundColor(for: item))
@@ -101,14 +95,14 @@ struct ExpenseSection: View {
                         self.selectedExpenseItem = item // Set the selected item
                     }
             }
-            .onDelete(perform: deleteItems)
-        }
-        .sheet(item: $selectedExpenseItem) { item in
+            
+            
+        }.sheet(item: $selectedExpenseItem) { item in
             // Present the sheet for editing
             AddEditExpenseItemView(expenseItem: item)
-        }   
+        }
+       
     }
-
     private func dismiss() {
         selectedExpenseItem = nil // Reset the selected item
     }
@@ -121,4 +115,6 @@ struct ExpenseSection: View {
             return Color.white
         }
     }
+     
+     
 }

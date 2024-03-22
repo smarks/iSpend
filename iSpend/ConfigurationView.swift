@@ -4,25 +4,17 @@ import SwiftUI
 
 struct ConfigurationView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var categories: Categories
-    @ObservedObject var mediations: Mediations
-    @State var categoryItems: [Category]
-    @State var mediationItems: [Mediation]
-
+    @EnvironmentObject var categories: Categories
+    @EnvironmentObject var mediations: Mediations
+    
     @State private var showingAddMediations = false
     @State private var showingAddCategories = false
     @State private var editingText: String = "" // State to hold the text being edited or added
 
-    init() {
-        mediationItems = Mediations.singleInstance.items
-        categories = Categories.singleInstance
-        mediations = Mediations.singleInstance
-        categoryItems = Categories.singleInstance.items
-    }
-
+    
     var body: some View {
         NavigationView {
-            EditListView(deleteItems: removeCategories, items: $categoryItems)
+            EditListView(deleteItems: removeCategories, items: $categories.items)
                 .navigationTitle("Categories")
                 .toolbar {
                     Button {
@@ -42,7 +34,7 @@ struct ConfigurationView: View {
         }
 
         NavigationView {
-            EditListView(deleteItems: removeMediations, items: $mediationItems)
+            EditListView(deleteItems: removeMediations, items: $mediations.items)
                 .navigationTitle("Mediations")
                 .toolbar {
                     Button {
@@ -66,24 +58,23 @@ struct ConfigurationView: View {
     func removeCategories(at offsets: IndexSet) {
         var objectsToDelete = IndexSet()
         for offset in offsets {
-            let item = categoryItems[offset]
-            if let index = categoryItems.firstIndex(of: item) {
+            let item = categories.items[offset]
+            if let index = categories.items.firstIndex(of: item) {
                 objectsToDelete.insert(index)
             }
         }
-        Categories.singleInstance.items = categoryItems
-
+ 
     }
 
     func removeMediations(at offsets: IndexSet) {
         var objectsToDelete = IndexSet()
         for offset in offsets {
-            let item = mediationItems[offset]
-            if let index = mediationItems.firstIndex(of: item) {
+            let item = mediations.items[offset]
+            if let index = mediations.items.firstIndex(of: item) {
                 objectsToDelete.insert(index)
             }
         }
-        Mediations.singleInstance.refreshData()
+        mediations.refreshData()
     }
 }
 

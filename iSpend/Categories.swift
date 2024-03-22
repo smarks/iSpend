@@ -24,15 +24,14 @@ struct Category: NamedItem, Identifiable, Codable, Equatable, Hashable {
 protocol NamedItemCollection {
     func appendItem(item:any NamedItem)
 }
+
 class Categories: ObservableObject {
-    
-    static let  singleInstance:Categories = Categories()
     
     @Published var items: [Category] = categoriesManager.items
 
-    let defaultValue = defaultCategory
+   static let defaultValue = defaultCategory
     
-    private init() {
+     init() {
         if categoriesManager.items.isEmpty {
             categoriesManager.appendItem(item: defaultCategory)
             categoriesManager.appendItem(item:houseHoldCategory)

@@ -38,7 +38,7 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
         amount = 0.0
         note = ""
         date = Date.now
-        category = Categories.singleInstance.defaultValue
+        category = Categories.defaultValue
         discretionaryValue = 7.0
     }
 

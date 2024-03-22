@@ -19,10 +19,10 @@ enum SettingsTypes: String, CaseIterable, Hashable {
 struct SettingView: View {
     @EnvironmentObject var settings: Settings
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var discretionaryBudget = DiscretionaryBudget()
-    @ObservedObject var necessaryBudget = NecessaryBudget()
-    @ObservedObject var categories: Categories = Categories.singleInstance
-    @ObservedObject var mediations: Mediations = Mediations.singleInstance
+    @EnvironmentObject var discretionaryBudget: DiscretionaryBudget
+    @EnvironmentObject var necessaryBudget: NecessaryBudget
+    @EnvironmentObject var categories: Categories
+    @EnvironmentObject var mediations: Mediations
 
     var isDirty: Bool = false
     var disableSave: Bool {

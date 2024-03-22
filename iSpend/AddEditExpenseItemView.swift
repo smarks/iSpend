@@ -13,10 +13,9 @@ struct AddEditExpenseItemView: View {
     @State private var selectedCategoryId: UUID
     @State private var originalExpenseItem: ExpenseItem
 
-    @EnvironmentObject() var expenses: Expenses
-
-    @ObservedObject var categories: Categories = Categories.singleInstance
-    @ObservedObject var mediations: Mediations = Mediations.singleInstance
+    @EnvironmentObject var expenses: Expenses
+    @EnvironmentObject var categories: Categories
+    @EnvironmentObject var mediations: Mediations
 
     @Environment(\.dismiss) var dismiss
 
@@ -46,9 +45,8 @@ struct AddEditExpenseItemView: View {
             _selectedCategoryId = State(initialValue: existingCategory.id)
         } else {
             // If not found, use the default category's ID as the initial value
-            _selectedCategoryId = State(initialValue: categories.defaultValue.id)
+            _selectedCategoryId = State(initialValue:Categories.defaultValue.id)
         }
-        
     }
 
     var body: some View {
@@ -60,25 +58,24 @@ struct AddEditExpenseItemView: View {
 
                 TextField("Name", text: $expenseItem.name)
                 Picker("Type", selection: $expenseItem.type) {
- 
-                                                 ForEach(types, id: \.self) {
-                                                     let label = "\($0)"
-                                                     Text(label)
-                                                 }
+                    ForEach(types, id: \.self) {
+                        let label = "\($0)"
+                        Text(label)
+                    }
                 }.onChange(of: expenseItem.discretionaryValue) { _, _ in
-                                                 if expenseItem.discretionaryValue < 2 {
-                                                     expenseItem.type = ExpenseType.Necessary
-                                                 } else {
-                                                     expenseItem.type = ExpenseType.Discretionary
-                                                 }
-                                             }.onChange(of: expenseItem.type) { _, _ in
-                                                 if expenseItem.type == ExpenseType.Discretionary {
-                                                     expenseItem.discretionaryValue = 7
-                                                 } else {
-                                                     expenseItem.discretionaryValue = 1
-                                                 }
-                                             }
- 
+                    if expenseItem.discretionaryValue < 2 {
+                        expenseItem.type = ExpenseType.Necessary
+                    } else {
+                        expenseItem.type = ExpenseType.Discretionary
+                    }
+                }.onChange(of: expenseItem.type) { _, _ in
+                    if expenseItem.type == ExpenseType.Discretionary {
+                        expenseItem.discretionaryValue = 7
+                    } else {
+                        expenseItem.discretionaryValue = 1
+                    }
+                }
+
                 ZStack {
                     LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing)
                         .mask(Slider(value: $expenseItem.discretionaryValue, in: 1 ... 7, step: 1))
@@ -86,7 +83,7 @@ struct AddEditExpenseItemView: View {
                     Slider(value: $expenseItem.discretionaryValue, in: 1 ... 7, step: 1)
                         .opacity(0.05) // Allows sliding
                 }
-                
+
                 //  stringAmount = String(expenseItem.amount)
                 NumericTextField(numericText: $stringAmount, amountDouble: $expenseItem.amount)
 

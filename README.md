@@ -1,5 +1,6 @@
 # iSpend
 
+
 ### About
 iSpend is an iOS application written in Swift using SwiftUI that allows users to record expenditures and categorize them as either "necessary" or "discretionary"
 Of course, those terms are subjective, but the gist is that necessary expenditures are things like your mortgage, telephone bill, basic food stuffs, fixing your car, while discretionary expenditures as basically "nice to haves" a new pair of headphones, that shiny red car, etc. 

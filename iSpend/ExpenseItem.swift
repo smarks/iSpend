@@ -16,7 +16,7 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
     var amount: Double
     var note: String
     var date: Date
-    var category:Category
+    var category:String
     var discretionaryValue:Double
     
     static func == (lhs: ExpenseItem, rhs: ExpenseItem) -> Bool {
@@ -38,7 +38,7 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
         amount = 0.0
         note = ""
         date = Date.now
-        category = Categories.singleInstance.defaultValue
+        category = Categories.defaultValue
         discretionaryValue = 7.0
     }
 
@@ -49,7 +49,7 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
         self.amount = amount
         self.note = note
         self.date = date
-        self.category = category
+        self.category = "None"
         self.discretionaryValue = discretionaryValue
     }
 }

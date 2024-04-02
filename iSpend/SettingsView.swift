@@ -21,9 +21,7 @@ struct SettingView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var discretionaryBudget = DiscretionaryBudget()
     @ObservedObject var necessaryBudget = NecessaryBudget()
-    @ObservedObject var categories: Categories = Categories.singleInstance
-    @ObservedObject var mediations: Mediations = Mediations.singleInstance
-
+   
     var isDirty: Bool = false
     var disableSave: Bool {
         isDirty

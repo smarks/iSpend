@@ -8,15 +8,13 @@ import SwiftUI
 // This view allows the user to add or edit expense items.
 
 struct AddEditExpenseItemView: View {
-    @State private var expenseItem: ExpenseItem
+    @State var expenseItem: ExpenseItem
+    @State var originalExpenseItem: ExpenseItem
     @State private var stringAmount: String = ""
-    @State private var selectedCategoryId: UUID
-    @State private var originalExpenseItem: ExpenseItem
 
     @EnvironmentObject() var expenses: Expenses
 
-    @ObservedObject var categories: Categories = Categories.singleInstance
-    @ObservedObject var mediations: Mediations = Mediations.singleInstance
+    var categories:[String] = Categories().list
 
     @Environment(\.dismiss) var dismiss
 
@@ -27,29 +25,14 @@ struct AddEditExpenseItemView: View {
         expenseItem.name.isEmpty || originalExpenseItem == expenseItem || expenseItem.amount == 0.0
     }
 
+    var mediations: [String] = Mediations().list
+
     var messageToReflectOn: String {
-        let index = Int.random(in: 1 ..< mediations.items.count)
-        return mediations.items[index].name
+        let index = Int.random(in: 1 ..< mediations.count)
+        return mediations[index]
     }
 
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
-
-    init(expenseItem: ExpenseItem) {
-        _expenseItem = State(initialValue: expenseItem)
-        _originalExpenseItem = State(initialValue: expenseItem)
-
-        selectedCategoryId = expenseItem.id
-
-        // Find the category in categories.all that matches expenseItem.category
-        if let existingCategory = categories.items.first(where: { $0.id == expenseItem.category.id }) {
-            // If found, use its ID as the initial value for selectedCategoryId
-            _selectedCategoryId = State(initialValue: existingCategory.id)
-        } else {
-            // If not found, use the default category's ID as the initial value
-            _selectedCategoryId = State(initialValue: categories.defaultValue.id)
-        }
-        
-    }
 
     var body: some View {
         NavigationView {
@@ -60,25 +43,24 @@ struct AddEditExpenseItemView: View {
 
                 TextField("Name", text: $expenseItem.name)
                 Picker("Type", selection: $expenseItem.type) {
- 
-                                                 ForEach(types, id: \.self) {
-                                                     let label = "\($0)"
-                                                     Text(label)
-                                                 }
+                    ForEach(types, id: \.self) {
+                        let label = "\($0)"
+                        Text(label)
+                    }
                 }.onChange(of: expenseItem.discretionaryValue) { _, _ in
-                                                 if expenseItem.discretionaryValue < 2 {
-                                                     expenseItem.type = ExpenseType.Necessary
-                                                 } else {
-                                                     expenseItem.type = ExpenseType.Discretionary
-                                                 }
-                                             }.onChange(of: expenseItem.type) { _, _ in
-                                                 if expenseItem.type == ExpenseType.Discretionary {
-                                                     expenseItem.discretionaryValue = 7
-                                                 } else {
-                                                     expenseItem.discretionaryValue = 1
-                                                 }
-                                             }
- 
+                    if expenseItem.discretionaryValue < 2 {
+                        expenseItem.type = ExpenseType.Necessary
+                    } else {
+                        expenseItem.type = ExpenseType.Discretionary
+                    }
+                }.onChange(of: expenseItem.type) { _, _ in
+                    if expenseItem.type == ExpenseType.Discretionary {
+                        expenseItem.discretionaryValue = 7
+                    } else {
+                        expenseItem.discretionaryValue = 1
+                    }
+                }
+
                 ZStack {
                     LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing)
                         .mask(Slider(value: $expenseItem.discretionaryValue, in: 1 ... 7, step: 1))
@@ -86,19 +68,19 @@ struct AddEditExpenseItemView: View {
                     Slider(value: $expenseItem.discretionaryValue, in: 1 ... 7, step: 1)
                         .opacity(0.05) // Allows sliding
                 }
-                
+
                 //  stringAmount = String(expenseItem.amount)
                 NumericTextField(numericText: $stringAmount, amountDouble: $expenseItem.amount)
 
                 TextField("Notes", text: $expenseItem.note)
 
-                Picker("Category", selection: $selectedCategoryId) {
-                    ForEach(categories.items, id: \.id) { category in
-                        Text(category.name).tag(category.id)
+                Picker("Category", selection: $expenseItem.category) {
+                    ForEach(categories, id: \.self) { category in
+                        Text(category).tag(category)
                     }
                 }
-                .onChange(of: selectedCategoryId) {
-                    if let newCategory = categories.items.first(where: { $0.id == selectedCategoryId }) {
+                .onChange(of: expenseItem.category) {
+                    if let newCategory = categories.first(where: { $0 == expenseItem.category }) {
                         expenseItem.category = newCategory
                     }
                 }

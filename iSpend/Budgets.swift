@@ -43,3 +43,4 @@ class NecessaryBudget: Budget {
     
     override var label: String { "Necessary Budget" }
 }
+

@@ -11,9 +11,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var expenses = Expenses()
     @StateObject var settings = Settings()
-//@StateObject var mediations: Mediations = Mediations.singleInstance
-//    @StateObject var categories: Categories = Categories.singleInstance
-    
+ 
     @State private var showingAddExpense = false
     @State private var showingSettings = false
 
@@ -43,10 +41,10 @@ struct ContentView: View {
                     Image(systemName: "gear")
                 }
             }
-            .sheet(isPresented: $showingAddExpense) {
-                let newExpenseItem: ExpenseItem = ExpenseItem()
-                AddEditExpenseItemView(expenseItem: newExpenseItem)
-            }
+         .sheet(isPresented: $showingAddExpense) {
+              let newExpenseItem: ExpenseItem = ExpenseItem()
+              AddEditExpenseItemView(expenseItem: newExpenseItem, originalExpenseItem: newExpenseItem   )
+             }
             .sheet(isPresented: $showingSettings) {
                 SettingView()
             } 

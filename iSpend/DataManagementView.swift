@@ -13,11 +13,11 @@ struct DataManagementView: View {
     @State private var showAlert = false
 
     var exportButtonLabel: String {
-        if expenses.allItems.isEmpty {
-            "Export (No data to export)"
+       if expenses.allItems.isEmpty {
+          "Export (No data to export)"
         } else {
             "Export"
-        }
+       }
     }
 
     @EnvironmentObject var expenses: Expenses

@@ -18,7 +18,13 @@ class Expenses: ObservableObject {
     }
 
     var discretionaryItems: [ExpenseItem] {
-        allItems.filter { $0.type == ExpenseType.Discretionary }
+        get { allItems.filter { $0.type == ExpenseType.Discretionary }
+        }
+        
+        set {
+    //        _allItems.append(newValue)
+            objectWillChange.send()
+        }
     }
 
     var necessaryItems: [ExpenseItem] {
@@ -33,10 +39,13 @@ class Expenses: ObservableObject {
         if let savedItems = UserDefaults.standard.data(forKey: "Items") {
             if let decodedItems = try? JSONDecoder().decode([ExpenseItem].self, from: savedItems) {
                 allItems = decodedItems
+                print(allItems.count)
+                print(allItems)
                 return
             }
         }
-
+        print("empty")
+        print(allItems)
         allItems = []
     }
 }

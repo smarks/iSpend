@@ -40,13 +40,13 @@ struct AddEditExpenseItemView: View {
         selectedCategoryId = expenseItem.id
 
         // Find the category in categories.all that matches expenseItem.category
-        if let existingCategory = categories.items.first(where: { $0.id == expenseItem.category.id }) {
+      //  if let existingCategory = categories.items.first(where: { $0.id == expenseItem.category.id }) {
             // If found, use its ID as the initial value for selectedCategoryId
-            _selectedCategoryId = State(initialValue: existingCategory.id)
-        } else {
+       //     _selectedCategoryId = State(initialValue: existingCategory.id)
+      //  } else {
             // If not found, use the default category's ID as the initial value
             _selectedCategoryId = State(initialValue:Categories.defaultValue.id)
-        }
+     //   }
     }
 
     var body: some View {

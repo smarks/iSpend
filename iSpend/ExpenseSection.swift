@@ -24,9 +24,9 @@ struct ExpenseSection: View {
     let title: String
     let expenseItems: [ExpenseItem]
     @ObservedObject var expenses: Expenses
-    
-    var categories:[String] = Categories().list
-    
+
+    var categories: [String] = Categories().list
+
     @State private var selectedCategory: String?
     @State private var selectedExpenseItem: ExpenseItem? // Track the selected item
 
@@ -105,9 +105,14 @@ struct ExpenseSection: View {
             .onDelete(perform: deleteItems)
         }
         .sheet(item: $selectedExpenseItem) { item in
+            var itemHack = item
             // Present the sheet for editing
-           // AddEditExpenseItemView(expenseItem: item)
-        }   
+            AddEditExpenseItemView(expenseItem: Binding(
+               get: { itemHack },
+               set: { itemHack = $0 }
+            ), originalExpenseItem: itemHack)
+             
+        }
     }
 
     private func dismiss() {

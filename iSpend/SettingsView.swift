@@ -1,9 +1,7 @@
-//
 //  SettingsView.swift
 //  iSpend
 //
 //  Created by Spencer Marks on 1/24/24.
-//
 
 import Combine
 import Foundation
@@ -21,7 +19,7 @@ struct SettingView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var discretionaryBudget = DiscretionaryBudget()
     @ObservedObject var necessaryBudget = NecessaryBudget()
-   
+
     var isDirty: Bool = false
     var disableSave: Bool {
         isDirty
@@ -29,35 +27,26 @@ struct SettingView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                NavigationLink(value: SettingsTypes.budgets) {
-                    Text("Budgets")
+            List(SettingsTypes.allCases, id: \.self) { settingType in
+                NavigationLink(settingType.rawValue, value: settingType)
+            }
+            .navigationDestination(for: SettingsTypes.self) { type in
+                switch type {
+                case .budgets:
+                    BudgetsView()
+                case .dataManagement:
+                    DataManagementView()
+                case .configuration:
+                    ConfigurationView()
+                case .about:
+                    AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
+                    //swiftlint:disable:previous force_cast
                 }
-                NavigationLink(value: SettingsTypes.dataManagement) {
-                    Text("Data Management")
-                }
-                NavigationLink(value: SettingsTypes.configuration) {
-                    Text("Configuration")
-                }
-                NavigationLink(value: SettingsTypes.about) {
-                    Text("About")
-                }
-                .navigationDestination(for: SettingsTypes.self) { type in
-                    switch type {
-                    case .budgets:
-                        BudgetsView()
-                    case .dataManagement:
-                        DataManagementView()
-                    case .configuration:
-                        ConfigurationView()
-
-                    case .about:
-                        AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
-                    }
-                }.navigationBarTitleDisplayMode(.large).toolbar {
-                    Button("Done") {
-                        dismiss()
-                    }
+            }
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                Button("Done") {
+                    dismiss()
                 }
             }
         }
@@ -82,3 +71,4 @@ enum AppIconProvider {
         return iconFileName
     }
 }
+

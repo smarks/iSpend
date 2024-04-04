@@ -7,20 +7,19 @@
 
 import XCTest
 
-final class iSpendUnitTest: XCTestCase {
+final class ISpendUnitTest: XCTestCase {
 
     override func setUpWithError() throws {
-        
+
     }
 
     override func tearDownWithError() throws {
-        
+
     }
 
     func testExample() throws {
        let settings = Settings()
-        
-        
+
     }
 
     func testPerformanceExample() throws {

@@ -8,6 +8,6 @@
 import Foundation
 
 enum ExpenseType: String, Codable, Equatable {
-    case Necessary
-    case Discretionary
+    case necessary
+    case discretionary
 }

@@ -21,7 +21,7 @@ struct DataManagementView: View {
     }
 
     @EnvironmentObject var expenses: Expenses
-    
+
     var body: some View {
         List {
             Button("Reset", role: .destructive) {
@@ -34,7 +34,7 @@ struct DataManagementView: View {
                         UserDefaults.standard.removeObject(forKey: key)
                     }
                     expenses.loadData()
-                    
+
                 }
             }
 

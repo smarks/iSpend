@@ -261,6 +261,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 515A85C8272FD57D00C6A00C /* Build configuration list for PBXNativeTarget "iSpend" */;
 			buildPhases = (
+				22048E0C2BBDFAA400ECC69C /* ShellScript */,
 				515A85B6272FD57B00C6A00C /* Sources */,
 				515A85B7272FD57B00C6A00C /* Frameworks */,
 				515A85B8272FD57B00C6A00C /* Resources */,
@@ -345,6 +346,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		22048E0C2BBDFAA400ECC69C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"$(SRCROOT)/swiftlint.log",
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# if [[ \"$(uname -m)\" == arm64 ]]; then\n#     export PATH=\"/opt/homebrew/bin:$PATH\"\n# fi\n# \n# if which swiftlint > /dev/null; then\n#   swiftlint\n# else\n#   echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n# fi\n# \necho 'swiftlint goes here'\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2270D4ED2B9B8E4A004D26B8 /* Sources */ = {
@@ -647,6 +669,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"iSpend/Preview Content\"";
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "iSpend-CBT";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -689,6 +712,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"iSpend/Preview Content\"";
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "iSpend-CBT";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";

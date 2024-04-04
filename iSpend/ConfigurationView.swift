@@ -2,8 +2,6 @@ import Combine
 import Foundation
 import SwiftUI
 
-import SwiftUI
-
 struct ConfigurationView: View {
     @Environment(\.dismiss) var dismiss
 
@@ -47,30 +45,28 @@ struct ConfigurationView: View {
     }
 }
 
- 
-
-        /*
-         NavigationView {
-             EditListView(deleteItems: removeMediations, items: $mediationItems)
-                 .navigationTitle("Mediations")
-                 .toolbar {
-                     Button {
-                         editingText = "" // Reset or set to a default value for adding a new item
-                         showingAddMediations = true
-                     } label: {
-                         Image(systemName: "plus")
-                     }
-                 }
-         }
-         .sheet(isPresented: $showingAddMediations) {
-             AddOrEditItemView(itemText: editingText) { newText in
-                 // Handle saving the edited or new text
-                 if !newText.isEmpty {
-                     mediations.appendItem(mediation: Mediation(name: newText))
-                 }
-             }.environmentObject(mediations)
-         }
-   */
+ /*
+       NavigationView {
+           EditListView(deleteItems: removeMediations, items: $mediationItems)
+               .navigationTitle("Mediations")
+               .toolbar {
+                   Button {
+                       editingText = "" // Reset or set to a default value for adding a new item
+                       showingAddMediations = true
+                   } label: {
+                       Image(systemName: "plus")
+                   }
+               }
+       }
+       .sheet(isPresented: $showingAddMediations) {
+           AddOrEditItemView(itemText: editingText) { newText in
+               // Handle saving the edited or new text
+               if !newText.isEmpty {
+                   mediations.appendItem(mediation: Mediation(name: newText))
+               }
+           }.environmentObject(mediations)
+       }
+ */
 
 struct AddOrEditItemView: View {
     @Environment(\.dismiss) var dismiss
@@ -123,7 +119,7 @@ extension Array: RawRepresentable where Element: Codable {
         return result
     }
 }
- 
+
 class Categories: ObservableObject {
     static let defaultValue: String = "None"
 
@@ -135,5 +131,6 @@ class Mediations: ObservableObject {
     @AppStorage("Mediations") var list: [String] = [
         "don't", "What would you do without it?",
         "What would you do without it?",
-        "Sometimes its' OK to reward yourself.", "Learn from the past, and plan for the future, while living in the present."]
+        "Sometimes its' OK to reward yourself.",
+        "Learn from the past, and plan for the future, while living in the present."]
 }

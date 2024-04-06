@@ -5,100 +5,83 @@ import SwiftUI
 struct ConfigurationView: View {
     @Environment(\.dismiss) var dismiss
 
-    @State private var showingAddMediations = false
-    @State private var showingAddCategories = false
-    @State private var editingText: String = "" // State to hold the text being edited or added
-
-    // Mark categoryItems as @State to allow for mutations
-    @State var categories: [String] = Categories().list
+    @State private var showingSheet = false
+    @State private var editingText: String = ""
+    @Binding var items: [String] // Use a binding to allow the view to modify the array
+    var title: String
 
     var body: some View {
         NavigationView {
             List {
-                ForEach(categories, id: \.self) { stringToShow in
+                ForEach(items, id: \.self) { stringToShow in
                     Text(stringToShow)
                 }
-                .onDelete(perform: removeCategories) // Use onDelete here
+                .onDelete(perform: remove) // Use onDelete here
             }
-            .navigationTitle("Categories")
+            .navigationTitle(title)
             .toolbar {
                 Button {
                     editingText = ""
-                    showingAddCategories = true
+                    showingSheet = true
                 } label: {
                     Image(systemName: "plus")
                 }
             }
         }
-        .sheet(isPresented: $showingAddCategories) {
-            AddOrEditItemView(itemText: editingText) { newText in
+        .sheet(isPresented: $showingSheet) {
+            EditLabelView(itemText: editingText, editTitle: title) { newText in
                 if !newText.isEmpty {
-                    categories.append(newText)
+                    items.append(newText)
+                    showingSheet = false
                 }
             }
         }
     }
 
-    // Function to remove categories, no longer needs to be marked as mutating
-    func removeCategories(at offsets: IndexSet) {
-        categories.remove(atOffsets: offsets)
+    func remove(at offsets: IndexSet) {
+        items.remove(atOffsets: offsets)
     }
 }
-
- /*
-       NavigationView {
-           EditListView(deleteItems: removeMediations, items: $mediationItems)
-               .navigationTitle("Mediations")
-               .toolbar {
-                   Button {
-                       editingText = "" // Reset or set to a default value for adding a new item
-                       showingAddMediations = true
-                   } label: {
-                       Image(systemName: "plus")
-                   }
-               }
-       }
-       .sheet(isPresented: $showingAddMediations) {
-           AddOrEditItemView(itemText: editingText) { newText in
-               // Handle saving the edited or new text
-               if !newText.isEmpty {
-                   mediations.appendItem(mediation: Mediation(name: newText))
-               }
-           }.environmentObject(mediations)
-       }
- */
-
-struct AddOrEditItemView: View {
+struct EditLabelView: View {
     @Environment(\.dismiss) var dismiss
     var onSave: (String) -> Void
     @State private var itemText: String
+    var editTitle: String
 
-    init(itemText: String = "", onSave: @escaping (String) -> Void) {
+    init(itemText: String = "", editTitle: String = "Add", onSave: @escaping (String) -> Void) {
         _itemText = State(initialValue: itemText)
+        self.editTitle = editTitle
         self.onSave = onSave
     }
 
     var body: some View {
         NavigationView {
-            TextField("Enter item", text: $itemText)
-                .padding()
-                .navigationTitle("Edit Item")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
-                            dismiss()
-                        }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Save") {
-                            onSave(itemText)
-                            dismiss()
-                        }
+            VStack {
+                TextField("Enter item", text: $itemText)
+                    .padding(.horizontal)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+            .padding()
+            .navigationTitle(editTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
                     }
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        onSave(itemText)
+                        dismiss()
+                    }
+                }
+            }
         }
     }
 }
+
+
 
 extension Array: RawRepresentable where Element: Codable {
     public init?(rawValue: String) {
@@ -120,14 +103,20 @@ extension Array: RawRepresentable where Element: Codable {
     }
 }
 
-class Categories: ObservableObject {
+protocol Labels: ObservableObject {
+    var list: [String] { get   }
+     
+
+}
+
+class Categories: Labels {
     static let defaultValue: String = "None"
 
-    @AppStorage("Categories") var list: [String] = [
+    @AppStorage("Categories")  var list: [String] = [
         defaultValue, "Restaurant", "Misc", "HouseHold", "Hobby"]
 }
 
-class Mediations: ObservableObject {
+class Mediations: Labels {
     @AppStorage("Mediations") var list: [String] = [
         "don't", "What would you do without it?",
         "What would you do without it?",

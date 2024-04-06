@@ -10,7 +10,8 @@ import SwiftUI
 enum SettingsTypes: String, CaseIterable, Hashable {
     case budgets = "Budgets"
     case dataManagement = "Data Management"
-    case configuration = "Configuration"
+    case categories = "Categories"
+    case mediations = "Mdiations"
     case about = "About"
 }
 
@@ -19,6 +20,8 @@ struct SettingView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var discretionaryBudget = DiscretionaryBudget()
     @ObservedObject var necessaryBudget = NecessaryBudget()
+    @ObservedObject var categories: Categories = Categories()
+    @ObservedObject var mediations: Mediations = Mediations()
 
     var isDirty: Bool = false
     var disableSave: Bool {
@@ -36,8 +39,10 @@ struct SettingView: View {
                     BudgetsView()
                 case .dataManagement:
                     DataManagementView()
-                case .configuration:
-                    ConfigurationView()
+                case .categories:
+                    ConfigurationView(items: $categories.list, title: "Categories" )
+                case .mediations:
+                    ConfigurationView(items: $mediations.list, title: "Mediations" )
                 case .about:
                     AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
                     //swiftlint:disable:previous force_cast

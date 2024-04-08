@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ExpenseItem: Identifiable, Codable, Equatable {
+class ExpenseItem: Identifiable, Codable, Equatable, ObservableObject {
 
     var id = UUID()
     var name: String

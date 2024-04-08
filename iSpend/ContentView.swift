@@ -20,17 +20,16 @@ struct ContentView: View {
 
     let discretionaryTitle = "\(ExpenseType.discretionary)".capitalized
     let necessaryTitle = "\(ExpenseType.necessary)".capitalized
-
     var body: some View {
         NavigationView {
             List {
-                ExpenseSection(title: discretionaryTitle, 
+                ExpenseSection(title: discretionaryTitle,
                                expenseItems: expenses.discretionaryItems,
                                expenses: expenses,
                                deleteItems: removeDiscretionaryItems,
                                budget: discretionaryBudget)
 
-                ExpenseSection(title: necessaryTitle, 
+                ExpenseSection(title: necessaryTitle,
                                expenseItems: expenses.necessaryItems,
                                expenses: expenses,
                                deleteItems: removeNecessaryItems,
@@ -49,13 +48,11 @@ struct ContentView: View {
                     Image(systemName: "gear")
                 }
             }
-         .sheet(isPresented: $showingAddExpense) {
-              var newExpenseItem: ExpenseItem = ExpenseItem()
-             AddEditExpenseItemView(expenseItem: Binding(
-                get: { newExpenseItem },
-                set: { newExpenseItem = $0 }
-             ), originalExpenseItem: newExpenseItem)
-             }
+            .sheet(isPresented: $showingAddExpense) {
+                let newExpenseItem: ExpenseItem = ExpenseItem()
+                let _: ExpenseItem = ExpenseItem()
+                AddEditExpenseItemView(expenseItem: newExpenseItem, originalExpenseItem: newExpenseItem)
+            }
             .sheet(isPresented: $showingSettings) {
                 SettingView()
             }

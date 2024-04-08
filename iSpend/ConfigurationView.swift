@@ -81,8 +81,6 @@ struct EditLabelView: View {
     }
 }
 
-
-
 extension Array: RawRepresentable where Element: Codable {
     public init?(rawValue: String) {
         guard let data = rawValue.data(using: .utf8),
@@ -104,15 +102,13 @@ extension Array: RawRepresentable where Element: Codable {
 }
 
 protocol Labels: ObservableObject {
-    var list: [String] { get   }
-     
-
+    var list: [String] { get }
 }
 
 class Categories: Labels {
     static let defaultValue: String = "None"
 
-    @AppStorage("Categories")  var list: [String] = [
+    @AppStorage("Categories") var list: [String] = [
         defaultValue, "Restaurant", "Misc", "HouseHold", "Hobby"]
 }
 

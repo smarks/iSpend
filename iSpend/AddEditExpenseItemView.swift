@@ -8,27 +8,31 @@
 
 import SwiftUI
 
-// This view allows the user to add or edit expense items.
 struct AddEditExpenseItemView: View {
-    // Use Binding for better integration with parent views
-    @Binding var expenseItem: ExpenseItem
-    
-    // No need for this to be @State if it's not modified
-    var originalExpenseItem: ExpenseItem
-
+ 
+    @ObservedObject var expenseItem: ExpenseItem
+  
+    @State var originalExpenseItem: ExpenseItem
     @State private var stringAmount: String = ""
 
-    @EnvironmentObject var expenses: Expenses
+    @EnvironmentObject private var expenses: Expenses
     @Environment(\.dismiss) private var dismiss
 
-    var categories: [String] = Categories().list
-    var mediations: [String] = Mediations().list
+    @State  var categories: [String] = Categories().list
+    @State  var mediations: [String] = Mediations().list
+    
+    let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
 
     let types = [ExpenseType.necessary, ExpenseType.discretionary]
 
     // If expense record is incomplete or hasn't changed, disable save button.
     private var disableSave: Bool {
-        expenseItem.name.isEmpty || expenseItem == originalExpenseItem || expenseItem.amount <= 0.0
+        expenseItem.name.isEmpty
+        ||
+        expenseItem == originalExpenseItem
+        || 
+        expenseItem.amount <= 0.0
+    
     }
 
     private var messageToReflectOn: String {
@@ -40,11 +44,10 @@ struct AddEditExpenseItemView: View {
         if  expenseItem.name.isEmpty {
             return "Record a New Expense"
         } else {
-            return "Edit Record"
+            return "Edit \(expenseItem.name)"
         }
     }
     
-    let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
 
     var body: some View {
         NavigationView {

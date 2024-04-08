@@ -105,12 +105,8 @@ struct ExpenseSection: View {
             .onDelete(perform: deleteItems)
         }
         .sheet(item: $selectedExpenseItem) { item in
-            var itemHack = item
-            // Present the sheet for editing
-            AddEditExpenseItemView(expenseItem: Binding(
-               get: { itemHack },
-               set: { itemHack = $0 }
-            ), originalExpenseItem: itemHack)
+            AddEditExpenseItemView(expenseItem:  item, originalExpenseItem: item)
+           
              
         }
     }

@@ -1,4 +1,3 @@
-//
 //  Expenses.swift
 //  iSpend
 //
@@ -6,10 +5,41 @@
 //  Extended by Spencer Marks starting on 07/25/2023
 //
 
-import Foundation
 
-class Expenses: ObservableObject {
-    @Published var allItems = [ExpenseItem]() {
+import Foundation
+import SwiftUI
+
+enum ExpenseType: String, Codable, Equatable {
+    case necessary
+    case discretionary
+}
+
+class ExpenseItem: Identifiable, Codable {
+    var id = UUID()
+    var name: String
+    var type: ExpenseType
+    var amount: Double
+    var note: String
+    var date: Date
+    var category: String
+    var discretionaryValue: Double
+    
+    init(name:String, type:ExpenseType, amount: Double, note:String, date: Date, category:String, discretionaryValue: Double){
+        self.id = UUID()
+        self.name = name
+        self.type = type
+        self.amount = amount
+        self.note = note
+        self.date = date
+        self.category = category
+        self.discretionaryValue = discretionaryValue
+    }
+}
+
+@Observable
+class Expenses {
+     
+   var allItems = [ExpenseItem]() {
         didSet {
             if let encoded = try? JSONEncoder().encode(allItems) {
                 UserDefaults.standard.set(encoded, forKey: "Items")

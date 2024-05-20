@@ -1,9 +1,8 @@
 //
 //  FormatStyle-LocalCurrency.swift
-//  iSpend
+//  Revisit
 //
-//  Original code created by Paul Hudson on 01/11/2021.
-//  Extended by Spencer Marks starting on 07/25/2023
+//  Created by Spencer Marks on 5/9/24.
 //
 
 import Foundation

@@ -1,9 +1,7 @@
-//
 //  SettingsView.swift
 //  iSpend
 //
 //  Created by Spencer Marks on 1/24/24.
-//
 
 import Combine
 import Foundation
@@ -12,7 +10,8 @@ import SwiftUI
 enum SettingsTypes: String, CaseIterable, Hashable {
     case budgets = "Budgets"
     case dataManagement = "Data Management"
-    case configuration = "Configuration"
+    case categories = "Categories"
+    case mediations = "Mdiations"
     case about = "About"
 }
 
@@ -21,8 +20,8 @@ struct SettingView: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var discretionaryBudget = DiscretionaryBudget()
     @ObservedObject var necessaryBudget = NecessaryBudget()
-    @ObservedObject var categories: Categories = Categories.singleInstance
-    @ObservedObject var mediations: Mediations = Mediations.singleInstance
+    @ObservedObject var categories: Categories = Categories()
+    @ObservedObject var mediations: Mediations = Mediations()
 
     var isDirty: Bool = false
     var disableSave: Bool {
@@ -31,35 +30,28 @@ struct SettingView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                NavigationLink(value: SettingsTypes.budgets) {
-                    Text("Budgets")
+            List(SettingsTypes.allCases, id: \.self) { settingType in
+                NavigationLink(settingType.rawValue, value: settingType)
+            }
+            .navigationDestination(for: SettingsTypes.self) { type in
+                switch type {
+                case .budgets:
+                    BudgetsView()
+                case .dataManagement:
+                    DataManagementView()
+                case .categories:
+                    ConfigurationView(items: $categories.list, title: "Categories" )
+                case .mediations:
+                    ConfigurationView(items: $mediations.list, title: "Mediations" )
+                case .about:
+                    AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
+                    //swiftlint:disable:previous force_cast
                 }
-                NavigationLink(value: SettingsTypes.dataManagement) {
-                    Text("Data Management")
-                }
-                NavigationLink(value: SettingsTypes.configuration) {
-                    Text("Configuration")
-                }
-                NavigationLink(value: SettingsTypes.about) {
-                    Text("About")
-                }
-                .navigationDestination(for: SettingsTypes.self) { type in
-                    switch type {
-                    case .budgets:
-                        BudgetsView()
-                    case .dataManagement:
-                        DataManagementView()
-                    case .configuration:
-                        ConfigurationView()
-
-                    case .about:
-                        AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
-                    }
-                }.navigationBarTitleDisplayMode(.large).toolbar {
-                    Button("Done") {
-                        dismiss()
-                    }
+            }
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                Button("Done") {
+                    dismiss()
                 }
             }
         }
@@ -84,3 +76,4 @@ enum AppIconProvider {
         return iconFileName
     }
 }
+

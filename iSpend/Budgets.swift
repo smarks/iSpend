@@ -18,12 +18,12 @@ class Budget: ObservableObject {
 }
 
 class DiscretionaryBudget: Budget {
-    @AppStorage("discretionaryBudget") var _amount: String = "0.0"
+    @AppStorage("discretionaryBudget") var amountLocal: String = "0.0"
 
     override var amount: String {
-        get { _amount }
+        get { amountLocal }
         set {
-            _amount = newValue
+            amountLocal = newValue
             objectWillChange.send()
         }
     }
@@ -32,14 +32,13 @@ class DiscretionaryBudget: Budget {
 }
 
 class NecessaryBudget: Budget {
-    @AppStorage("necessaryBudget") var _amount: String = "0.0"
+    @AppStorage("necessaryBudget") var amountLocal: String = "0.0"
     override var amount: String {
-        get { _amount }
+        get { amountLocal }
         set {
-            _amount = newValue
+            amountLocal = newValue
             objectWillChange.send()
         }
     }
-    
     override var label: String { "Necessary Budget" }
 }

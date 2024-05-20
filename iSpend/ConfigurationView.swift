@@ -4,117 +4,118 @@ import SwiftUI
 
 struct ConfigurationView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var categories: Categories
-    @ObservedObject var mediations: Mediations
-    @State var categoryItems: [Category]
-    @State var mediationItems: [Mediation]
 
-    @State private var showingAddMediations = false
-    @State private var showingAddCategories = false
-    @State private var editingText: String = "" // State to hold the text being edited or added
-
-    init() {
-        mediationItems = Mediations.singleInstance.items
-        categories = Categories.singleInstance
-        mediations = Mediations.singleInstance
-        categoryItems = Categories.singleInstance.items
-    }
+    @State private var showingSheet = false
+    @State private var editingText: String = ""
+    @Binding var items: [String] // Use a binding to allow the view to modify the array
+    var title: String
 
     var body: some View {
         NavigationView {
-            EditListView(deleteItems: removeCategories, items: $categoryItems)
-                .navigationTitle("Categories")
-                .toolbar {
-                    Button {
-                        editingText = ""
-                        showingAddCategories = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
+            List {
+                ForEach(items, id: \.self) { stringToShow in
+                    Text(stringToShow)
                 }
+                .onDelete(perform: remove) // Use onDelete here
+            }
+            .navigationTitle(title)
+            .toolbar {
+                Button {
+                    editingText = ""
+                    showingSheet = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
         }
-        .sheet(isPresented: $showingAddCategories) {
-            AddOrEditItemView(itemText: editingText) { newText in
+        .sheet(isPresented: $showingSheet) {
+            EditLabelView(itemText: editingText, editTitle: title) { newText in
                 if !newText.isEmpty {
-                    categories.appendItem(category: Category(name: newText))
+                    items.append(newText)
+                    showingSheet = false
                 }
-            }.environmentObject(categories)
-        }
-
-        NavigationView {
-            EditListView(deleteItems: removeMediations, items: $mediationItems)
-                .navigationTitle("Mediations")
-                .toolbar {
-                    Button {
-                        editingText = "" // Reset or set to a default value for adding a new item
-                        showingAddMediations = true
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
-        }
-        .sheet(isPresented: $showingAddMediations) {
-            AddOrEditItemView(itemText: editingText) { newText in
-                // Handle saving the edited or new text
-                if !newText.isEmpty {
-                    mediations.appendItem(mediation: Mediation(name: newText))
-                }
-            }.environmentObject(mediations)
+            }
         }
     }
 
-    func removeCategories(at offsets: IndexSet) {
-        var objectsToDelete = IndexSet()
-        for offset in offsets {
-            let item = categoryItems[offset]
-            if let index = categoryItems.firstIndex(of: item) {
-                objectsToDelete.insert(index)
-            }
-        }
-        Categories.singleInstance.items = categoryItems
-
-    }
-
-    func removeMediations(at offsets: IndexSet) {
-        var objectsToDelete = IndexSet()
-        for offset in offsets {
-            let item = mediationItems[offset]
-            if let index = mediationItems.firstIndex(of: item) {
-                objectsToDelete.insert(index)
-            }
-        }
-        Mediations.singleInstance.refreshData()
+    func remove(at offsets: IndexSet) {
+        items.remove(atOffsets: offsets)
     }
 }
-
-struct AddOrEditItemView: View {
+struct EditLabelView: View {
     @Environment(\.dismiss) var dismiss
     var onSave: (String) -> Void
     @State private var itemText: String
+    var editTitle: String
 
-    init(itemText: String = "", onSave: @escaping (String) -> Void) {
+    init(itemText: String = "", editTitle: String = "Add", onSave: @escaping (String) -> Void) {
         _itemText = State(initialValue: itemText)
+        self.editTitle = editTitle
         self.onSave = onSave
     }
 
     var body: some View {
         NavigationView {
-            TextField("Enter item", text: $itemText)
-                .padding()
-                .navigationTitle("Edit Item")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
-                            dismiss()
-                        }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Save") {
-                            onSave(itemText)
-                            dismiss()
-                        }
+            VStack {
+                TextField("Enter item", text: $itemText)
+                    .padding(.horizontal)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+            .padding()
+            .navigationTitle(editTitle)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
                     }
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        onSave(itemText)
+                        dismiss()
+                    }
+                }
+            }
         }
     }
+}
+
+extension Array: RawRepresentable where Element: Codable {
+    public init?(rawValue: String) {
+        guard let data = rawValue.data(using: .utf8),
+              let result = try? JSONDecoder().decode([Element].self, from: data)
+        else {
+            return nil
+        }
+        self = result
+    }
+
+    public var rawValue: String {
+        guard let data = try? JSONEncoder().encode(self),
+              let result = String(data: data, encoding: .utf8)
+        else {
+            return "[]"
+        }
+        return result
+    }
+}
+
+protocol Labels: ObservableObject {
+    var list: [String] { get }
+}
+
+class Categories: Labels {
+    static let defaultValue: String = "None"
+
+    @AppStorage("Categories") var list: [String] = [
+        defaultValue, "Restaurant", "Misc", "HouseHold", "Hobby"]
+}
+
+class Mediations: Labels {
+    @AppStorage("Mediations") var list: [String] = [
+        "don't", "What would you do without it?",
+        "What would you do without it?",
+        "Sometimes its' OK to reward yourself.",
+        "Learn from the past, and plan for the future, while living in the present."]
 }

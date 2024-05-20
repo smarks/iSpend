@@ -1,0 +1,13 @@
+included:
+  
+excluded:
+   
+analyzer_rules:
+  - unused_declaration
+  - unused_import
+opt_in_rules:
+  - all
+disabled_rules:
+  - explicit_acl
+  - explicit_top_level_acl
+  - required_deinit

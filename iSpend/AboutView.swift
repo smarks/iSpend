@@ -15,31 +15,73 @@ struct AboutView: View {
     let appIcon: String
 
     var body: some View {
-        Text("iSpend").bold().font(.system(size: 18))
-
-        if let image = UIImage(named: appIcon) {
-            Image(uiImage: image)
+        VStack(spacing: 10) {
+            appTitle
+            appIconImage
+            appDescription
+            versionInformation
+            developerInformation
+            linksSection
         }
+        .padding()
+    }
 
-        Text("Thoughtful spending made easier").italic().font(.system(size: 12))
-        Spacer()
-        Text("Version \(version) ").font(.system(size: 14))
-        Text("(build \(buildNumber))").font(.system(size: 12))
-        Spacer()
-        Text("Designed &  Programmed by:").font(.system(size: 12))
-        Text("Spencer Marks ⌭ Origami Software").font(.system(size: 12))
-        Spacer()
-        let link = "[Origami Software](https://origamisoftware.com)"
-        Text(.init(link))
-        Spacer()
-        let sourceCode = "[M.I.T. licensed Source Code](https://github.com/smarks/iSpend)"
-        Text(.init(sourceCode)).font(.system(size: 12))
-        Spacer()
-        let privacyPolicyLink = "[Privacy Policy](https://origamisoftware.com/about/ispend-privacy)"
-        Text(.init(privacyPolicyLink)).font(.system(size: 12))
-        Spacer()
-        let hackWithSwiftURL = "[Thanks Paul](https://www.hackingwithswift.com)"
-        Text(.init(hackWithSwiftURL))
+    private var appTitle: some View {
+        Text("iSpend")
+            .bold()
+            .font(.system(size: 18))
+    }
+
+    private var appIconImage: some View {
+        // Correctly handle the optional UIImage and ensure a view is always returned
+        Group {
+            if let image = UIImage(named: appIcon) {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 100, height: 100)
+            } else {
+                // Provide a fallback view in case the image is not found
+                Image(systemName: "app.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 100, height: 100)
+            }
+        }
+    }
+
+    private var appDescription: some View {
+        Text("Thoughtful spending made easier")
+            .italic()
+            .font(.system(size: 12))
+    }
+
+    private var versionInformation: some View {
+        VStack {
+            Text("Version \(version)")
+                .font(.system(size: 14))
+            Text("(build \(buildNumber))")
+                .font(.system(size: 12))
+        }
+    }
+
+    private var developerInformation: some View {
+        VStack {
+            Text("Designed & Programmed by:")
+                .font(.system(size: 12))
+            Text("Spencer Marks ⌭ Origami Software")
+                .font(.system(size: 12))
+        }
+    }
+
+    private var linksSection: some View {
+        VStack {
+            Link("Origami Software", destination: URL(string: "https://origamisoftware.com")!)
+            Link("M.I.T. licensed Source Code", destination: URL(string: "https://github.com/smarks/iSpend")!)
+            Link("Privacy Policy", destination: URL(string: "https://origamisoftware.com/about/ispend-privacy")!)
+            Link("Thanks Paul", destination: URL(string: "https://www.hackingwithswift.com")!)
+        }
+        .font(.system(size: 12))
     }
 }
 

@@ -11,24 +11,29 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var expenses = Expenses()
     @StateObject var settings = Settings()
-//@StateObject var mediations: Mediations = Mediations.singleInstance
-//    @StateObject var categories: Categories = Categories.singleInstance
-    
+
     @State private var showingAddExpense = false
     @State private var showingSettings = false
 
     @ObservedObject var discretionaryBudget = DiscretionaryBudget()
     @ObservedObject var necessaryBudget = NecessaryBudget()
 
-    let discretionaryTitle = "\(ExpenseType.Discretionary)".capitalized
-    let necessaryTitle = "\(ExpenseType.Necessary)".capitalized
-
+    let discretionaryTitle = "\(ExpenseType.discretionary)".capitalized
+    let necessaryTitle = "\(ExpenseType.necessary)".capitalized
     var body: some View {
         NavigationView {
             List {
-                ExpenseSection(title: discretionaryTitle, expenseItems: expenses.discretionaryItems, expenses: expenses, deleteItems: removeDiscretionaryItems, budget: discretionaryBudget)
+                ExpenseSection(title: discretionaryTitle,
+                               expenseItems: expenses.discretionaryItems,
+                               expenses: expenses,
+                               deleteItems: removeDiscretionaryItems,
+                               budget: discretionaryBudget)
 
-                ExpenseSection(title: necessaryTitle, expenseItems: expenses.necessaryItems, expenses: expenses, deleteItems: removeNecessaryItems, budget: necessaryBudget)
+                ExpenseSection(title: necessaryTitle,
+                               expenseItems: expenses.necessaryItems,
+                               expenses: expenses,
+                               deleteItems: removeNecessaryItems,
+                               budget: necessaryBudget)
             }
             .navigationTitle("iSpend")
             .toolbar {
@@ -45,11 +50,12 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showingAddExpense) {
                 let newExpenseItem: ExpenseItem = ExpenseItem()
-                AddEditExpenseItemView(expenseItem: newExpenseItem)
+                let _: ExpenseItem = ExpenseItem()
+                AddEditExpenseItemView(expenseItem: newExpenseItem, originalExpenseItem: newExpenseItem)
             }
             .sheet(isPresented: $showingSettings) {
                 SettingView()
-            } 
+            }
 
         }.environmentObject(settings)
             .environmentObject(expenses)

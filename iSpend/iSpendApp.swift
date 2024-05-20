@@ -9,6 +9,7 @@
 import SwiftUI
 
 @main
+// swiftlint:disable type_name
 struct iSpendApp: App {
     var body: some Scene {
         WindowGroup {

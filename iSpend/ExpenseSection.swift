@@ -24,8 +24,9 @@ struct ExpenseSection: View {
     let title: String
     let expenseItems: [ExpenseItem]
     @ObservedObject var expenses: Expenses
-    var categories:[Category] = Categories.singleInstance.items
-    
+
+    var categories: [String] = Categories().list
+
     @State private var selectedCategory: String?
     @State private var selectedExpenseItem: ExpenseItem? // Track the selected item
 
@@ -91,7 +92,7 @@ struct ExpenseSection: View {
                 HStack {
                     Text(ExpenseSection.dateFormatter.string(from: item.date)).frame(maxWidth: .infinity, alignment: .leading).lineLimit(1)
                     Text(item.name).frame(maxWidth: .infinity, alignment: .center).lineLimit(1)
-                    Text(item.category.name)
+                    Text(item.category)
 
                     Text(item.amount, format: .localCurrency).frame(maxWidth: .infinity, alignment: .trailing).lineLimit(1)
                 }.frame(maxWidth: .infinity, alignment: .leading)
@@ -104,9 +105,10 @@ struct ExpenseSection: View {
             .onDelete(perform: deleteItems)
         }
         .sheet(item: $selectedExpenseItem) { item in
-            // Present the sheet for editing
-            AddEditExpenseItemView(expenseItem: item)
-        }   
+            AddEditExpenseItemView(expenseItem:  item, originalExpenseItem: item)
+           
+             
+        }
     }
 
     private func dismiss() {

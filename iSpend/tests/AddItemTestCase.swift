@@ -50,9 +50,9 @@ final class AddItemTestCase: XCTestCase {
         viewModel.expenses.allItems.append(newItem)
 
         // Verify the item was added
-        let newCount:Int = expenses.discretionaryItems.count + expenses.necessaryItems.count
-        XCTAssertEqual(viewModel.expenses.allItems.count,  newCount)
-      
+        let newCount: Int = expenses.discretionaryItems.count + expenses.necessaryItems.count
+        XCTAssertEqual(viewModel.expenses.allItems.count, newCount)
+
     }
 
     func testExample() throws {

@@ -8,17 +8,17 @@
 
 import Foundation
 
-struct ExpenseItem: Identifiable, Codable, Equatable {
-    
+class ExpenseItem: Identifiable, Codable, Equatable, ObservableObject {
+
     var id = UUID()
     var name: String
     var type: ExpenseType
     var amount: Double
     var note: String
     var date: Date
-    var category:Category
-    var discretionaryValue:Double
-    
+    var category: String
+    var discretionaryValue: Double
+
     static func == (lhs: ExpenseItem, rhs: ExpenseItem) -> Bool {
           // Implement your comparison logic here
           // Compare all the properties that determine if the record has changed
@@ -34,22 +34,22 @@ struct ExpenseItem: Identifiable, Codable, Equatable {
     init() {
         id = UUID()
         name = ""
-        type = ExpenseType.Discretionary
+        type = ExpenseType.discretionary
         amount = 0.0
         note = ""
         date = Date.now
-        category = Categories.singleInstance.defaultValue
+        category = Categories.defaultValue
         discretionaryValue = 7.0
     }
 
-    init(id: UUID, name: String, type: ExpenseType, amount: Double, note: String, date: Date, category: Category,discretionaryValue: Double) {
+    init(id: UUID, name: String, type: ExpenseType, amount: Double, note: String, date: Date, category: Category, discretionaryValue: Double) {
         self.id = id
         self.name = name
         self.type = type
         self.amount = amount
         self.note = note
         self.date = date
-        self.category = category
+        self.category = "None"
         self.discretionaryValue = discretionaryValue
     }
 }

@@ -50,8 +50,9 @@ struct AddExpenseView: View {
                         .mask(
                             Slider(value: $discretionaryValue, in: 1 ... 7, step: 1)
                         )
-                    Slider(value: $discretionaryValue, in: 1 ... 7, step: 1)
+                    Slider(value: $discretionaryValue, in: 1 ... 7, step: 1).opacity(0.05)
                 }
+                
                 typePicker
                 NumericTextField(numericText: $stringAmount, amountDouble: $amount, label:$amopuntLabel)
                 TextField("Notes", text: $note)

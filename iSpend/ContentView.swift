@@ -1,84 +1,129 @@
 //
 //  ContentView.swift
-//  iSpend
+//  Revisit
 //
-//  Original code created by Paul Hudson on 01/11/2021.
-//  Extended by Spencer Marks starting on 07/25/2023
+//  Created by Spencer Marks on 5/7/24.
 //
 
 import SwiftUI
 
+var dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "MM-dd"
+    return formatter
+}()
+
 struct ContentView: View {
-    @StateObject var expenses = Expenses()
-    @StateObject var settings = Settings()
-
+    @State private var expenses = Expenses()
     @State private var showingAddExpense = false
-    @State private var showingSettings = false
 
-    @ObservedObject var discretionaryBudget = DiscretionaryBudget()
-    @ObservedObject var necessaryBudget = NecessaryBudget()
+    let discretionaryBudget: DiscretionaryBudget = DiscretionaryBudget()
+    var discretionaryRowNumber: Int = 0
+    let necessaryBudget: NecessaryBudget = NecessaryBudget()
+    var necessaryRowNumber: Int = 0
+    @State var selectedExpenseItem: ExpenseItem?
+    @State var showingSettings: Bool = false
 
-    let discretionaryTitle = "\(ExpenseType.discretionary)".capitalized
-    let necessaryTitle = "\(ExpenseType.necessary)".capitalized
-    var body: some View {
-        NavigationView {
-            List {
-                ExpenseSection(title: discretionaryTitle,
-                               expenseItems: expenses.discretionaryItems,
-                               expenses: expenses,
-                               deleteItems: removeDiscretionaryItems,
-                               budget: discretionaryBudget)
-
-                ExpenseSection(title: necessaryTitle,
-                               expenseItems: expenses.necessaryItems,
-                               expenses: expenses,
-                               deleteItems: removeNecessaryItems,
-                               budget: necessaryBudget)
-            }
-            .navigationTitle("iSpend")
-            .toolbar {
-                Button {
-                    showingAddExpense = true
-                } label: {
-                    Image(systemName: "plus")
-                }
-                Button {
-                    showingSettings = true
-                } label: {
-                    Image(systemName: "gear")
-                }
-            }
-            .sheet(isPresented: $showingAddExpense) {
-                let newExpenseItem: ExpenseItem = ExpenseItem()
-                let _: ExpenseItem = ExpenseItem()
-                AddEditExpenseItemView(expenseItem: newExpenseItem, originalExpenseItem: newExpenseItem)
-            }
-            .sheet(isPresented: $showingSettings) {
-                SettingView()
-            }
-
-        }.environmentObject(settings)
-            .environmentObject(expenses)
+    var discretionaryBudgetTotal: Double {
+        /*  var t: Double = 0.0
+         for item in expenses {
+         t = t + item.amount
+         }
+         return t
+         */
+        expenses.discretionaryItems.reduce(0) { $0 + $1.amount }
     }
 
-    func removeItems(at offsets: IndexSet, in inputArray: [ExpenseItem]) {
-        var objectsToDelete = IndexSet()
+    var necessaryBudgetTotal: Double {
+        /*  var t: Double = 0.0
+         for item in expenses {
+         t = t + item.amount
+         }
+         return t
+         */
+        expenses.necessaryItems.reduce(0) { $0 + $1.amount }
+    }
 
-        for offset in offsets {
-            let item = inputArray[offset]
-
-            if let index = expenses.allItems.firstIndex(of: item) {
-                objectsToDelete.insert(index)
-            }
+    var discretionaryBudgetTotalColor: Color {
+        if Double(discretionaryBudget.amount) ?? 0 >= discretionaryBudgetTotal {
+            return Color.blue
+        } else {
+            return Color.red
         }
-        expenses.allItems.remove(atOffsets: objectsToDelete)
     }
 
-    func removeNecessaryItems(at offsets: IndexSet) {
-        removeItems(at: offsets, in: expenses.necessaryItems)
+    var discretionaryBackgroundColor: Color {
+        if discretionaryRowNumber % 2 == 0 {
+            return Color.white
+        } else {
+            return Color.gray
+        }
     }
 
-    func removeDiscretionaryItems(at offsets: IndexSet) {
-        removeItems(at: offsets, in: expenses.discretionaryItems)
+    var necessaryBudgetTotalColor: Color {
+        if Double(discretionaryBudget.amount) ?? 0 >= discretionaryBudgetTotal {
+            return Color.blue
+        } else {
+            return Color.red
+        }
+    }
+
+    var necessaryBackgroundColor: Color {
+        if necessaryRowNumber % 2 == 0 {
+            return Color.white
+        } else {
+            return Color.gray
+        }
+    }
+    var messageToReflectOn: String {
+       let mediations: [String] = Mediations().list
+       let index = Int.random(in: 1 ..< mediations.count)
+       return mediations[index]
+   }
+    var body: some View {
+        NavigationSplitView {
+            List {
+                
+                Section(header: Text("Necessary").font(.headline)) {
+                    ExpenseItemView(title: "Necessary", amount: necessaryBudget.amount,
+                                    budgetTotal: necessaryBudgetTotal,
+                                    budgetTotalColor: necessaryBudgetTotalColor,
+                                    backgroundColor: necessaryBackgroundColor,
+                                    expensesItems: expenses.necessaryItems)
+                }
+                
+                Section(header: Text("Discretionary").font(.headline)) {
+                    ExpenseItemView(title: "Discretionary", amount: discretionaryBudget.amount,
+                                    budgetTotal: discretionaryBudgetTotal,
+                                    budgetTotalColor: discretionaryBudgetTotalColor,
+                                    backgroundColor: discretionaryBackgroundColor,
+                                    expensesItems: expenses.discretionaryItems)
+                }
+
+            }.navigationTitle("iSpend")
+                .toolbar {
+                    Button {
+                        showingAddExpense = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                    Button {
+                        showingSettings = true
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                }
+                .sheet(isPresented: $showingAddExpense) {
+                    AddExpenseView(messageToReflectOn: messageToReflectOn, expenses: expenses)
+                }.sheet(isPresented: $showingSettings) {
+                    SettingView(settings: Settings(), expenses: expenses)
+                }
+        } detail: {
+            Text("Select an item")
+        }
+    }
+
+    func removeItems(at offsets: IndexSet) {
+        expenses.allItems.remove(atOffsets: offsets)
     }
 }

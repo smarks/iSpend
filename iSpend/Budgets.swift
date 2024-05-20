@@ -1,8 +1,8 @@
 //
-//  Budgets.swift
-//  iSpend
+//  Budget.swift
+//  Revisit
 //
-//  Created by Spencer Marks on 3/2/24.
+//  Created by Spencer Marks on 5/9/24.
 //
 
 import Foundation
@@ -42,3 +42,4 @@ class NecessaryBudget: Budget {
     }
     override var label: String { "Necessary Budget" }
 }
+

@@ -117,6 +117,7 @@ struct ContentView: View {
                     AddExpenseView(messageToReflectOn: messageToReflectOn, expenses: expenses)
                 }.sheet(isPresented: $showingSettings) {
                     SettingView(settings: Settings(), expenses: expenses)
+
                 }
         } detail: {
             Text("Select an item")

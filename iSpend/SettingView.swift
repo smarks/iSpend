@@ -23,14 +23,13 @@ class Settings: ObservableObject {
             appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!
         }
     }
-    
+
     init() {
         appVersion = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!
     }
 }
 
 struct SettingView: View {
-    
     @State var settings: Settings
     @Environment(\.dismiss) var dismiss
     @ObservedObject var discretionaryBudget = DiscretionaryBudget()
@@ -38,39 +37,69 @@ struct SettingView: View {
     @ObservedObject var categories: Categories = Categories()
     @ObservedObject var mediations: Mediations = Mediations()
 
-    @State var expenses:Expenses
-    
+    @State var expenses: Expenses
+    @State var showBudgetView: Bool = false
+    @State var showDataManagementView: Bool = false
+    @State var showCategoriestView: Bool = false
+    @State var showMediationsView: Bool = false
+    @State var showAboutView: Bool = false
+
     var isDirty: Bool = false
     var disableSave: Bool {
         isDirty
     }
 
     var body: some View {
-        NavigationStack {
-            List(SettingsTypes.allCases, id: \.self) { settingType in
-                NavigationLink(settingType.rawValue, value: settingType)
-            }
-            .navigationDestination(for: SettingsTypes.self) { type in
-                switch type {
-                case .budgets:
-                    BudgetsView()
-                case .dataManagement:
-                    DataManagementView(expenses: expenses)
-                case .categories:
-                    ConfigurationView(items: $categories.list, title: "Categories" )
-                case .mediations:
-                    ConfigurationView(items: $mediations.list, title: "Mediations" )
-                case .about:
-                    AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
-                    //swiftlint:disable:previous force_cast
+        NavigationView {
+            VStack {
+                List {
+                    Button {
+                        showBudgetView = true
+                    } label: {
+                        Text("Budgets")
+                    }.frame(alignment: .leading)
+                    Button {
+                        showDataManagementView = true
+                    } label: {
+                        Text("Datat Management")
+                    }.frame(alignment: .leading)
+                    Button {
+                        showCategoriestView = true
+                    } label: {
+                        Text("Categories")
+                    }
+                    Button {
+                        showMediationsView = true
+                    } label: {
+                        Text("Mediations")
+                    }
+                    Button {
+                        showAboutView = true
+                    } label: {
+                        Text("About")
+                    }
                 }
             }
-            .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                Button("Done") {
-                    dismiss()
-                }
-            }
+                .navigationTitle("Preferences and Settings").navigationBarTitleDisplayMode(.inline).navigationBarBackButtonHidden(false)
+            /*     .toolbar {
+                     ToolbarItem(placement: .topBarTrailing) {
+                         Button("Done") {
+                             dismiss()
+                         }
+                     }
+                 }
+             */
+
+        }.sheet(isPresented: $showBudgetView) {
+            BudgetsView(necessaryBudget: necessaryBudget, discretionaryBudget: discretionaryBudget)
+        }.sheet(isPresented: $showDataManagementView) {
+            DataManagementView(expenses: expenses)
+        }.sheet(isPresented: $showCategoriestView) {
+            ConfigurationView(items: $categories.list, title: "Categories")
+        }.sheet(isPresented: $showMediationsView) {
+            ConfigurationView(items: $categories.list, title: "Mediations")
+        }.sheet(isPresented: $showMediationsView) {
+            AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
         }
     }
 }
@@ -95,35 +124,73 @@ enum AppIconProvider {
 }
 
 struct BudgetsView: View {
+    @Environment(\.dismiss) var dismiss
+
     @EnvironmentObject var settings: Settings
-    @ObservedObject var discretionaryBudget = DiscretionaryBudget()
-    @ObservedObject var necessaryBudget = NecessaryBudget()
+    @State var discretionaryBudget: DiscretionaryBudget
+    @State var necessaryBudget: NecessaryBudget
+    @State var newDiscretionaryBudgetValue: String
+    @State var newNecessaryBudgetValue: String
+    @State var budgetChanged: Bool
+
+    // If expense record is incomplete or hasn't changed, disable save button.
+    private var disableSave: Bool {
+        return !budgetChanged
+    }
+
+    init(necessaryBudget: NecessaryBudget, discretionaryBudget: DiscretionaryBudget) {
+        newNecessaryBudgetValue = necessaryBudget.amount
+        newDiscretionaryBudgetValue = discretionaryBudget.amount
+        self.discretionaryBudget = discretionaryBudget
+        self.necessaryBudget = necessaryBudget
+        budgetChanged = false
+    }
+
     var body: some View {
-        NavigationView {
-            VStack {
-                List {
+        NavigationStack {
+            Form {
+                VStack {
                     Text("Discretionary Budget:").padding().bold()
-                    TextField("Discretionary Budget", text: $discretionaryBudget.amount)
+                    TextField("Discretionary Budget", text: $newDiscretionaryBudgetValue)
                         .keyboardType(.numberPad)
-                        .onReceive(Just(discretionaryBudget.amount)) { newValue in
+                        .onReceive(Just(newDiscretionaryBudgetValue)) { newValue in
                             let filtered = newValue.filter { "0123456789.".contains($0) }
                             if filtered != newValue {
-                                discretionaryBudget.amount = filtered
+                                newDiscretionaryBudgetValue = filtered
                             }
                         }
 
                     Text("Necessary Budget:").padding().bold()
-                    TextField("Necessary Budget", text: $necessaryBudget.amount)
+                    TextField("Necessary Budget", text: $newNecessaryBudgetValue)
                         .keyboardType(.numberPad)
-                        .onReceive(Just(necessaryBudget.amount)) { newValue in
+                        .onReceive(Just(newNecessaryBudgetValue)) { newValue in
                             let filtered = newValue.filter { "0123456789.".contains($0) }
                             if filtered != newValue {
-                                necessaryBudget.amount = filtered
+                                newNecessaryBudgetValue = filtered
                             }
                         }
                 }
+            }.onChange(of: newDiscretionaryBudgetValue) { _, _ in
+                budgetChanged = true
 
-            }.padding()
+            }.onChange(of: newNecessaryBudgetValue) { _, _ in
+                budgetChanged = true
+
+            }.navigationTitle("Set Budgets")
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Cancel") {
+                            dismiss()
+                        }
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Save") {
+                            necessaryBudget.amount = newNecessaryBudgetValue
+                            discretionaryBudget.amount = newDiscretionaryBudgetValue
+                            dismiss()
+                        }.disabled(disableSave)
+                    }
+                }
         }
     }
 }
@@ -142,7 +209,6 @@ struct DataManagementView: View {
         }
     }
 
-
     var body: some View {
         List {
             Button("Reset", role: .destructive) {
@@ -155,7 +221,6 @@ struct DataManagementView: View {
                         UserDefaults.standard.removeObject(forKey: key)
                     }
                     expenses.loadData()
-
                 }
             }
 
@@ -235,6 +300,7 @@ struct ConfigurationView: View {
         items.remove(atOffsets: offsets)
     }
 }
+
 struct EditLabelView: View {
     @Environment(\.dismiss) var dismiss
     var onSave: (String) -> Void
@@ -273,10 +339,6 @@ struct EditLabelView: View {
         }
     }
 }
-
- 
- 
-
 
 struct AboutView: View {
     let version: String

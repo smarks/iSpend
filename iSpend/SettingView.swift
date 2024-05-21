@@ -80,7 +80,7 @@ struct SettingView: View {
                     }
                 }
             }
-                .navigationTitle("Preferences and Settings").navigationBarTitleDisplayMode(.inline)
+                .navigationTitle("Preferences and Settings").navigationBarTitleDisplayMode(.inline).navigationBarBackButtonHidden(false)
             /*     .toolbar {
                      ToolbarItem(placement: .topBarTrailing) {
                          Button("Done") {

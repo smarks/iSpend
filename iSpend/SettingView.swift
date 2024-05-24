@@ -81,14 +81,13 @@ struct SettingView: View {
                 }
             }
             .navigationTitle("Preferences and Settings").navigationBarTitleDisplayMode(.inline).navigationBarBackButtonHidden(false)
-                 .toolbar {
-                     ToolbarItem(placement: .topBarTrailing) {
-                         Button("Done") {
-                             dismiss()
-                         }
-                     }
-                 }
-            
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
 
         }.sheet(isPresented: $showBudgetView) {
             BudgetsView(necessaryBudget: necessaryBudget, discretionaryBudget: discretionaryBudget)
@@ -150,25 +149,8 @@ struct BudgetsView: View {
         NavigationStack {
             Form {
                 VStack {
-                    Text("Discretionary Budget:").padding().bold()
-                    TextField("Discretionary Budget", text: $newDiscretionaryBudgetValue)
-                        .keyboardType(.numberPad)
-                        .onReceive(Just(newDiscretionaryBudgetValue)) { newValue in
-                            let filtered = newValue.filter { "0123456789.".contains($0) }
-                            if filtered != newValue {
-                                newDiscretionaryBudgetValue = filtered
-                            }
-                        }
-
-                    Text("Necessary Budget:").padding().bold()
-                    TextField("Necessary Budget", text: $newNecessaryBudgetValue)
-                        .keyboardType(.numberPad)
-                        .onReceive(Just(newNecessaryBudgetValue)) { newValue in
-                            let filtered = newValue.filter { "0123456789.".contains($0) }
-                            if filtered != newValue {
-                                newNecessaryBudgetValue = filtered
-                            }
-                        }
+                    BudgetEditorView(label: "Necessary Budget:", value: $newNecessaryBudgetValue)
+                    BudgetEditorView(label: "Discretionary Budget:", value: $newDiscretionaryBudgetValue)
                 }
             }.onChange(of: newDiscretionaryBudgetValue) { _, _ in
                 budgetChanged = true
@@ -192,6 +174,23 @@ struct BudgetsView: View {
                     }
                 }
         }
+    }
+}
+
+struct BudgetEditorView: View {
+    @State var label: String
+    @Binding var value: String
+
+    var body: some View {
+        Text(label).padding().bold()
+        TextField(label, text: $value)
+            .keyboardType(.numberPad)
+            .onReceive(Just(value)) { newValue in
+                let filtered = newValue.filter { "0123456789.".contains($0) }
+                if filtered != newValue {
+                    value = filtered
+                }
+            }
     }
 }
 

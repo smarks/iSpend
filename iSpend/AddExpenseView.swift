@@ -76,6 +76,7 @@ struct AddExpenseView: View {
                 }
             .navigationTitle("Add new expense")
             .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
                 Button("Save") {
                     if (item != nil) {
                         item?.name = name
@@ -92,6 +93,12 @@ struct AddExpenseView: View {
                     }
                         dismiss()
                 }.disabled(disableSave)
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
             }
         }
     }

@@ -18,13 +18,14 @@ struct ContentView: View {
 
     @State private var expenses = Expenses()
     @State private var showingAddExpense = false
-
-    let discretionaryBudget: DiscretionaryBudget = DiscretionaryBudget()
-    var discretionaryRowNumber: Int = 0
-    let necessaryBudget: NecessaryBudget = NecessaryBudget()
-    var necessaryRowNumber: Int = 0
     @State var selectedExpenseItem: ExpenseItem?
     @State var showingSettings: Bool = false
+
+    @ObservedObject var necessaryBudget: NecessaryBudget = NecessaryBudget()
+    @ObservedObject var discretionaryBudget: DiscretionaryBudget = DiscretionaryBudget()
+
+    var discretionaryRowNumber: Int = 0
+    var necessaryRowNumber: Int = 0
 
     var discretionaryBudgetTotal: Double {
         /*  var t: Double = 0.0

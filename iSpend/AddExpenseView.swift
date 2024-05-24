@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 
 struct AddExpenseView: View {
+    @Environment(\.dismiss) var dismiss
+
     @State private var name = ""
     @State private var type = ExpenseType.necessary
     @State private var amount = 0.0
@@ -29,7 +31,6 @@ struct AddExpenseView: View {
     var expenses: Expenses
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
 
-    @Environment(\.dismiss) var dismiss
 
     let types = [ExpenseType.necessary, ExpenseType.discretionary]
  

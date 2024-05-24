@@ -80,15 +80,15 @@ struct SettingView: View {
                     }
                 }
             }
-                .navigationTitle("Preferences and Settings").navigationBarTitleDisplayMode(.inline).navigationBarBackButtonHidden(false)
-            /*     .toolbar {
+            .navigationTitle("Preferences and Settings").navigationBarTitleDisplayMode(.inline).navigationBarBackButtonHidden(false)
+                 .toolbar {
                      ToolbarItem(placement: .topBarTrailing) {
                          Button("Done") {
                              dismiss()
                          }
                      }
                  }
-             */
+            
 
         }.sheet(isPresented: $showBudgetView) {
             BudgetsView(necessaryBudget: necessaryBudget, discretionaryBudget: discretionaryBudget)
@@ -98,7 +98,7 @@ struct SettingView: View {
             ConfigurationView(items: $categories.list, title: "Categories")
         }.sheet(isPresented: $showMediationsView) {
             ConfigurationView(items: $categories.list, title: "Mediations")
-        }.sheet(isPresented: $showMediationsView) {
+        }.sheet(isPresented: $showAboutView) {
             AboutView(version: settings.appVersion, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
         }
     }
@@ -196,8 +196,9 @@ struct BudgetsView: View {
 }
 
 struct DataManagementView: View {
-    @State var expenses: Expenses
+    @Environment(\.dismiss) var dismiss
 
+    @State var expenses: Expenses
     @State var isPresentingConfirm: Bool = false
     @State private var showAlert = false
 
@@ -210,33 +211,42 @@ struct DataManagementView: View {
     }
 
     var body: some View {
-        List {
-            Button("Reset", role: .destructive) {
-                isPresentingConfirm = true
+        NavigationView {
+            List {
+                Button("Reset", role: .destructive) {
+                    isPresentingConfirm = true
 
-            }.confirmationDialog("Are you sure?",
-                                 isPresented: $isPresentingConfirm) {
-                Button("Delete all data and restore defaults?", role: .destructive) {
-                    for key in Array(UserDefaults.standard.dictionaryRepresentation().keys) {
-                        UserDefaults.standard.removeObject(forKey: key)
+                }.confirmationDialog("Are you sure?",
+                                     isPresented: $isPresentingConfirm) {
+                    Button("Delete all data and restore defaults?", role: .destructive) {
+                        for key in Array(UserDefaults.standard.dictionaryRepresentation().keys) {
+                            UserDefaults.standard.removeObject(forKey: key)
+                        }
+                        expenses.loadData()
                     }
-                    expenses.loadData()
+                }
+
+                Button(exportButtonLabel) {
+                    let csvString = generateCSV(from: expenses.allItems)
+                    UIPasteboard.general.string = csvString
+                    print("CSV string copied to clipboard.")
+                    showAlert = true
+
+                }.alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("\(expenses.allItems.count) exported "),
+                        message: Text("Your data is now in  ready to paste into a file. Save the file with a .csv extension and view in your favorite spreadsheet program"),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }.disabled(expenses.allItems.isEmpty)
+
+            }.toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
                 }
             }
-
-            Button(exportButtonLabel) {
-                let csvString = generateCSV(from: expenses.allItems)
-                UIPasteboard.general.string = csvString
-                print("CSV string copied to clipboard.")
-                showAlert = true
-
-            }.alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text("\(expenses.allItems.count) exported "),
-                    message: Text("Your data is now in  ready to paste into a file. Save the file with a .csv extension and view in your favorite spreadsheet program"),
-                    dismissButton: .default(Text("OK"))
-                )
-            }.disabled(expenses.allItems.isEmpty)
         }
     }
 }
@@ -278,11 +288,19 @@ struct ConfigurationView: View {
             }
             .navigationTitle(title)
             .toolbar {
-                Button {
-                    editingText = ""
-                    showingSheet = true
-                } label: {
-                    Image(systemName: "plus")
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        editingText = ""
+                        showingSheet = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
                 }
             }
         }

@@ -14,6 +14,8 @@ var dateFormatter: DateFormatter = {
 }()
 
 struct ContentView: View {
+    @Environment(\.dismiss) var dismiss
+
     @State private var expenses = Expenses()
     @State private var showingAddExpense = false
 
@@ -75,24 +77,25 @@ struct ContentView: View {
             return Color.gray
         }
     }
+
     var messageToReflectOn: String {
-       let mediations: [String] = Mediations().list
-       let index = Int.random(in: 1 ..< mediations.count)
-       return mediations[index]
-   }
+        let mediations: [String] = Mediations().list
+        let index = Int.random(in: 1 ..< mediations.count)
+        return mediations[index]
+    }
+
     var body: some View {
-        NavigationSplitView {
+        NavigationView {
             List {
-                
-                Section(header: Text("Necessary").font(.headline)) {
+                Section(header: Text("Necessary").font(.headline).foregroundStyle(.blue)) {
                     ExpenseItemView(title: "Necessary", amount: necessaryBudget.amount,
                                     budgetTotal: necessaryBudgetTotal,
                                     budgetTotalColor: necessaryBudgetTotalColor,
                                     backgroundColor: necessaryBackgroundColor,
                                     expensesItems: expenses.necessaryItems)
                 }
-                
-                Section(header: Text("Discretionary").font(.headline)) {
+
+                Section(header: Text("Discretionary").font(.headline).foregroundStyle(.blue)) {
                     ExpenseItemView(title: "Discretionary", amount: discretionaryBudget.amount,
                                     budgetTotal: discretionaryBudgetTotal,
                                     budgetTotalColor: discretionaryBudgetTotalColor,
@@ -101,26 +104,29 @@ struct ContentView: View {
                 }
 
             }.navigationTitle("iSpend")
-                .toolbar {
-                    Button {
-                        showingAddExpense = true
-                    } label: {
-                        Image(systemName: "plus")
+                .toolbar {                  
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        
+                        Button {
+                            showingAddExpense = true
+                        } label: {
+                            Image(systemName: "plus")
+                        }
                     }
-                    Button {
-                        showingSettings = true
-                    } label: {
-                        Image(systemName: "gear")
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        
+                        Button {
+                            showingSettings = true
+                        } label: {
+                            Image(systemName: "gear")
+                        }
                     }
                 }
                 .sheet(isPresented: $showingAddExpense) {
                     AddExpenseView(messageToReflectOn: messageToReflectOn, expenses: expenses)
                 }.sheet(isPresented: $showingSettings) {
                     SettingView(settings: Settings(), expenses: expenses)
-
                 }
-        } detail: {
-            Text("Select an item")
         }
     }
 

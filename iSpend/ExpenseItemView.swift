@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct ExpenseItemView: View {
+    @State var expenses: Expenses
     var title: String
     var amount: String
     var budgetTotal: Double
@@ -18,6 +19,12 @@ struct ExpenseItemView: View {
 
     @State var selectedExpenseItem: ExpenseItem?
 
+    var messageToReflectOn: String {
+             let mediations: [String] = Mediations().list
+             let index = Int.random(in: 1 ..< mediations.count)
+             return mediations[index]
+    }
+    
     var body: some View {
         HStack {
             Text("Budget:").font(.headline)
@@ -38,11 +45,21 @@ struct ExpenseItemView: View {
             }.frame(maxWidth: .infinity, alignment: .leading)
                 .background(backgroundColor(for: item, expenses: expensesItems))
                 .onTapGesture {
-                    print(item)
-                    selectedExpenseItem = item // Set the selected item
+                    selectedExpenseItem = item // Set the selected item   
+                    print(item.name)
                 }
-        }
+
+        }.onDelete(perform: delete)
+            .sheet(item: $selectedExpenseItem) { item in // show a new sheet if selectedItem is not `nil`
+                AddExpenseView(item: item, messageToReflectOn: messageToReflectOn, expenses: expenses)
+            }
     }
+
+    func delete(at offsets: IndexSet) {
+        print(offsets)
+        expenses.allItems.remove(atOffsets: offsets)
+    }
+
     // Helper method to determine the background color for each row
     func backgroundColor(for item: ExpenseItem, expenses: [ExpenseItem]) -> Color {
         if let index = expenses.firstIndex(where: { $0.id == item.id }) {
@@ -52,5 +69,3 @@ struct ExpenseItemView: View {
         }
     }
 }
- 
- 

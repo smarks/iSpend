@@ -80,16 +80,17 @@ struct ContentView: View {
     }
 
     var messageToReflectOn: String {
-        let mediations: [String] = Mediations().list
-        let index = Int.random(in: 1 ..< mediations.count)
-        return mediations[index]
+             let mediations: [String] = Mediations().list
+             let index = Int.random(in: 1 ..< mediations.count)
+             return mediations[index]
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
+                
                 Section(header: Text("Necessary").font(.headline).foregroundStyle(.blue)) {
-                    ExpenseItemView(title: "Necessary", amount: necessaryBudget.amount,
+                    ExpenseItemView(expenses: expenses, title: "Necessary", amount: necessaryBudget.amount,
                                     budgetTotal: necessaryBudgetTotal,
                                     budgetTotalColor: necessaryBudgetTotalColor,
                                     backgroundColor: necessaryBackgroundColor,
@@ -97,7 +98,7 @@ struct ContentView: View {
                 }
 
                 Section(header: Text("Discretionary").font(.headline).foregroundStyle(.blue)) {
-                    ExpenseItemView(title: "Discretionary", amount: discretionaryBudget.amount,
+                    ExpenseItemView(expenses: expenses,title: "Discretionary", amount: discretionaryBudget.amount,
                                     budgetTotal: discretionaryBudgetTotal,
                                     budgetTotalColor: discretionaryBudgetTotalColor,
                                     backgroundColor: discretionaryBackgroundColor,
@@ -105,9 +106,8 @@ struct ContentView: View {
                 }
 
             }.navigationTitle("iSpend")
-                .toolbar {                  
+                .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        
                         Button {
                             showingAddExpense = true
                         } label: {
@@ -115,22 +115,27 @@ struct ContentView: View {
                         }
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        
                         Button {
                             showingSettings = true
                         } label: {
                             Image(systemName: "gear")
                         }
                     }
-                }
-                .sheet(isPresented: $showingAddExpense) {
+                }.sheet(isPresented: $showingAddExpense) {
                     AddExpenseView(messageToReflectOn: messageToReflectOn, expenses: expenses)
                 }.sheet(isPresented: $showingSettings) {
                     SettingView(settings: Settings(), expenses: expenses)
                 }
         }
+       
+
     }
 
+  
+    func delete(at offsets: IndexSet) {
+        // delete the objects here
+    }
+    
     func removeItems(at offsets: IndexSet) {
         expenses.allItems.remove(atOffsets: offsets)
     }

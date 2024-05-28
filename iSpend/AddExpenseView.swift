@@ -10,6 +10,7 @@ import SwiftUI
 
 struct AddExpenseView: View {
     @Environment(\.dismiss) var dismiss
+    var item: ExpenseItem?
 
     @State private var name = ""
     @State private var type = ExpenseType.Necessary
@@ -21,31 +22,39 @@ struct AddExpenseView: View {
     @State private var date: Date = Date.now
     @State private var discretionaryValue: Double = 0
     @State private var discretionaryValueString: String = "0"
-    
-    @State var discretionaryValueLabel:String = "Discretionary Value"
-    @State var amopuntLabel:String = "Amount"
 
-    var item:ExpenseItem?
+    @State var discretionaryValueLabel: String = "Discretionary Value"
+    @State var amopuntLabel: String = "Amount"
+
     
     var messageToReflectOn: String
     var expenses: Expenses
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
 
-
     let types = [ExpenseType.Necessary, ExpenseType.Discretionary]
- 
+
     // If expense record is incomplete or hasn't changed, disable save button.
     private var disableSave: Bool {
         name.isEmpty ||
-        amount <= 0.0
+            amount <= 0.0
     }
-    
+
+    private var typeColor: Color {
+        if discretionaryValue < 3 {
+            return Color.blue
+        } else if discretionaryValue < 6 {
+            return Color.orange
+        } else {
+            return Color.red
+        }
+    }
+
     var body: some View {
         NavigationStack {
             Form {
                 reflectionSection
                 TextField("Name", text: $name)
-                NumericTextField(numericText: $discretionaryValueString, amountDouble:$discretionaryValue, label: $discretionaryValueLabel)
+                NumericTextField(numericText: $discretionaryValueString, amountDouble: $discretionaryValue, label: $discretionaryValueLabel)
                 ZStack {
                     LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing)
                         .mask(
@@ -53,49 +62,44 @@ struct AddExpenseView: View {
                         )
                     Slider(value: $discretionaryValue, in: 1 ... 7, step: 1).opacity(0.05)
                 }
-                
-                Text(type.rawValue)
+
+                Text(type.rawValue).fontWeight(.bold).foregroundColor(typeColor)
+
                 // typePicker
-                NumericTextField(numericText: $stringAmount, amountDouble: $amount, label:$amopuntLabel)
+                NumericTextField(numericText: $stringAmount, amountDouble: $amount, label: $amopuntLabel)
                 TextField("Notes", text: $note)
                 categoryPicker
-                    .onChange(of:discretionaryValue) { _, _ in
-                        if  discretionaryValue < 2 {
+                    .onChange(of: discretionaryValue) { _, _ in
+                        if discretionaryValue < 2 {
                             type = ExpenseType.Necessary
                         } else {
                             type = ExpenseType.Discretionary
                         }
                         discretionaryValueString = String(discretionaryValue)
                     }
-            /*}.onChange(of: type) { _, _ in
-                    if  type == ExpenseType.discretionary {
-                        discretionaryValue = 7
-                    } else {
-                        discretionaryValue = 1
-                    }
-             */
-                }.onChange(of:discretionaryValueString){_, _ in
-                    discretionaryValue = Double(discretionaryValueString) ??  0
-                }
+
+            }.onChange(of: discretionaryValueString) { _, _ in
+                discretionaryValue = Double(discretionaryValueString) ?? 0
+            }
             .navigationTitle("Add new expense")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                Button("Save") {
-                    if (item != nil) {
-                        item?.name = name
-                        item?.amount = amount
-                        item?.type = type
-                        item?.note = note
-                        item?.date = date
-                        item?.category = "poop"
-                        item?.discretionaryValue = discretionaryValue
+                    Button("Save") {
+                        if item != nil {
+                            item?.name = name
+                            item?.amount = amount
+                            item?.type = type
+                            item?.note = note
+                            item?.date = date
+                            item?.category = "poop"
+                            item?.discretionaryValue = discretionaryValue
 
-                    } else {
-                        let item = ExpenseItem(name: name, type: type, amount: amount, note: "", date: Date.now, category: item?.category ?? Categories.defaultValue, discretionaryValue: discretionaryValue)
-                        expenses.allItems.append(item)
-                    }
+                        } else {
+                            let item = ExpenseItem(name: name, type: type, amount: amount, note: "", date: Date.now, category: item?.category ?? Categories.defaultValue, discretionaryValue: discretionaryValue)
+                            expenses.allItems.append(item)
+                        }
                         dismiss()
-                }.disabled(disableSave)
+                    }.disabled(disableSave)
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Cancel") {
@@ -115,12 +119,12 @@ struct AddExpenseView: View {
             Text("Reflection")
         }
     }
-    
+
     private var detailsSection: some View {
         Section {
             TextField("Name", text: $name)
             typePicker
-            NumericTextField( numericText: $stringAmount, amountDouble: $amount,label:$amopuntLabel)
+            NumericTextField(numericText: $stringAmount, amountDouble: $amount, label: $amopuntLabel)
             TextField("Notes", text: $note)
             categoryPicker
             datePicker
@@ -154,8 +158,8 @@ struct AddExpenseView: View {
 struct NumericTextField: View {
     @Binding var numericText: String
     @Binding var amountDouble: Double
-    @Binding var label:String
-    
+    @Binding var label: String
+
     var body: some View {
         TextField(label, text: $numericText)
             .keyboardType(.decimalPad)

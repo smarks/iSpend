@@ -12,7 +12,7 @@ struct AddExpenseView: View {
     @Environment(\.dismiss) var dismiss
 
     @State private var name = ""
-    @State private var type = ExpenseType.necessary
+    @State private var type = ExpenseType.Necessary
     @State private var amount = 0.0
     @State private var note = ""
     @State private var categories: [String] = Categories().list
@@ -32,7 +32,7 @@ struct AddExpenseView: View {
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
 
 
-    let types = [ExpenseType.necessary, ExpenseType.discretionary]
+    let types = [ExpenseType.Necessary, ExpenseType.Discretionary]
  
     // If expense record is incomplete or hasn't changed, disable save button.
     private var disableSave: Bool {
@@ -54,23 +54,26 @@ struct AddExpenseView: View {
                     Slider(value: $discretionaryValue, in: 1 ... 7, step: 1).opacity(0.05)
                 }
                 
-                typePicker
+                Text(type.rawValue)
+                // typePicker
                 NumericTextField(numericText: $stringAmount, amountDouble: $amount, label:$amopuntLabel)
                 TextField("Notes", text: $note)
                 categoryPicker
-                datePicker.onChange(of:discretionaryValue) { _, _ in
-                    if  discretionaryValue < 2 {
-                        type = ExpenseType.necessary
-                    } else {
-                         type = ExpenseType.discretionary
+                    .onChange(of:discretionaryValue) { _, _ in
+                        if  discretionaryValue < 2 {
+                            type = ExpenseType.Necessary
+                        } else {
+                            type = ExpenseType.Discretionary
+                        }
+                        discretionaryValueString = String(discretionaryValue)
                     }
-                    discretionaryValueString = String(discretionaryValue)
-                } }.onChange(of: type) { _, _ in
+            /*}.onChange(of: type) { _, _ in
                     if  type == ExpenseType.discretionary {
                         discretionaryValue = 7
                     } else {
                         discretionaryValue = 1
                     }
+             */
                 }.onChange(of:discretionaryValueString){_, _ in
                     discretionaryValue = Double(discretionaryValueString) ??  0
                 }

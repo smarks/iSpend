@@ -48,12 +48,24 @@ struct AddExpenseView: View {
             return Color.red
         }
     }
+    @FocusState private var isFocused: Bool
 
     var body: some View {
         NavigationStack {
             Form {
                 reflectionSection
-                TextField("Name", text: $name)
+                TextField("Name", text: $name).focused($isFocused)
+                    .onChange(of: isFocused) {  
+                        if !isFocused {
+                            print("TextField lost focus")
+                            let result = separateNumbersAndLetters(from: name)
+                            print(result)
+                            stringAmount = String(result.number ?? 0.0)
+                            amount = result.number ?? 0.0
+                            name = result.letters
+                        }
+                    }
+
                 NumericTextField(numericText: $discretionaryValueString, amountDouble: $discretionaryValue, label: $discretionaryValueLabel)
                 ZStack {
                     LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing)
@@ -66,7 +78,12 @@ struct AddExpenseView: View {
                 Text(type.rawValue).fontWeight(.bold).foregroundColor(typeColor)
 
                 // typePicker
-                NumericTextField(numericText: $stringAmount, amountDouble: $amount, label: $amopuntLabel)
+                NumericTextField(numericText: $stringAmount, amountDouble: $amount, label: $amopuntLabel).onChange(of: amount)
+                { newValue  in
+                    amount = newValue
+                    stringAmount = String(newValue)
+                }
+                
                 TextField("Notes", text: $note)
                 categoryPicker
                     .onChange(of: discretionaryValue) { _, _ in
@@ -80,7 +97,7 @@ struct AddExpenseView: View {
 
             }.onChange(of: discretionaryValueString) { _, _ in
                 discretionaryValue = Double(discretionaryValueString) ?? 0
-            }
+            } 
             .navigationTitle("Add new expense")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -204,3 +221,36 @@ struct NumericTextField: View {
         return String(text.unicodeScalars.filter { allowedCharacterSet.contains($0) })
     }
 }
+ func separateNumbersAndLetters(from input: String) -> (letters: String, number: Double?) {
+    // Define the regular expression pattern to match numbers
+    let numberPattern = "[0-9]+(?:\\.[0-9]+)?"
+    
+    // Create a regular expression object
+    let regex = try? NSRegularExpression(pattern: numberPattern, options: [])
+    
+    // Find matches in the input string
+    let matches = regex?.matches(in: input, options: [], range: NSRange(location: 0, length: input.utf16.count))
+    
+    // Extract the number from the matches
+    var numberString: String?
+    if let match = matches?.first {
+        if let range = Range(match.range, in: input) {
+            numberString = String(input[range])
+        }
+    }
+    
+    // Convert the number string to a Double
+    let number = numberString != nil ? Double(numberString!) : nil
+    
+    // Remove the number from the input string to get the letters
+    let letters = input.replacingOccurrences(of: numberString ?? "", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
+    
+    return (letters, number)
+}
+/*
+// Example usage
+let input = "National Grid 500"
+let result = separateNumbersAndLetters(from: input)
+print("Letters: \(result.letters)") // Output: "National Grid"
+print("Number: \(result.number ?? 0)") // Output: 500.0
+*/

@@ -10,8 +10,8 @@ import Foundation
 import SwiftUI
 
 enum ExpenseType: String, Codable, Equatable {
-    case necessary
-    case discretionary
+    case Necessary
+    case Discretionary
 }
 
 class ExpenseItem: Identifiable, Codable {
@@ -48,11 +48,11 @@ class Expenses {
     }
 
     var discretionaryItems: [ExpenseItem] {
-        allItems.filter { $0.type == ExpenseType.discretionary }
+        allItems.filter { $0.type == ExpenseType.Discretionary }
     }
 
     var necessaryItems: [ExpenseItem] {
-        allItems.filter { $0.type == ExpenseType.necessary }
+        allItems.filter { $0.type == ExpenseType.Necessary }
     }
 
     init() {

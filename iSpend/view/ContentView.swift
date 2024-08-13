@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  Revisit
+//   
 //
 //  Created by Spencer Marks on 5/7/24.
 //
@@ -139,4 +139,9 @@ struct ContentView: View {
     func removeItems(at offsets: IndexSet) {
         expenses.allItems.remove(atOffsets: offsets)
     }
+    
+}
+
+#Preview{
+    ContentView()
 }

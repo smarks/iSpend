@@ -14,17 +14,44 @@ var dateFormatter: DateFormatter = {
     return formatter
 }()
 struct ExpenseModelView: View {
-    var expenseModel: ExpenseModel
-    
+    @State var expenseModel: ExpenseModel
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
-        HStack {
-            Text(expenseModel.name)
-            Text(dateFormatter.string(from: expenseModel.date))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .lineLimit(1)
-            Text(expenseModel.amount, format: .localCurrency)
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .lineLimit(1)
+        NavigationStack {
+            Form {
+                Section(header: Text("Activity Details")) {
+                    Text(expenseModel.name)
+                    Text(dateFormatter.string(from: expenseModel.date))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .lineLimit(1)
+                    Text(expenseModel.amount, format: .localCurrency)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .lineLimit(1)
+                }
+            }
+            .navigationTitle("Activity Editor")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", role: .cancel) {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        saveActivity()
+                        dismiss()
+                    }
+                }
+            }
         }
+    }
+    private func saveActivity() {
+        print("Activity saved")
+        modelContext.insert(expenseModel)
+        print("Saving activity")
+        print(expenseModel)
     }
 }

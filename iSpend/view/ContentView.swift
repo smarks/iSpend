@@ -11,23 +11,56 @@ struct ContentView: View {
    
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
-     
-    @Query(filter: #Predicate<ExpenseModel>{ expense in expense.type.rawValue == ExpenseType.Discretionary.rawValue }, sort:[SortDescriptor(\ExpenseModel.date)])
+   
+    @Query(filter: #Predicate<ExpenseModel>{ expense in expense.type == NECESSARY }, sort:[SortDescriptor(\ExpenseModel.date)])
+    private var necessaryExpenses: [ExpenseModel]
+    
+    @Query(filter: #Predicate<ExpenseModel>{ expense in expense.type == DISCRETIONARY }, sort:[SortDescriptor(\ExpenseModel.date)])
     private var discretionaryExpenses: [ExpenseModel]
 
-   // @Query(filter: #Predicate<ExpenseModel>{ expense in expense.type == ExpenseType.Necessary }, sort:[SortDescriptor(\ExpenseModel.date)])
-    private var necessaryExpenses: [ExpenseModel]
+    @State var showingAddEntry: Bool = false
+    @State var showingSettings: Bool = false
+
     
     var body: some View {
         NavigationStack {
             List {
-                ForEach(discretionaryExpenses, id: \.id) { item in
+                ForEach(necessaryExpenses) { item in
                     ExpenseModelView(expenseModel: item)
-                }
+                }.onDelete(perform: delete)
                 
-            }.navigationTitle("Discretionary Expenses")
+            }.navigationTitle("iSpend")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            showingAddEntry = true
+                        } label: {
+                            Image(systemName: "plus")
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            showingSettings = true
+                        } label: {
+                            Image(systemName: "gear")
+                        }
+                    }
+                }.sheet(isPresented: $showingAddEntry) {
+                    ExpenseModelView(expenseModel: ExpenseModel())
+                      
+                      
+                }.sheet(isPresented: $showingSettings) {
+                    // SettingView(settings: Settings())
+                }
             
-           
         }
+        
+    }
+
+  
+    func delete(at offsets: IndexSet) {
+        modelContext.delete(necessaryExpenses[offsets.count - 1])
     }
 }
+
+//   ExpenseModelView(expenseModel: ExpenseModel() )

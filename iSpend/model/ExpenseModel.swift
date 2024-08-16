@@ -14,18 +14,21 @@ enum ExpenseType: Int, Codable {
     case Discretionary = 2
 }
  
+let NECESSARY:Int = 1
+let DISCRETIONARY:Int = 2
 
+ 
 @Model
 final class ExpenseModel {
     var name: String
-    var type: ExpenseType
+    var type: Int
     var amount: Double
     var note: String
     var date: Date
     var category: String
     var discretionaryValue: Double
     
-    init(name:String, type:ExpenseType, amount: Double, note:String, date: Date, category:String, discretionaryValue: Double){
+    init(name:String = "Description", type:Int = NECESSARY, amount:Double = 0, note:String="Notes", date: Date=Date(), category:String = "None", discretionaryValue: Double=0){
         self.name = name
         self.type = type
         self.amount = amount

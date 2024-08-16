@@ -8,7 +8,7 @@
 import Combine
 import Foundation
 import SwiftUI
-
+/*
 enum SettingsTypes: String, CaseIterable, Hashable {
     case budgets = "Budgets"
     case dataManagement = "Data Management"
@@ -437,3 +437,4 @@ struct About: Identifiable, Hashable {
     let name: String
     let id: Int
 }
+*/

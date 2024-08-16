@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/*
 class Budget: ObservableObject {
     var amount: String {
         get { "0.0" }
@@ -43,3 +44,4 @@ class NecessaryBudget: Budget {
     override var label: String { "Necessary Budget" }
 }
 
+*/

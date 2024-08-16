@@ -12,9 +12,8 @@ import SwiftData
 @main
 struct iSpendApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            ExpenseModel.self,
-        ])
+        let schema = Schema([ExpenseModel.self])
+   
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {

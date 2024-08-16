@@ -5,37 +5,8 @@
 //  Extended by Spencer Marks starting on 07/25/2023
 //
 
-
+/*
 import Foundation
-import SwiftUI
-
-enum ExpenseType: String, Codable, Equatable {
-    case Necessary
-    case Discretionary
-}
-
-class ExpenseItem: Identifiable, Codable {
-    var id = UUID()
-    var name: String
-    var type: ExpenseType
-    var amount: Double
-    var note: String
-    var date: Date
-    var category: String
-    var discretionaryValue: Double
-    
-    init(name:String, type:ExpenseType, amount: Double, note:String, date: Date, category:String, discretionaryValue: Double){
-        self.id = UUID()
-        self.name = name
-        self.type = type
-        self.amount = amount
-        self.note = note
-        self.date = date
-        self.category = category
-        self.discretionaryValue = discretionaryValue
-    }
-}
-
 @Observable
 class Expenses {
      
@@ -70,3 +41,4 @@ class Expenses {
         allItems = []
     }
 }
+*/

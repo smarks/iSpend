@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+/*
 struct AddExpenseView: View {
     @Environment(\.dismiss) var dismiss
     var item: ExpenseItem?
@@ -247,3 +247,4 @@ func separateNumbersAndLetters(from input: String) -> (letters: String, number: 
 
     return (letters, number)
 }
+*/

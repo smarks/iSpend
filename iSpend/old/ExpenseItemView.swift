@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+/*
 struct ExpenseItemView: View {
     @State var expenses: Expenses
     var title: String
@@ -69,3 +69,4 @@ struct ExpenseItemView: View {
         }
     }
 }
+*/

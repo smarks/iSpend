@@ -21,7 +21,7 @@ struct ExpenseModelView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Activity Details")) {
+                Section(header: Text("Expense Details")) {
                     Text(expenseModel.name)
                     Text(dateFormatter.string(from: expenseModel.date))
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -30,24 +30,26 @@ struct ExpenseModelView: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .lineLimit(1)
                 }
-            }
-            .navigationTitle("Activity Editor")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", role: .cancel) {
-                        dismiss()
+            }  .navigationTitle("Activity Editor")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel", role: .cancel) {
+                            dismiss()
+                            print("you have been cancelled")
+                        }
                     }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        saveActivity()
-                        dismiss()
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Save") {
+                            saveActivity()
+                            dismiss()
+                        }
                     }
                 }
             }
         }
-    }
+     
+    
     private func saveActivity() {
         print("Activity saved")
         modelContext.insert(expenseModel)

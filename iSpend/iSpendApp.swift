@@ -6,14 +6,13 @@
 //  Extended by Spencer Marks starting on 07/25/2023
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct iSpendApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([ExpenseModel.self])
-   
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
@@ -29,5 +28,4 @@ struct iSpendApp: App {
         }
         .modelContainer(sharedModelContainer)
     }
-    
 }

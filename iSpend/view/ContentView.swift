@@ -19,6 +19,7 @@ struct ContentView: View {
 
     @State var showingAddEntry: Bool = false
     @State var showingSettings: Bool = false
+    @State var selectedItem: ExpenseModel?
 
     var body: some View {
         NavigationStack {
@@ -26,6 +27,10 @@ struct ContentView: View {
                 Section(header: Text("Necessary Expenses")) {
                     ForEach(necessaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
+                            .onTapGesture(count: 1) {
+                                selectedItem = item
+                                showingAddEntry = true
+                            }
                     }.onDelete(perform: delete)
                 }
                 Section(header: Text("Discretionary Expenses")) {
@@ -50,7 +55,8 @@ struct ContentView: View {
                         }
                     }
                 }.sheet(isPresented: $showingAddEntry) {
-                    ExpenseModelView(expenseModel: ExpenseModel())
+                    let item: ExpenseModel = selectedItem ?? ExpenseModel()
+                    ExpenseModelViewEditor(expenseModel: item)
                 }.sheet(isPresented: $showingSettings) {
                     // SettingView(settings: Settings())
                 }

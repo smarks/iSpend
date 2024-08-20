@@ -7,6 +7,9 @@
 
 import Foundation
 
+/**
+ * for a given string, parse it and return numbers as a double and the non numeric charactersas a string. 
+ */
 func separateNumbersAndLetters(from input: String) -> (letters: String, number: Double?) {
     // Define the regular expression pattern to match numbers
     let numberPattern = "[0-9]+(?:\\.[0-9]+)?"
@@ -26,7 +29,7 @@ func separateNumbersAndLetters(from input: String) -> (letters: String, number: 
     }
 
     // Convert the number string to a Double
-    let number = numberString != nil ? Double(numberString!) : nil
+    let number = numberString.flatMap { Double($0) }
 
     // Remove the number from the input string to get the letters
     let letters = input.replacingOccurrences(of: numberString ?? "", with: "").trimmingCharacters(in: .whitespacesAndNewlines)

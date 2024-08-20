@@ -21,10 +21,8 @@ struct ExpenseModelViewEditor: View {
     @State var expenseModel: ExpenseModel
     @State var originalExpenseModel: ExpenseModel
     @State private var categories: [String] = Categories().list
-    @State private var stringAmount: String = ""
+   // @State private var stringAmount: String = ""
     @State private var discretionaryValueString: String = "0"
-    @State var discretionaryValueLabel: String = "Discretionary Value"
-    @State var amopuntLabel: String = "Amount"
 
     let messageToReflectOn: String
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
@@ -47,7 +45,6 @@ struct ExpenseModelViewEditor: View {
         self.expenseModel = expenseModel
         originalExpenseModel = expenseModel
         categories = Categories().list
-        stringAmount = String(expenseModel.amount)
         discretionaryValueString = String(expenseModel.discretionaryValue)
         messageToReflectOn = Mediations().list.randomElement() ?? "Who knows what this will bring"
     }
@@ -87,6 +84,14 @@ struct ExpenseModelViewEditor: View {
 
     @FocusState private var isFocused: Bool
 
+    private let numberFormatter: NumberFormatter = {
+            let formatter = NumberFormatter()
+            formatter.numberStyle = .currency
+            formatter.maximumFractionDigits = 2
+            return formatter
+        }()
+    
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -100,8 +105,6 @@ struct ExpenseModelViewEditor: View {
                             if !isFocused {
                                 print("TextField lost focus")
                                 let result = separateNumbersAndLetters(from: expenseModel.name)
-                                print(result)
-                                stringAmount = String(result.number ?? 0.0)
                                 expenseModel.amount = result.number ?? 0.0
                                 expenseModel.name = result.letters
                             }
@@ -110,8 +113,11 @@ struct ExpenseModelViewEditor: View {
 
                 HStack {
                     Text("Amount:")
-                    NumericTextField(numericText: $stringAmount, amountDouble: $expenseModel.amount, label: amopuntLabel)
-                }
+                    TextField("Enter number", value: $expenseModel.amount, formatter:numberFormatter )
+                               .keyboardType(.numberPad)
+                               .textFieldStyle(RoundedBorderTextFieldStyle())
+                               .padding()
+                    }
 
                 HStack {
                     Text(String(expenseModel.typeType.rawValue))
@@ -134,7 +140,9 @@ struct ExpenseModelViewEditor: View {
                         Slider(value: $expenseModel.discretionaryValue, in: 1 ... 7, step: 1).opacity(0.05)
                     }
                 }
+                
                 typePicker.onChange(of: expenseModel.typeType) {
+                
                     if expenseModel.typeType == ExpenseTypeType.Necessary {
                         expenseModel.type = NECESSARY
                         expenseModel.discretionaryValue = 0
@@ -149,7 +157,8 @@ struct ExpenseModelViewEditor: View {
 
             }.onChange(of: discretionaryValueString) { _, _ in
                 expenseModel.discretionaryValue = Double(discretionaryValueString) ?? 0
-            }.navigationTitle("Add new expense")
+                
+            }.navigationTitle("Expense Editor")
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Done") {
@@ -169,12 +178,31 @@ struct ExpenseModelViewEditor: View {
 
     private func saveActivity() {
         print("save expense")
-        // modelContext.insert(expenseModel)
+        modelContext.insert(expenseModel)
         print(expenseModel)
     }
 
     private func cancelActivity() {
         expenseModel = originalExpenseModel // Revert to the original state
         print("Activity cancelled, reverted to original state")
+    }
+    
+
+     func filterNumericText(from text: String) -> String {
+        let allowedCharacterSet = CharacterSet(charactersIn: "0123456789.")
+        let tokens = text.components(separatedBy: ".")
+
+        // Allow only one '.' decimal character
+        if tokens.count > 2 {
+            return String(text.dropLast())
+        }
+
+        // Allow only two digits after '.' decimal character
+        if tokens.count > 1 && tokens[1].count > 2 {
+            return String(text.dropLast())
+        }
+
+        // Only allow digits and decimals
+        return String(text.unicodeScalars.filter { allowedCharacterSet.contains($0) })
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-
+/*
 struct NumericTextField: View {
     @Binding var numericText: String
     @Binding var amountDouble: Double
@@ -40,21 +40,5 @@ struct NumericTextField: View {
              */
     }
 
-    private func filterNumericText(from text: String) -> String {
-        let allowedCharacterSet = CharacterSet(charactersIn: "0123456789.")
-        let tokens = text.components(separatedBy: ".")
-
-        // Allow only one '.' decimal character
-        if tokens.count > 2 {
-            return String(text.dropLast())
-        }
-
-        // Allow only two digits after '.' decimal character
-        if tokens.count > 1 && tokens[1].count > 2 {
-            return String(text.dropLast())
-        }
-
-        // Only allow digits and decimals
-        return String(text.unicodeScalars.filter { allowedCharacterSet.contains($0) })
-    }
 }
+ */

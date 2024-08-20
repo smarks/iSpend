@@ -14,11 +14,6 @@ var dateFormatter: DateFormatter = {
     return formatter
 }()
 
-enum ExpenseTypeType: String, Codable, Equatable {
-    case Necessary
-    case Discretionary
-}
-
 struct ExpenseModelViewEditor: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -33,7 +28,7 @@ struct ExpenseModelViewEditor: View {
 
     let messageToReflectOn: String
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
-    let types = [ExpenseType.Necessary, ExpenseType.Discretionary]
+    let types = [ExpenseTypeType.Necessary, ExpenseTypeType.Discretionary]
 
     private var categoryPicker: some View {
         Picker("Category", selection: $expenseModel.category) {
@@ -50,7 +45,7 @@ struct ExpenseModelViewEditor: View {
 
     init(expenseModel: ExpenseModel) {
         self.expenseModel = expenseModel
-        self.originalExpenseModel = expenseModel
+        originalExpenseModel = expenseModel
         categories = Categories().list
         stringAmount = String(expenseModel.amount)
         discretionaryValueString = String(expenseModel.discretionaryValue)
@@ -59,7 +54,7 @@ struct ExpenseModelViewEditor: View {
 
     // If expense record is incomplete or hasn't changed, disable save button.
     private var disableSave: Bool {
-        return false //  expenseModel.name.isEmpty ||  expenseModel.amount <= 0.0
+        return expenseModel.name.isEmpty || expenseModel.amount <= 0.0 || expenseModel.name.count == 0
     }
 
     private var typeColor: Color {
@@ -83,16 +78,11 @@ struct ExpenseModelViewEditor: View {
     }
 
     private var typePicker: some View {
-        Picker("Type", selection: $expenseModel.type) {
+        Picker("Type", selection: $expenseModel.typeType) {
             ForEach(types, id: \.self) { type in
-                if type.rawValue == 1 {
-                    Text("n")
-                } else {
-                    Text("d")
-                }
+                Text(type.rawValue)
             }
         }
-        
     }
 
     @FocusState private var isFocused: Bool
@@ -101,35 +91,58 @@ struct ExpenseModelViewEditor: View {
         NavigationStack {
             Form {
                 reflectionSection
-                TextField("Name", text: $expenseModel.name).focused($isFocused)
-                    .onChange(of: isFocused) {
-                        if !isFocused {
-                            print("TextField lost focus")
-                            let result = separateNumbersAndLetters(from: expenseModel.name)
-                            print(result)
-                            stringAmount = String(result.number ?? 0.0)
-                            expenseModel.amount = result.number ?? 0.0
-                            expenseModel.name = result.letters
+
+                HStack {
+                    Text("Description:")
+
+                    TextField("Name", text: $expenseModel.name).focused($isFocused)
+                        .onChange(of: isFocused) {
+                            if !isFocused {
+                                print("TextField lost focus")
+                                let result = separateNumbersAndLetters(from: expenseModel.name)
+                                print(result)
+                                stringAmount = String(result.number ?? 0.0)
+                                expenseModel.amount = result.number ?? 0.0
+                                expenseModel.name = result.letters
+                            }
                         }
-                    }
-
-                NumericTextField(numericText: $discretionaryValueString, amountDouble: $expenseModel.discretionaryValue, label: $discretionaryValueLabel)
-                ZStack {
-                    LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing)
-                        .mask(
-                            Slider(value: $expenseModel.discretionaryValue, in: 1 ... 7, step: 1)
-                        )
-                    Slider(value: $expenseModel.discretionaryValue, in: 1 ... 7, step: 1).opacity(0.05)
                 }
-                Text(String(expenseModel.type)).fontWeight(.bold).foregroundColor(typeColor)
 
-                typePicker
+                HStack {
+                    Text("Amount:")
+                    NumericTextField(numericText: $stringAmount, amountDouble: $expenseModel.amount, label: amopuntLabel)
+                }
 
-                NumericTextField(numericText: $stringAmount, amountDouble: $expenseModel.amount, label: $amopuntLabel).onChange(of: expenseModel.amount)
-                    { newValue in
-                        expenseModel.amount = newValue
-                        stringAmount = String(expenseModel.amount)
+                HStack {
+                    Text(String(expenseModel.typeType.rawValue))
+                        .fontWeight(.bold).foregroundColor(typeColor)
+                        .frame(minWidth: CGFloat("DISCRETIONARY".count)).onChange(of: expenseModel.discretionaryValue) { _, newValue in
+                            if newValue > 3 {
+                                expenseModel.type = DISCRETIONARY
+                                expenseModel.typeType = ExpenseTypeType.Discretionary
+                            } else {
+                                expenseModel.type = NECESSARY
+                                expenseModel.typeType = ExpenseTypeType.Necessary
+                            }
+                        }.padding(.leading)
+
+                    ZStack {
+                        LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing)
+                            .mask(
+                                Slider(value: $expenseModel.discretionaryValue, in: 1 ... 7, step: 1)
+                            )
+                        Slider(value: $expenseModel.discretionaryValue, in: 1 ... 7, step: 1).opacity(0.05)
                     }
+                }
+                typePicker.onChange(of: expenseModel.typeType) {
+                    if expenseModel.typeType == ExpenseTypeType.Necessary {
+                        expenseModel.type = NECESSARY
+                        expenseModel.discretionaryValue = 0
+                    } else {
+                        expenseModel.type = DISCRETIONARY
+                        expenseModel.discretionaryValue = 7
+                    }
+                }
 
                 TextField("Notes", text: $expenseModel.note)
                 categoryPicker
@@ -139,7 +152,8 @@ struct ExpenseModelViewEditor: View {
             }.navigationTitle("Add new expense")
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
-                        Button("Save") {
+                        Button("Done") {
+                            saveActivity()
                             dismiss()
                         }.disabled(disableSave)
                     }
@@ -152,15 +166,15 @@ struct ExpenseModelViewEditor: View {
                 }
         }
     }
-    /*private func saveActivity() {
-           print("Activity saved")
-           modelContext.insert(expenseModel)
-           print("Saving activity")
-           print(expenseModel)
-       }
-*/
-       private func cancelActivity() {
-           expenseModel = originalExpenseModel // Revert to the original state
-           print("Activity cancelled, reverted to original state")
-       }
+
+    private func saveActivity() {
+        print("save expense")
+        // modelContext.insert(expenseModel)
+        print(expenseModel)
+    }
+
+    private func cancelActivity() {
+        expenseModel = originalExpenseModel // Revert to the original state
+        print("Activity cancelled, reverted to original state")
+    }
 }

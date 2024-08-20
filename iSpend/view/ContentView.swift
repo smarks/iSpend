@@ -36,6 +36,10 @@ struct ContentView: View {
                 Section(header: Text("Discretionary Expenses")) {
                     ForEach(discretionaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
+                            .onTapGesture(count: 1) {
+                                selectedItem = item
+                                showingAddEntry = true
+                            }
                     }.onDelete(perform: deleteDiscretionary)
                 }
             }.navigationTitle("iSpend")

@@ -26,6 +26,7 @@ struct ContentView: View {
         NavigationStack {
             List {
                 Section(header: Text("Necessary Expenses")) {
+                    SummaryView(expenses: necessaryExpenses, label: "Necessary", budget: 0)
                     ForEach(necessaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
                             .onTapGesture(count: 2) {
@@ -36,6 +37,7 @@ struct ContentView: View {
                     }.onDelete(perform: delete)
                 }
                 Section(header: Text("Discretionary Expenses")) {
+                    SummaryView(expenses: discretionaryExpenses,label: "Discretionary", budget: 0)
                     ForEach(discretionaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
                             .onTapGesture(count: 2 ){

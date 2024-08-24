@@ -42,11 +42,12 @@ struct ExpenseModelViewEditor: View {
     }
 
     init(expenseModel: ExpenseModel) {
+        print("expenseModel \(expenseModel.name)")
         self.expenseModel = expenseModel
-        originalExpenseModel = expenseModel
-        categories = Categories().list
-        discretionaryValueString = String(expenseModel.discretionaryValue)
-        messageToReflectOn = Mediations().list.randomElement() ?? "Who knows what this will bring"
+        self.originalExpenseModel = expenseModel
+        self.categories = Categories().list
+        self.discretionaryValueString = String(expenseModel.discretionaryValue)
+        self.messageToReflectOn = Mediations().list.randomElement() ?? "Who knows what this will bring"
     }
 
     // If expense record is incomplete or hasn't changed, disable save button.
@@ -102,7 +103,7 @@ struct ExpenseModelViewEditor: View {
 
                     TextField("Name", text: $expenseModel.name).focused($isFocused)
                         .onChange(of: isFocused) {
-                            if !isFocused {
+                            if !isFocused && expenseModel.amount == 0.0 {
                                 print("TextField lost focus")
                                 let result = separateNumbersAndLetters(from: expenseModel.name)
                                 expenseModel.amount = result.number ?? 0.0

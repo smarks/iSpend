@@ -8,6 +8,7 @@
 import SwiftData
 import SwiftUI
 struct ContentView: View {
+    
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
 
@@ -27,18 +28,21 @@ struct ContentView: View {
                 Section(header: Text("Necessary Expenses")) {
                     ForEach(necessaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
-                            .onTapGesture(count: 1) {
-                                selectedItem = item
-                                showingAddEntry = true
+                            .onTapGesture(count: 2) {
+                                self.selectedItem = item
+                                self.showingAddEntry = true
+                                print("selected item: \(selectedItem?.name ?? "tear")")
                             }
                     }.onDelete(perform: delete)
                 }
                 Section(header: Text("Discretionary Expenses")) {
                     ForEach(discretionaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
-                            .onTapGesture(count: 1) {
-                                selectedItem = item
-                                showingAddEntry = true
+                            .onTapGesture(count: 2 ){
+                                self.selectedItem = item
+                                self.showingAddEntry = true
+                                print("selected item: \(selectedItem?.name ?? "tear")")
+                                print(item)
                             }
                     }.onDelete(perform: deleteDiscretionary)
                 }
@@ -59,7 +63,7 @@ struct ContentView: View {
                         }
                     }
                 }.sheet(isPresented: $showingAddEntry) {
-                    let item: ExpenseModel = selectedItem ?? ExpenseModel()
+                    let item: ExpenseModel = self.selectedItem ?? ExpenseModel()
                     ExpenseModelViewEditor(expenseModel: item)
                 }.sheet(isPresented: $showingSettings) {
                     // SettingView(settings: Settings())

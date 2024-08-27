@@ -12,21 +12,21 @@ struct SummaryView: View {
     @Environment(\.modelContext) private var modelContext
     let expenses: [ExpenseModel]
     let label: String
-    let budget: Double
+    let budget: BudgetModel
 
-    var total: Double {
+    var totalExpenses: Double {
         expenses.reduce(0) { $0 + $1.amount }
     }
 
     var balance: Double {
-        total - budget
+        totalExpenses - budget.amount
     }
 
     var body: some View {
         VStack {
-            Text("Total: \(total,format: .localCurrency)").font(.headline)
+            Text("Total: \(totalExpenses,format: .localCurrency)").font(.headline)
             Divider()
-            Text("Budget: \(budget, format: .localCurrency)")
+            Text("Budget: \(budget.amount, format: .localCurrency)")
             Text("Remaining: \(balance,format: .localCurrency)")
         }
     }

@@ -12,7 +12,7 @@ import SwiftUI
 @main
 struct iSpendApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([ExpenseModel.self])
+        let schema = Schema([ExpenseModel.self, BudgetModel.self, CatergoriesModel.self, MediationsModel.self])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {

@@ -7,8 +7,8 @@
 
 import SwiftData
 import SwiftUI
+
 struct ContentView: View {
-    
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
 
@@ -18,6 +18,32 @@ struct ContentView: View {
     @Query(filter: #Predicate<ExpenseModel> { expense in expense.type == DISCRETIONARY }, sort: [SortDescriptor(\ExpenseModel.date)])
     private var discretionaryExpenses: [ExpenseModel]
 
+    @Query(filter: #Predicate<BudgetModel> { budget in budget.type == NECESSARY })
+    private var necessaryBudgets: [BudgetModel]
+
+    private var necessaryBudget: BudgetModel {
+        if necessaryBudgets.isEmpty {
+            let budgetModel: BudgetModel = BudgetModel(type: NECESSARY, amount: 0)
+            modelContext.insert(budgetModel)
+            return budgetModel
+        } else {
+            return necessaryBudgets[0]
+        }
+    }
+
+    @Query(filter: #Predicate<BudgetModel> { budget in budget.type == DISCRETIONARY })
+    private var discretionaryBudgets: [BudgetModel]
+
+    private var discretionaryBudget: BudgetModel {
+        if discretionaryBudgets.isEmpty {
+            let budgetModel: BudgetModel = BudgetModel(type: DISCRETIONARY, amount: 0)
+            modelContext.insert(BudgetModel(type: DISCRETIONARY, amount: 0))
+            return budgetModel
+        } else {
+            return discretionaryBudgets[0]
+        }
+    }
+
     @State var showingAddEntry: Bool = false
     @State var showingSettings: Bool = false
     @State var selectedItem: ExpenseModel?
@@ -26,7 +52,7 @@ struct ContentView: View {
         NavigationStack {
             List {
                 Section(header: Text("Necessary Expenses")) {
-                    SummaryView(expenses: necessaryExpenses, label: "Necessary", budget: 0)
+                    SummaryView(expenses: necessaryExpenses, label: "Necessary", budget: necessaryBudget)
                     ForEach(necessaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
                             .onTapGesture(count: 2) {
@@ -37,10 +63,10 @@ struct ContentView: View {
                     }.onDelete(perform: delete)
                 }
                 Section(header: Text("Discretionary Expenses")) {
-                    SummaryView(expenses: discretionaryExpenses,label: "Discretionary", budget: 0)
+                    SummaryView(expenses: discretionaryExpenses, label: "Discretionary", budget: discretionaryBudget)
                     ForEach(discretionaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
-                            .onTapGesture(count: 2 ){
+                            .onTapGesture(count: 2) {
                                 self.selectedItem = item
                                 self.showingAddEntry = true
                                 print("selected item: \(selectedItem?.name ?? "tear")")
@@ -68,7 +94,7 @@ struct ContentView: View {
                     let item: ExpenseModel = self.selectedItem ?? ExpenseModel()
                     ExpenseModelViewEditor(expenseModel: item)
                 }.sheet(isPresented: $showingSettings) {
-                    // SettingView(settings: Settings())
+                     SettingsView()
                 }
         }
     }

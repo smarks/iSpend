@@ -41,6 +41,13 @@
 		22BB24662BFBCA0A00FF1294 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BB24632BFBCA0A00FF1294 /* Configuration.swift */; };
 		22BB24672BFBCA0A00FF1294 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22BB24642BFBCA0A00FF1294 /* SettingView.swift */; };
 		22C3457C2B9E534C0049D67D /* iSpendUnitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C3457B2B9E534C0049D67D /* iSpendUnitTest.swift */; };
+		22D206FE2C7DF7410059DB2A /* CatergoriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D206FD2C7DF7410059DB2A /* CatergoriesModel.swift */; };
+		22D207002C7DF7D60059DB2A /* MediationsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D206FF2C7DF7D60059DB2A /* MediationsModel.swift */; };
+		22D207022C7DF8150059DB2A /* BudgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D207012C7DF8150059DB2A /* BudgetModel.swift */; };
+		22D207042C7DFC800059DB2A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D207032C7DFC800059DB2A /* SettingsView.swift */; };
+		22D207062C7E01B80059DB2A /* BudgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D207052C7E01B80059DB2A /* BudgetView.swift */; };
+		22D2070A2C7E07200059DB2A /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D207092C7E07200059DB2A /* AboutView.swift */; };
+		22D2070C2C7E22B20059DB2A /* DataManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D2070B2C7E22B20059DB2A /* DataManagementView.swift */; };
 		22DF27572C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DF27562C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift */; };
 		22DF27582C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DF27562C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift */; };
 		22DF27592C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DF27562C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift */; };
@@ -95,6 +102,13 @@
 		22C3457B2B9E534C0049D67D /* iSpendUnitTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iSpendUnitTest.swift; sourceTree = "<group>"; };
 		22C7D9652B97E27E00FA6A4D /* iSpend.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iSpend.entitlements; sourceTree = "<group>"; };
 		22CD64F92BFFD86E005565FF /* AppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AppIcon.png; path = iSpend/Assets.xcassets/AppIcon.png; sourceTree = "<group>"; };
+		22D206FD2C7DF7410059DB2A /* CatergoriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatergoriesModel.swift; sourceTree = "<group>"; };
+		22D206FF2C7DF7D60059DB2A /* MediationsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediationsModel.swift; sourceTree = "<group>"; };
+		22D207012C7DF8150059DB2A /* BudgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetModel.swift; sourceTree = "<group>"; };
+		22D207032C7DFC800059DB2A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		22D207052C7E01B80059DB2A /* BudgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetView.swift; sourceTree = "<group>"; };
+		22D207092C7E07200059DB2A /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
+		22D2070B2C7E22B20059DB2A /* DataManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementView.swift; sourceTree = "<group>"; };
 		22DF27562C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseModelViewEditor.swift; sourceTree = "<group>"; };
 		515A85BA272FD57B00C6A00C /* iSpend.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iSpend.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -128,6 +142,9 @@
 			isa = PBXGroup;
 			children = (
 				2206E4072C6BA3EB000B5AE4 /* ExpenseModel.swift */,
+				22D206FD2C7DF7410059DB2A /* CatergoriesModel.swift */,
+				22D206FF2C7DF7D60059DB2A /* MediationsModel.swift */,
+				22D207012C7DF8150059DB2A /* BudgetModel.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -139,6 +156,10 @@
 				22DF27562C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift */,
 				22851D8F2C73BAB700240BD6 /* ExpenseModelView.swift */,
 				2299EFB32C7A9C8300252AE1 /* SummaryView.swift */,
+				22D207032C7DFC800059DB2A /* SettingsView.swift */,
+				22D207052C7E01B80059DB2A /* BudgetView.swift */,
+				22D207092C7E07200059DB2A /* AboutView.swift */,
+				22D2070B2C7E22B20059DB2A /* DataManagementView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -400,17 +421,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22D207022C7DF8150059DB2A /* BudgetModel.swift in Sources */,
 				2276FDEE2A70526300E0B60F /* FormatStyle-LocalCurrency.swift in Sources */,
+				22D206FE2C7DF7410059DB2A /* CatergoriesModel.swift in Sources */,
 				22851D942C73DE5500240BD6 /* CommonViews.swift in Sources */,
+				22D207062C7E01B80059DB2A /* BudgetView.swift in Sources */,
 				22DF27572C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift in Sources */,
+				22D207042C7DFC800059DB2A /* SettingsView.swift in Sources */,
 				2276FDEA2A70526300E0B60F /* Expenses.swift in Sources */,
 				229828A22B93F69600348C97 /* Budgets.swift in Sources */,
 				2299EFB42C7A9C8300252AE1 /* SummaryView.swift in Sources */,
 				22851D982C73DE9B00240BD6 /* Utils.swift in Sources */,
 				22BB24672BFBCA0A00FF1294 /* SettingView.swift in Sources */,
 				2276FDF02A70526300E0B60F /* ContentView.swift in Sources */,
+				22D2070A2C7E07200059DB2A /* AboutView.swift in Sources */,
+				22D2070C2C7E22B20059DB2A /* DataManagementView.swift in Sources */,
 				22BB24652BFBCA0A00FF1294 /* AddExpenseView.swift in Sources */,
 				2273A3C52BFBDA53002B4260 /* ExpenseItemView.swift in Sources */,
+				22D207002C7DF7D60059DB2A /* MediationsModel.swift in Sources */,
 				2276FDF82A70526300E0B60F /* iSpendApp.swift in Sources */,
 				22851D902C73BAB700240BD6 /* ExpenseModelView.swift in Sources */,
 				2206E4082C6BA3EB000B5AE4 /* ExpenseModel.swift in Sources */,

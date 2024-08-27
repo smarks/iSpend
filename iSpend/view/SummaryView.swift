@@ -24,14 +24,10 @@ struct SummaryView: View {
 
     var body: some View {
         VStack {
-            HStack {
-                Text("Total: ").font(.subheadline)
-                Text("\(total)")
-            }
-            HStack {
-                Text("Budget: \(budget)")
-                Text("Remaining: \(balance)")
-            }
+            Text("Total: \(total,format: .localCurrency)").font(.headline)
+            Divider()
+            Text("Budget: \(budget, format: .localCurrency)")
+            Text("Remaining: \(balance,format: .localCurrency)")
         }
     }
 }

@@ -1,27 +1,42 @@
-# iSpend
+# 🚀 Yai 💬 - AI powered terminal assistant
 
-### About
-iSpend is an iOS application written in Swift using SwiftUI that allows users to record expenditures and categorize them as either "necessary" or "discretionary"
-Of course, those terms are subjective, but the gist is that necessary expenditures are things like your mortgage, telephone bill, basic food stuffs, fixing your car, while discretionary expenditures as basically "nice to haves" a new pair of headphones, that shiny red car, etc. 
+[![build](https://github.com/ekkinox/yai/actions/workflows/build.yml/badge.svg)](https://github.com/ekkinox/yai/actions/workflows/build.yml)
+[![release](https://github.com/ekkinox/yai/actions/workflows/release.yml/badge.svg)](https://github.com/ekkinox/yai/actions/workflows/release.yml)
+[![doc](https://github.com/ekkinox/yai/actions/workflows/doc.yml/badge.svg)](https://github.com/ekkinox/yai/actions/workflows/doc.yml)
 
-The idea is, if you use this app as you are about to spend some money, it will get you thinking about whether you really need and / or want to spend it. It might help reduce impulse spending. It could help with a budget. It might help you see where all your money actually goes. You can easily see how much money “you gotta spend” vs. self indulgences. 
+> Unleash the power of artificial intelligence to streamline your command line experience.
 
-I wrote this for me. Your mileage may vary. I welcome feedback and suggestions. If I like the suggestion, I will implement it. If I can't or won’t, you are free to fork this codebase and add it yourself. 
+![Intro](docs/_assets/intro.gif)
 
-### Thanks and Acknowledgements 
-I could not have written this without the help of Paul Hudson, a most excellent teacher and purveyor of the Hacking with Swift website / learning center. 
-[https://www.hackingwithswift.com] // [https://github.com/twostraws/]HackingWithSwiftI have found his video content, written materials as well as code examples expectational.  
+## What is Yai ?
 
-This app, iSPent, is based on Paul's example iExpense  project. I started with that code base and extended it (and renamed it). 
+`Yai` (your AI) is an assistant for your terminal, using [OpenAI ChatGPT](https://chat.openai.com/) to build and run commands for you. You just need to describe them in your everyday language, it will take care or the rest. 
 
-### Orignal app: 
-https://github.com/twostraws/HackingWithSwift/tree/main/SwiftUI/project7
-https://www.hackingwithswift.com/books/ios-swiftui/iexpense-introduction
+You have any questions on random topics in mind? You can also ask `Yai`, and get the power of AI without leaving `/home`.
 
-### Free / M.I.T License 
-I intend to publish this app on the App Store and will ask a small fee. It will be my first published app and a few small deposits will significantly boost my ego.
+It is already aware of your:
+- operating system & distribution
+- username, shell & home directory
+- preferred editor
 
-But the app is based on free stuff. Paul has given a lot of great stuff away. I respect that and in that spirit, I will make both the binaries and source code publicly available under the permissive M.I.T. license. 
-[https://opensource.org/license/mit/ ]
+And you can also give any supplementary preferences to fine tune your experience.
 
+## Documentation
 
+A complete documentation is available at [https://ekkinox.github.io/yai/](https://ekkinox.github.io/yai/).
+
+## Quick start
+
+To install `Yai`, simply run:
+
+```shell
+curl -sS https://raw.githubusercontent.com/ekkinox/yai/main/install.sh | bash
+```
+
+At first run, it will ask you for an [OpenAI API key](https://platform.openai.com/account/api-keys), and use it to create the configuration file in `~/.config/yai.json`.
+
+See [documentation](https://ekkinox.github.io/yai/getting-started/#configuration) for more information.
+
+## Thanks
+
+Thanks to [@K-arch27](https://github.com/K-arch27) for the `yai` name idea!

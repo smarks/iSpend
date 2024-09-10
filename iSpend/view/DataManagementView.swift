@@ -5,18 +5,18 @@ import SwiftUI
 struct DataManagementView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
-
+    
     var expenses: [ExpenseModel]
-
+    
     @State private var isPresentingConfirm: Bool = false
     @State private var showAlert = false
     @State private var showErrorAlert = false
     @State private var errorMessage: String = ""
-
+    
     private var exportButtonLabel: String {
         expenses.isEmpty ? "Export (No data to export)" : "Export"
     }
-
+    
     var body: some View {
         NavigationView {
             List {
@@ -27,7 +27,7 @@ struct DataManagementView: View {
                 resetButton(title: "Delete all data",
                             modelTypes: [CatergoriesModel.self],
                             errorMessage: "Failed to clear all data.")
-                  
+                
                 Button(exportButtonLabel) {
                     let csvString = generateCSV(from: expenses)
                     UIPasteboard.general.string = csvString
@@ -50,7 +50,7 @@ struct DataManagementView: View {
             }
         }
     }
-
+    
     private func resetButton<T: PersistentModel>(title: String, modelTypes: [T.Type], errorMessage: String) -> some View {
         Button(title, role: .destructive) {
             isPresentingConfirm = true
@@ -76,22 +76,23 @@ struct DataManagementView: View {
             )
         }
     }
-
-func generateCSV(from expenses: [ExpenseModel]) -> String {
-    var csvString = "id,name,type,amount,note,date\n"
-
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateStyle = .short
-    dateFormatter.timeStyle = .none
-
-    for expense in expenses {
-        let dateString = dateFormatter.string(from: expense.date)
-        let escapedNote = expense.note.replacingOccurrences(of: "\"", with: "\"\"") // Escape double quotes
-        let csvRow = """
+    
+    func generateCSV(from expenses: [ExpenseModel]) -> String {
+        var csvString = "id,name,type,amount,note,date\n"
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .none
+        
+        for expense in expenses {
+            let dateString = dateFormatter.string(from: expense.date)
+            let escapedNote = expense.note.replacingOccurrences(of: "\"", with: "\"\"") // Escape double quotes
+            let csvRow = """
         "\(expense.id)",\(expense.name),\(expense.typeType),\(expense.amount),"\(escapedNote)",\(dateString)\n
         """
-        csvString.append(contentsOf: csvRow)
+            csvString.append(contentsOf: csvRow)
+        }
+        
+        return csvString
     }
-
-    return csvString
 }

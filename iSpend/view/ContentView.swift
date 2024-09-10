@@ -53,6 +53,7 @@ struct ContentView: View {
             List {
                 Section(header: Text("Necessary Expenses")) {
                     SummaryView(expenses: necessaryExpenses, label: "Necessary", budget: necessaryBudget)
+                    Heading()
                     ForEach(necessaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
                             .onTapGesture(count: 2) {
@@ -64,6 +65,7 @@ struct ContentView: View {
                 }
                 Section(header: Text("Discretionary Expenses")) {
                     SummaryView(expenses: discretionaryExpenses, label: "Discretionary", budget: discretionaryBudget)
+                    Heading()
                     ForEach(discretionaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
                             .onTapGesture(count: 2) {
@@ -94,7 +96,7 @@ struct ContentView: View {
                     let item: ExpenseModel = self.selectedItem ?? ExpenseModel()
                     ExpenseModelViewEditor(expenseModel: item)
                 }.sheet(isPresented: $showingSettings) {
-                     SettingsView()
+                    SettingsView()
                 }
         }
     }
@@ -105,5 +107,16 @@ struct ContentView: View {
 
     func deleteDiscretionary(at offsets: IndexSet) {
         modelContext.delete(discretionaryExpenses[offsets.count - 1])
+    }
+}
+
+struct Heading: View {
+    var body: some View {
+        HStack {
+            Text("Date").fontWeight(.semibold).font(.caption).frame(maxWidth: .infinity, alignment: .leading)
+            Text("Description").fontWeight(.semibold).font(.caption).frame(maxWidth: .infinity, alignment: .leading)
+            Text("Category").fontWeight(.semibold).font(.caption).frame(maxWidth: .infinity, alignment: .leading)
+            Text("Amount").fontWeight(.semibold).font(.caption).frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 }

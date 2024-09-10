@@ -97,7 +97,7 @@ struct SettingsView: View {
                     Button {
                         showDataManagementView = true
                     } label: {
-                        Text("Datat Management")
+                        Text("Data Management")
                     }.frame(alignment: .leading)
                     Button {
                         showCategoriestView = true

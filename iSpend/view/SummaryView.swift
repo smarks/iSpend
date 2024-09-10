@@ -19,15 +19,37 @@ struct SummaryView: View {
     }
 
     var balance: Double {
-        totalExpenses - budget.amount
+        budget.amount - totalExpenses
+    }
+
+    var balanceColor: Color {
+        if balance < 0 {
+            return Color.red
+        }
+        return Color.blue
     }
 
     var body: some View {
         VStack {
-            Text("Total: \(totalExpenses,format: .localCurrency)").font(.headline)
+            
+            HStack {
+                Text("Total:").font(.subheadline)
+                Text("\(totalExpenses, format: .localCurrency)").font(.subheadline).foregroundColor(balanceColor).frame(maxWidth: .infinity, alignment: .trailing)
+            }.frame(maxWidth: .infinity, alignment: .leading)
+
             Divider()
-            Text("Budget: \(budget.amount, format: .localCurrency)")
-            Text("Remaining: \(balance,format: .localCurrency)")
+            
+            HStack {
+                Text("Budget:").font(.subheadline).padding(.trailing)
+                Text("\(budget.amount, format: .localCurrency)").font(.subheadline).padding(.trailing).frame(maxWidth: .infinity, alignment: .trailing)
+            }.frame(maxWidth: .infinity, alignment: .leading)
+            
+            Divider()
+           
+            HStack {
+                Text("Remaining:").font(.subheadline).padding(.trailing)
+                Text("\(balance, format: .localCurrency)").foregroundColor(balanceColor).font(.subheadline).padding(.trailing).frame(maxWidth: .infinity, alignment: .trailing)
+            }.frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }

@@ -14,6 +14,15 @@ var dateFormatter: DateFormatter = {
     return formatter
 }()
 
+let numberFormatter: NumberFormatter = {
+       let formatter = NumberFormatter()
+       formatter.numberStyle = .currency
+       formatter.maximumFractionDigits = 2
+       return formatter
+   }()
+
+    
+
 struct ExpenseModelViewEditor: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -85,14 +94,7 @@ struct ExpenseModelViewEditor: View {
 
     @FocusState private var isFocused: Bool
 
-    private let numberFormatter: NumberFormatter = {
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .currency
-            formatter.maximumFractionDigits = 2
-            return formatter
-        }()
-    
-    
+     
     var body: some View {
         NavigationStack {
             Form {

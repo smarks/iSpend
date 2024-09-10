@@ -11,14 +11,25 @@ import SwiftUI
 struct ExpenseModelView: View {
     @State var expenseModel: ExpenseModel
     @Environment(\.modelContext) private var modelContext
-    
+
     var body: some View {
         HStack {
-            Text(expenseModel.name)
+            
             Text(dateFormatter.string(from: expenseModel.date))
+                .fontWeight(.regular).font(.caption) //.system(size: 16))
                 .frame(maxWidth: .infinity, alignment: .leading)
+
+            Text(expenseModel.name)
+                .fontWeight(.regular).font(.caption)
+                .frame(maxWidth: .infinity, alignment: .leading)
+         
+            Text(expenseModel.category)
+                .fontWeight(.regular).font(.caption)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
             Text(expenseModel.amount, format: .localCurrency)
-                .frame(maxWidth: .infinity, alignment: .trailing)
+                .fontWeight(.regular).font(.caption)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }

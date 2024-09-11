@@ -12,10 +12,10 @@ struct ContentView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
 
-    @Query(filter: #Predicate<ExpenseModel> { expense in expense.type == NECESSARY }, sort: [SortDescriptor(\ExpenseModel.date)])
+    @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == NECESSARY }, sort: [SortDescriptor(\ExpenseModel.date)])
     private var necessaryExpenses: [ExpenseModel]
 
-    @Query(filter: #Predicate<ExpenseModel> { expense in expense.type == DISCRETIONARY }, sort: [SortDescriptor(\ExpenseModel.date)])
+    @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == DISCRETIONARY }, sort: [SortDescriptor(\ExpenseModel.date)])
     private var discretionaryExpenses: [ExpenseModel]
 
     @Query(filter: #Predicate<BudgetModel> { budget in budget.type == NECESSARY })
@@ -113,10 +113,10 @@ struct ContentView: View {
 struct Heading: View {
     var body: some View {
         HStack {
-            Text("Date").fontWeight(.semibold).font(.caption).frame(maxWidth: .infinity, alignment: .leading)
-            Text("Description").fontWeight(.semibold).font(.caption).frame(maxWidth: .infinity, alignment: .leading)
-            Text("Category").fontWeight(.semibold).font(.caption).frame(maxWidth: .infinity, alignment: .leading)
-            Text("Amount").fontWeight(.semibold).font(.caption).frame(maxWidth: .infinity, alignment: .leading)
+            Text("Date").fontWeight(.semibold).font(.subheadline).frame(maxWidth: .infinity, alignment: .leading)
+            Text("Name").fontWeight(.semibold).font(.subheadline).frame(maxWidth: .infinity, alignment: .leading)
+            Text("Category").fontWeight(.semibold).font(.subheadline).frame(maxWidth: .infinity, alignment: .leading)
+            Text("Amount").fontWeight(.semibold).font(.subheadline).frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }

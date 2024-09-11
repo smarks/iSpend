@@ -25,8 +25,8 @@ let DISCRETIONARY: Int = 2
 @Model
 final class ExpenseModel {
     var name: String
-    var type: Int
-    var typeType: ExpenseTypeType
+    var typeMap: Int
+    var expenseType: ExpenseTypeType
     var amount: Double
     var note: String
     var date: Date
@@ -35,16 +35,16 @@ final class ExpenseModel {
 
     init(name: String = "", type: Int = NECESSARY, amount: Double = 0, note: String = "", date: Date = Date(), category: String = "None", discretionaryValue: Double = 0) {
         self.name = name
-        self.type = type
+        self.typeMap = type
         self.amount = amount
         self.note = note
         self.date = date
         self.category = category
         self.discretionaryValue = discretionaryValue
         if type == 1 {
-            typeType = ExpenseTypeType.Necessary
+            expenseType = ExpenseTypeType.Necessary
         } else {
-            typeType = ExpenseTypeType.Discretionary
+            expenseType = ExpenseTypeType.Discretionary
         }
     }
 }

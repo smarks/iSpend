@@ -78,7 +78,7 @@ struct DataManagementView: View {
     }
     
     func generateCSV(from expenses: [ExpenseModel]) -> String {
-        var csvString = "id,name,type,amount,note,date\n"
+        var csvString = "date, name, expenseType, amount, note,  category, discretionaryValue\n"
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
@@ -87,12 +87,13 @@ struct DataManagementView: View {
         for expense in expenses {
             let dateString = dateFormatter.string(from: expense.date)
             let escapedNote = expense.note.replacingOccurrences(of: "\"", with: "\"\"") // Escape double quotes
+            
             let csvRow = """
-        "\(expense.id)",\(expense.name),\(expense.typeType),\(expense.amount),"\(escapedNote)",\(dateString)\n
+        "\(dateString)",\(expense.name),\(expense.expenseType),\(expense.amount),"\(escapedNote)"\n
         """
             csvString.append(contentsOf: csvRow)
         }
         
         return csvString
     }
-}
+} 

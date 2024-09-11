@@ -85,7 +85,7 @@ struct ExpenseModelViewEditor: View {
     }
 
     private var typePicker: some View {
-        Picker("Type", selection: $expenseModel.typeType) {
+        Picker("Type", selection: $expenseModel.expenseType) {
             ForEach(types, id: \.self) { type in
                 Text(type.rawValue)
             }
@@ -123,15 +123,15 @@ struct ExpenseModelViewEditor: View {
                     }
 
                 HStack {
-                    Text(String(expenseModel.typeType.rawValue))
+                    Text(String(expenseModel.expenseType.rawValue))
                         .fontWeight(.bold).foregroundColor(typeColor)
                         .frame(minWidth: CGFloat("DISCRETIONARY".count)).onChange(of: expenseModel.discretionaryValue) { _, newValue in
                             if newValue > 3 {
-                                expenseModel.type = DISCRETIONARY
-                                expenseModel.typeType = ExpenseTypeType.Discretionary
+                                expenseModel.typeMap = DISCRETIONARY
+                                expenseModel.expenseType = ExpenseTypeType.Discretionary
                             } else {
-                                expenseModel.type = NECESSARY
-                                expenseModel.typeType = ExpenseTypeType.Necessary
+                                expenseModel.typeMap = NECESSARY
+                                expenseModel.expenseType = ExpenseTypeType.Necessary
                             }
                         }.padding(.leading)
 
@@ -144,13 +144,13 @@ struct ExpenseModelViewEditor: View {
                     }
                 }
                 
-                typePicker.onChange(of: expenseModel.typeType) {
+                typePicker.onChange(of: expenseModel.expenseType) {
                 
-                    if expenseModel.typeType == ExpenseTypeType.Necessary {
-                        expenseModel.type = NECESSARY
+                    if expenseModel.expenseType == ExpenseTypeType.Necessary {
+                        expenseModel.typeMap = NECESSARY
                         expenseModel.discretionaryValue = 0
                     } else {
-                        expenseModel.type = DISCRETIONARY
+                        expenseModel.typeMap = DISCRETIONARY
                         expenseModel.discretionaryValue = 7
                     }
                 }
@@ -208,4 +208,44 @@ struct ExpenseModelViewEditor: View {
         // Only allow digits and decimals
         return String(text.unicodeScalars.filter { allowedCharacterSet.contains($0) })
     }
+} 
+
+extension Array: RawRepresentable where Element: Codable {
+    public init?(rawValue: String) {
+        guard let data = rawValue.data(using: .utf8),
+              let result = try? JSONDecoder().decode([Element].self, from: data)
+        else {
+            return nil
+        }
+        self = result
+    }
+
+    public var rawValue: String {
+        guard let data = try? JSONEncoder().encode(self),
+              let result = String(data: data, encoding: .utf8)
+        else {
+            return "[]"
+        }
+        return result
+    }
+}
+
+protocol Labels: ObservableObject {
+    var list: [String] { get }
+}
+
+class Categories: Labels {
+    static let defaultValue: String = "None"
+
+    @AppStorage("Categories") var list: [String] = [
+        defaultValue, "Restaurant", "Misc", "HouseHold", "Hobby"]
+}
+
+
+class Mediations: Labels {
+    @AppStorage("Mediations") var list: [String] = [
+        "don't", "What would you do without it?",
+        "What would you do without it?",
+        "Sometimes its' OK to reward yourself.",
+        "Learn from the past, and plan for the future, while living in the present."]
 }

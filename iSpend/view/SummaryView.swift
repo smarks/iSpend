@@ -33,8 +33,8 @@ struct SummaryView: View {
         VStack {
             
             HStack {
-                Text("Total:").font(.subheadline)
-                Text("\(totalExpenses, format: .localCurrency)").font(.subheadline).foregroundColor(balanceColor).frame(maxWidth: .infinity, alignment: .trailing)
+                Text("Total:").font(.headline).fontWeight(.bold)
+                Text("\(totalExpenses, format: .localCurrency)").fontWeight(.bold).foregroundColor(balanceColor).frame(maxWidth: .infinity, alignment: .trailing).font(.headline)
             }.frame(maxWidth: .infinity, alignment: .leading)
 
             Divider()

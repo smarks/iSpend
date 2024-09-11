@@ -21,7 +21,6 @@ class AppVersion: ObservableObject {
     }
 }
 
-
 struct SettingsView: View {
     enum SettingsTypes: String, CaseIterable, Hashable {
         case budgets = "Budgets"
@@ -36,26 +35,26 @@ struct SettingsView: View {
 
     @Query
     private var expenses: [ExpenseModel]
-    
-    private var data:Data = Data()
-    
+
+    private var data: Data = Data()
+
     @State var showBudgetView: Bool = false
     @State var showDataManagementView: Bool = false
     @State var showCategoriestView: Bool = false
     @State var showMediationsView: Bool = false
     @State var showAboutView: Bool = false
 
-    var appVersion:AppVersion = AppVersion()
+    var appVersion: AppVersion = AppVersion()
 
     var isDirty: Bool = false
     var disableSave: Bool {
         isDirty
     }
 
-    @Query(filter: #Predicate<ExpenseModel> { expense in expense.type == NECESSARY }, sort: [SortDescriptor(\ExpenseModel.date)])
+    @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == NECESSARY }, sort: [SortDescriptor(\ExpenseModel.date)])
     var necessaryExpenses: [ExpenseModel]
 
-    @Query(filter: #Predicate<ExpenseModel> { expense in expense.type == DISCRETIONARY }, sort: [SortDescriptor(\ExpenseModel.date)])
+    @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == DISCRETIONARY }, sort: [SortDescriptor(\ExpenseModel.date)])
     var discretionaryExpenses: [ExpenseModel]
 
     @Query(filter: #Predicate<BudgetModel> { budget in budget.type == NECESSARY })
@@ -83,8 +82,7 @@ struct SettingsView: View {
             return discretionaryBudgets[0]
         }
     }
-    
-    
+
     var body: some View {
         NavigationView {
             VStack {
@@ -126,13 +124,13 @@ struct SettingsView: View {
             }
 
         }.sheet(isPresented: $showBudgetView) {
-            BudgetsView(necessaryBudget:necessaryBudget, discretionaryBudget: discretionaryBudget)
+            BudgetsView(necessaryBudget: necessaryBudget, discretionaryBudget: discretionaryBudget)
         }.sheet(isPresented: $showDataManagementView) {
-            DataManagementView(expenses:expenses)
+            DataManagementView(expenses: expenses)
         }.sheet(isPresented: $showCategoriestView) {
-            ConfigurationView()
+            ConfigurationView(items: Categories().list)
         }.sheet(isPresented: $showMediationsView) {
-            ConfigurationView()
+            ConfigurationView(items: Mediations().list)
         }.sheet(isPresented: $showAboutView) {
             AboutView(version: appVersion.version, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
         }
@@ -158,13 +156,12 @@ enum AppIconProvider {
     }
 }
 
-
-
-
-
 struct ConfigurationView: View {
+    @State var items: [String]
     var body: some View {
-        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text("Hello, world!")/*@END_MENU_TOKEN@*/
+        List(items, id: \.self) { item in
+            Text(item)
+        }
+        //.onDelete(perform: delete)
     }
 }
-

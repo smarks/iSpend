@@ -156,12 +156,41 @@ enum AppIconProvider {
     }
 }
 
+
 struct ConfigurationView: View {
-    @State var items: [String]
+    let labels:any Labels
+    @State 
+    @State private var isEditing = false
+    @FocusState private var focusedField: UUID?
+
     var body: some View {
-        List(items, id: \.self) { item in
-            Text(item)
+        NavigationStack {
+                List {
+                    ForEach(items, id: \.self) { $item in
+                        TextField("Edit Item", text: $item)
+                                                .disabled(!isEditing)
+                                                .focused($focusedField, equals: item.id)
+                    }
+                    .onDelete(perform: delete)
+                    .onMove(perform: move)
+                  //  .onTapGesture(perform: edit(at: <#IndexSet#>))
+                }
+                .navigationTitle("Editable List")
+                .toolbar {
+                    EditButton()
+                }
+            }
         }
-        //.onDelete(perform: delete)
+    
+    func edit(at offsets: IndexSet) {
+        
+    }
+    
+    func delete(at offsets: IndexSet) {
+        // items.remove(atOffsets: offsets)
+    }
+
+    func move(from source: IndexSet, to destination: Int) {
+        // items.move(fromOffsets: source, toOffset: destination)
     }
 }

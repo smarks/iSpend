@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftData
 
 var dateFormatter: DateFormatter = {
     let formatter = DateFormatter()
@@ -27,9 +28,12 @@ struct ExpenseModelViewEditor: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
 
+    @Query(CatergoriesModel)
+    private var catergoriesModel: CatergoriesModel
+    
     @State var expenseModel: ExpenseModel
     @State var originalExpenseModel: ExpenseModel
-    @State private var categories: [String] = Categories().list
+    @State private var categories: [EditableListItem] = CatergoriesModel().items
    // @State private var stringAmount: String = ""
     @State private var discretionaryValueString: String = "0"
 
@@ -40,7 +44,7 @@ struct ExpenseModelViewEditor: View {
     private var categoryPicker: some View {
         Picker("Category", selection: $expenseModel.category) {
             ForEach(categories, id: \.self) { category in
-                Text(category).tag(category)
+                Text(category.text).tag(category)
             }
         }
         .pickerStyle(MenuPickerStyle())
@@ -128,10 +132,10 @@ struct ExpenseModelViewEditor: View {
                         .frame(minWidth: CGFloat("DISCRETIONARY".count)).onChange(of: expenseModel.discretionaryValue) { _, newValue in
                             if newValue > 3 {
                                 expenseModel.typeMap = DISCRETIONARY
-                                expenseModel.expenseType = ExpenseTypeType.Discretionary
+                                expenseModel.expenseType = ExpenseType.Discretionary
                             } else {
                                 expenseModel.typeMap = NECESSARY
-                                expenseModel.expenseType = ExpenseTypeType.Necessary
+                                expenseModel.expenseType = ExpenseType.Necessary
                             }
                         }.padding(.leading)
 
@@ -146,7 +150,7 @@ struct ExpenseModelViewEditor: View {
                 
                 typePicker.onChange(of: expenseModel.expenseType) {
                 
-                    if expenseModel.expenseType == ExpenseTypeType.Necessary {
+                    if expenseModel.expenseType == ExpenseType.Necessary {
                         expenseModel.typeMap = NECESSARY
                         expenseModel.discretionaryValue = 0
                     } else {
@@ -210,42 +214,24 @@ struct ExpenseModelViewEditor: View {
     }
 } 
 
-extension Array: RawRepresentable where Element: Codable {
-    public init?(rawValue: String) {
-        guard let data = rawValue.data(using: .utf8),
-              let result = try? JSONDecoder().decode([Element].self, from: data)
-        else {
-            return nil
-        }
-        self = result
-    }
-
-    public var rawValue: String {
-        guard let data = try? JSONEncoder().encode(self),
-              let result = String(data: data, encoding: .utf8)
-        else {
-            return "[]"
-        }
-        return result
-    }
-}
-
-protocol Labels: ObservableObject {
-    var list: [String] { get }
-}
-
-class Categories: Labels {
-    static let defaultValue: String = "None"
-
-    @AppStorage("Categories") var list: [String] = [
-        defaultValue, "Restaurant", "Misc", "HouseHold", "Hobby"]
-}
-
-
-class Mediations: Labels {
-    @AppStorage("Mediations") var list: [String] = [
-        "don't", "What would you do without it?",
-        "What would you do without it?",
-        "Sometimes its' OK to reward yourself.",
-        "Learn from the past, and plan for the future, while living in the present."]
-}
+/*
+ extension Array: RawRepresentable where Element: Codable {
+ public init?(rawValue: String) {
+ guard let data = rawValue.data(using: .utf8),
+ let result = try? JSONDecoder().decode([Element].self, from: data)
+ else {
+ return nil
+ }
+ self = result
+ }
+ 
+ public var rawValue: String {
+ guard let data = try? JSONEncoder().encode(self),
+ let result = String(data: data, encoding: .utf8)
+ else {
+ return "[]"
+ }
+ return result
+ }
+ }
+ */

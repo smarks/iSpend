@@ -27,19 +27,22 @@ let numberFormatter: NumberFormatter = {
 struct ExpenseModelViewEditor: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-
-    @Query(CatergoriesModel)
-    private var catergoriesModel: CatergoriesModel
+    
+    @Query(filter: #Predicate<EditableListItem> { item in item.type == CATEGORY })
+    private var categories: [EditableListItem]
+    
+    @Query(filter: #Predicate<EditableListItem> { item in item.type == MEDIATION })
+    private var mediations: [EditableListItem]
+     
     
     @State var expenseModel: ExpenseModel
     @State var originalExpenseModel: ExpenseModel
-    @State private var categories: [EditableListItem] = CatergoriesModel().items
-   // @State private var stringAmount: String = ""
     @State private var discretionaryValueString: String = "0"
+    
 
-    let messageToReflectOn: String
+    var messageToReflectOn: String = "This is a test message"
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
-    let types = [ExpenseTypeType.Necessary, ExpenseTypeType.Discretionary]
+    let types = [ExpenseType.Necessary, ExpenseType.Discretionary]
 
     private var categoryPicker: some View {
         Picker("Category", selection: $expenseModel.category) {
@@ -58,9 +61,8 @@ struct ExpenseModelViewEditor: View {
         print("expenseModel \(expenseModel.name)")
         self.expenseModel = expenseModel
         self.originalExpenseModel = expenseModel
-        self.categories = Categories().list
         self.discretionaryValueString = String(expenseModel.discretionaryValue)
-        self.messageToReflectOn = Mediations().list.randomElement() ?? "Who knows what this will bring"
+        self.messageToReflectOn = mediations.randomElement()?.text ?? "Who knows what this will bring"
     }
 
     // If expense record is incomplete or hasn't changed, disable save button.

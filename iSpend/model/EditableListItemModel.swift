@@ -7,38 +7,24 @@
 
 import Foundation
 import SwiftData
+ 
+ 
 
-protocol EditableListItems {
-    var items: [EditableListItem] { get set }
-}
+let CATEGORY: Int = 1
+let MEDIATION: Int = 2
 
-struct EditableListItem: Identifiable {
+@Model
+final class EditableListItem: Identifiable {
     var id = UUID()
     var text: String
-    init(text: String = "") {
+    var type: Int
+    init(text: String = "", type: Int = CATEGORY) {
         self.text = text
-        id = UUID()
+        self.id = UUID()
+        self.type = type
     }
 }
-@Model
-final class CatergoriesModel:EditableListItems {
-    var items: [EditableListItem]
-
-    init(items: [EditableListItem]) {
-        self.items = items
-    }
-}
-
-@Model
-final class MediationsModel: EditableListItems {
-    var items: [EditableListItem]
-
-    init(items: [EditableListItem]) {
-        self.items = items
-    }
-}
-
-
+  
 
 /*
  class Mediations: Labels {

@@ -59,7 +59,13 @@ struct SettingsView: View {
 
     @Query(filter: #Predicate<BudgetModel> { budget in budget.type == NECESSARY })
     var necessaryBudgets: [BudgetModel]
-
+  
+    @Query(filter: #Predicate<EditableListItem> { item in item.type == CATEGORY })
+    private var categories: [EditableListItem]
+        
+    @Query(filter: #Predicate<EditableListItem> { item in item.type == MEDIATION })
+    private var mediations: [EditableListItem]
+    
     var necessaryBudget: BudgetModel {
         if necessaryBudgets.isEmpty {
             let budgetModel: BudgetModel = BudgetModel(type: NECESSARY, amount: 0)
@@ -128,9 +134,9 @@ struct SettingsView: View {
         }.sheet(isPresented: $showDataManagementView) {
             DataManagementView(expenses: expenses)
         }.sheet(isPresented: $showCategoriestView) {
-            ConfigurationView(items: Categories().list)
+            ConfigurationView(editableTextItems: categories)
         }.sheet(isPresented: $showMediationsView) {
-            ConfigurationView(items: Mediations().list)
+            ConfigurationView(editableTextItems: mediations)
         }.sheet(isPresented: $showAboutView) {
             AboutView(version: appVersion.version, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
         }
@@ -158,18 +164,17 @@ enum AppIconProvider {
 
 
 struct ConfigurationView: View {
-    let labels:any Labels
-    @State 
+    let editableTextItems:[EditableListItem]
     @State private var isEditing = false
     @FocusState private var focusedField: UUID?
 
     var body: some View {
         NavigationStack {
                 List {
-                    ForEach(items, id: \.self) { $item in
-                        TextField("Edit Item", text: $item)
+                    ForEach(editableTextItems, id: \.self) { editableTextItem in
+                        TextField("Edit Item", text: editableTextItem.text)
                                                 .disabled(!isEditing)
-                                                .focused($focusedField, equals: item.id)
+                                                .focused($focusedField, equals: editableTextItem.id)
                     }
                     .onDelete(perform: delete)
                     .onMove(perform: move)

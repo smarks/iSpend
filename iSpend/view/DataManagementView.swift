@@ -25,7 +25,7 @@ struct DataManagementView: View {
                 resetButton(title: "Reset budget data", modelTypes: [BudgetModel.self], errorMessage: "Failed to clear all BudgetModel data.")
                 
                 resetButton(title: "Delete all data",
-                            modelTypes: [CatergoriesModel.self],
+                            modelTypes: [EditableListItem.self],
                             errorMessage: "Failed to clear all data.")
                 
                 Button(exportButtonLabel) {

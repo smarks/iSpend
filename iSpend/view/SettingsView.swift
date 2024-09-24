@@ -59,13 +59,13 @@ struct SettingsView: View {
 
     @Query(filter: #Predicate<BudgetModel> { budget in budget.type == NECESSARY })
     var necessaryBudgets: [BudgetModel]
-  
+
     @Query(filter: #Predicate<EditableListItem> { item in item.type == CATEGORY })
     private var categories: [EditableListItem]
-        
+
     @Query(filter: #Predicate<EditableListItem> { item in item.type == MEDIATION })
     private var mediations: [EditableListItem]
-    
+
     var necessaryBudget: BudgetModel {
         if necessaryBudgets.isEmpty {
             let budgetModel: BudgetModel = BudgetModel(type: NECESSARY, amount: 0)
@@ -134,9 +134,9 @@ struct SettingsView: View {
         }.sheet(isPresented: $showDataManagementView) {
             DataManagementView(expenses: expenses)
         }.sheet(isPresented: $showCategoriestView) {
-            ConfigurationView(editableTextItems: categories)
+            ConfigurationView(label: "Categories", editableTextItems: categories)
         }.sheet(isPresented: $showMediationsView) {
-            ConfigurationView(editableTextItems: mediations)
+            ConfigurationView(label: "Mediations", editableTextItems: mediations)
         }.sheet(isPresented: $showAboutView) {
             AboutView(version: appVersion.version, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
         }
@@ -162,40 +162,79 @@ enum AppIconProvider {
     }
 }
 
-
 struct ConfigurationView: View {
-    let editableTextItems:[EditableListItem]
+    let label: String
+    @State var editableTextItems: [EditableListItem]
     @State private var isEditing = false
     @FocusState private var focusedField: UUID?
+    @Environment(\.editMode) private var editMode
+    @Environment(\.dismiss) var dismiss
+    @State var showAddItem: Bool = false
 
     var body: some View {
         NavigationStack {
-                List {
-                    ForEach(editableTextItems, id: \.self) { editableTextItem in
-                        TextField("Edit Item", text: editableTextItem.text)
-                                                .disabled(!isEditing)
-                                                .focused($focusedField, equals: editableTextItem.id)
-                    }
-                    .onDelete(perform: delete)
-                    .onMove(perform: move)
-                  //  .onTapGesture(perform: edit(at: <#IndexSet#>))
+            List {
+                ForEach($editableTextItems) { $item in
+                    TextField("Edit Item", text: $item.text)
+                        .disabled(editMode?.wrappedValue.isEditing == true)
+                        .focused($focusedField, equals: item.id)
                 }
-                .navigationTitle("Editable List")
-                .toolbar {
-                    EditButton()
-                }
+                .onDelete(perform: delete)
+                .onMove(perform: move)
+                //  .onTapGesture(perform: edit(at: <#IndexSet#>))
             }
+            .navigationTitle(label)
+            .toolbar {
+                Button("Cancel") {
+                    dismiss()
+                }.padding()
+                EditButton()
+                Button("+") {
+                    showAddItem = true
+                }
+            }.id(isEditing)
+                .sheet(isPresented: $showAddItem) {
+                    EditListItemView(item: EditableListItem())
+                    
+                }
+
         }
-    
-    func edit(at offsets: IndexSet) {
-        
     }
-    
+
+    func edit(at offsets: IndexSet) {
+    }
+
     func delete(at offsets: IndexSet) {
-        // items.remove(atOffsets: offsets)
+        editableTextItems.remove(atOffsets: offsets)
     }
 
     func move(from source: IndexSet, to destination: Int) {
-        // items.move(fromOffsets: source, toOffset: destination)
+        editableTextItems.move(fromOffsets: source, toOffset: destination)
+    }
+}
+
+struct EditListItemView: View {
+    @State var item: EditableListItem
+    @Environment(\.modelContext) var modelContext
+
+    var body: some View {
+        TextField("Edit Item", text: $item.text).onDisappear(perform: { update(item) })
+    }
+    
+    func update(_ item: EditableListItem)  {
+        modelContext.insert(item)
+
+        var newItem = EditableListItem(text:"foo")
+        newItem.text = "updated"
+        modelContext.insert(newItem)
+
+        newItem = EditableListItem(text:"bar")
+        newItem.text = "foo"
+        modelContext.insert(newItem)
+
+        newItem = EditableListItem(text:"nag")
+        newItem.text = "bar"
+        modelContext.insert(newItem)
+        
     }
 }

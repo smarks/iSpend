@@ -118,20 +118,36 @@ struct EditableListManager: View {
     }
     
     private func addItem() {
-        guard !newItemText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+        let trimmedText = newItemText.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Input validation
+        guard !trimmedText.isEmpty else {
             return
         }
         
-        let trimmedText = newItemText.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Prevent excessively long inputs (DoS protection)
+        guard trimmedText.count <= 100 else {
+            errorMessage = "Item name is too long. Please keep it under 100 characters."
+            showingError = true
+            return
+        }
         
-        // Check for duplicates
-        if items.contains(where: { $0.text.lowercased() == trimmedText.lowercased() }) {
+        // Sanitize input - remove potentially harmful characters
+        let sanitizedText = sanitizeInput(trimmedText)
+        guard !sanitizedText.isEmpty else {
+            errorMessage = "Invalid characters in item name."
+            showingError = true
+            return
+        }
+        
+        // Check for duplicates (case-insensitive)
+        if items.contains(where: { $0.text.lowercased() == sanitizedText.lowercased() }) {
             errorMessage = "This item already exists."
             showingError = true
             return
         }
         
-        let newItem = EditableListItem(text: trimmedText, type: itemType)
+        let newItem = EditableListItem(text: sanitizedText, type: itemType)
         modelContext.insert(newItem)
         
         do {
@@ -141,6 +157,26 @@ struct EditableListManager: View {
             errorMessage = "Failed to save item: \(error.localizedDescription)"
             showingError = true
         }
+    }
+    
+    /// Sanitizes user input to prevent potential security issues
+    private func sanitizeInput(_ input: String) -> String {
+        // Remove control characters and non-printable characters
+        let allowedCharacterSet = CharacterSet.alphanumerics
+            .union(.punctuationCharacters)
+            .union(.whitespaces)
+            .union(.symbols)
+        
+        let sanitized = input.unicodeScalars
+            .filter { allowedCharacterSet.contains($0) }
+            .map { String($0) }
+            .joined()
+        
+        // Further limit to reasonable characters for item names
+        return sanitized.replacingOccurrences(of: "<", with: "")
+                       .replacingOccurrences(of: ">", with: "")
+                       .replacingOccurrences(of: "&", with: "and")
+                       .trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     private func deleteItems(offsets: IndexSet) {

@@ -17,6 +17,7 @@
 		2258BD042E7B69160093F84B /* .githubdependabot.yml in Resources */ = {isa = PBXBuildFile; fileRef = 2258BD032E7B69160093F84B /* .githubdependabot.yml */; };
 		2258BD062E7B69240093F84B /* fastlaneFastfile in Resources */ = {isa = PBXBuildFile; fileRef = 2258BD052E7B69240093F84B /* fastlaneFastfile */; };
 		2258BD082E7B693A0093F84B /* scriptssecurity-fix.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2258BD072E7B693A0093F84B /* scriptssecurity-fix.sh */; };
+		2258BD0A2E7B6D1C0093F84B /* EditableListManager 3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD092E7B6D1C0093F84B /* EditableListManager 3.swift */; };
 		2270D4E72B9B8167004D26B8 /* AddItemTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */; };
 		2270D4F42B9B8E4A004D26B8 /* iSpendUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4F32B9B8E4A004D26B8 /* iSpendUITests.swift */; };
 		2270D4F62B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4F52B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift */; };
@@ -82,6 +83,7 @@
 		2258BD032E7B69160093F84B /* .githubdependabot.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .githubdependabot.yml; sourceTree = "<group>"; };
 		2258BD052E7B69240093F84B /* fastlaneFastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = fastlaneFastfile; sourceTree = "<group>"; };
 		2258BD072E7B693A0093F84B /* scriptssecurity-fix.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "scriptssecurity-fix.sh"; sourceTree = "<group>"; };
+		2258BD092E7B6D1C0093F84B /* EditableListManager 3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditableListManager 3.swift"; sourceTree = "<group>"; };
 		2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemTestCase.swift; sourceTree = "<group>"; };
 		2270D4EC2B9B8AC6004D26B8 /* iSpendTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = iSpendTest.xctestplan; sourceTree = "<group>"; };
 		2270D4F12B9B8E4A004D26B8 /* iSpendUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iSpendUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -166,6 +168,7 @@
 				2258BD032E7B69160093F84B /* .githubdependabot.yml */,
 				2258BD052E7B69240093F84B /* fastlaneFastfile */,
 				2258BD072E7B693A0093F84B /* scriptssecurity-fix.sh */,
+				2258BD092E7B6D1C0093F84B /* EditableListManager 3.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 				22DF27572C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift in Sources */,
 				22D207042C7DFC800059DB2A /* SettingsView.swift in Sources */,
 				2299EFB42C7A9C8300252AE1 /* SummaryView.swift in Sources */,
+				2258BD0A2E7B6D1C0093F84B /* EditableListManager 3.swift in Sources */,
 				22851D982C73DE9B00240BD6 /* Utils.swift in Sources */,
 				2276FDF02A70526300E0B60F /* ContentView.swift in Sources */,
 				2258BCF82E7B61FC0093F84B /* EditableListManager 2.swift in Sources */,

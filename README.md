@@ -14,10 +14,6 @@
 
 You have any questions on random topics in mind? You can also ask `Yai`, and get the power of AI without leaving `/home`.
 
-It is already aware of your:
-- operating system & distribution
-- username, shell & home directory
-- preferred editor
 
 And you can also give any supplementary preferences to fine tune your experience.
 

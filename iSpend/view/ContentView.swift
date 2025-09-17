@@ -12,10 +12,10 @@ struct ContentView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
 
-    @Query(filter: #Predicate<ExpenseModel> { expense in expense.type == NECESSARY }, sort: [SortDescriptor(\ExpenseModel.date)])
+    @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == NECESSARY }, sort: [SortDescriptor(\ExpenseModel.date)])
     private var necessaryExpenses: [ExpenseModel]
 
-    @Query(filter: #Predicate<ExpenseModel> { expense in expense.type == DISCRETIONARY }, sort: [SortDescriptor(\ExpenseModel.date)])
+    @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == DISCRETIONARY }, sort: [SortDescriptor(\ExpenseModel.date)])
     private var discretionaryExpenses: [ExpenseModel]
 
     @Query(filter: #Predicate<BudgetModel> { budget in budget.type == NECESSARY })
@@ -37,7 +37,7 @@ struct ContentView: View {
     private var discretionaryBudget: BudgetModel {
         if discretionaryBudgets.isEmpty {
             let budgetModel: BudgetModel = BudgetModel(type: DISCRETIONARY, amount: 0)
-            modelContext.insert(BudgetModel(type: DISCRETIONARY, amount: 0))
+            modelContext.insert(budgetModel)
             return budgetModel
         } else {
             return discretionaryBudgets[0]
@@ -53,6 +53,7 @@ struct ContentView: View {
             List {
                 Section(header: Text("Necessary Expenses")) {
                     SummaryView(expenses: necessaryExpenses, label: "Necessary", budget: necessaryBudget)
+                    Heading()
                     ForEach(necessaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
                             .onTapGesture(count: 2) {
@@ -64,6 +65,7 @@ struct ContentView: View {
                 }
                 Section(header: Text("Discretionary Expenses")) {
                     SummaryView(expenses: discretionaryExpenses, label: "Discretionary", budget: discretionaryBudget)
+                    Heading()
                     ForEach(discretionaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
                             .onTapGesture(count: 2) {
@@ -93,17 +95,34 @@ struct ContentView: View {
                 }.sheet(isPresented: $showingAddEntry) {
                     let item: ExpenseModel = self.selectedItem ?? ExpenseModel()
                     ExpenseModelViewEditor(expenseModel: item)
+                        .environment(\.modelContext, modelContext)
                 }.sheet(isPresented: $showingSettings) {
-                     SettingsView()
+                    SettingsView()
+                        .environment(\.modelContext, modelContext)
                 }
         }
     }
 
     func delete(at offsets: IndexSet) {
-        modelContext.delete(necessaryExpenses[offsets.count - 1])
+        for index in offsets {
+            modelContext.delete(necessaryExpenses[index])
+        }
     }
 
     func deleteDiscretionary(at offsets: IndexSet) {
-        modelContext.delete(discretionaryExpenses[offsets.count - 1])
+        for index in offsets {
+            modelContext.delete(discretionaryExpenses[index])
+        }
+    }
+}
+
+struct Heading: View {
+    var body: some View {
+        HStack {
+            Text("Date").fontWeight(.semibold).font(.subheadline).frame(maxWidth: .infinity, alignment: .leading)
+            Text("Name").fontWeight(.semibold).font(.subheadline).frame(maxWidth: .infinity, alignment: .leading)
+            Text("Category").fontWeight(.semibold).font(.subheadline).frame(maxWidth: .infinity, alignment: .leading)
+            Text("Amount").fontWeight(.semibold).font(.subheadline).frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 }

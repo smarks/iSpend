@@ -17,53 +17,74 @@ struct BudgetsView: View {
 
     @State var discretionaryBudget: BudgetModel
     @State var necessaryBudget: BudgetModel
-    @State var newDiscretionaryBudgetValue: String
-    @State var newNecessaryBudgetValue: String
+    @State var newDiscretionaryBudgetValue: Double
+    @State var newNecessaryBudgetValue: Double
     @State var discretionaryBudgetChanged: Bool
     @State var necessaryBudgetChanged: Bool
 
     @FocusState private var isFocused: Bool
-
+ 
+    
     private var disableSave: Bool {
-        if necessaryBudgetChanged == true || discretionaryBudgetChanged == true {
+        if necessaryBudgetChanged == true {
             return true
-        } else {
-            return false
         }
+        if discretionaryBudgetChanged == true {
+            return true
+        }
+            return false
     }
 
+    let formatter: NumberFormatter = {
+           let formatter = NumberFormatter()
+           formatter.numberStyle = .currency
+           formatter.maximumFractionDigits = 2
+           formatter.usesGroupingSeparator = true
+           return formatter
+       }()
+    
     init(necessaryBudget: BudgetModel, discretionaryBudget: BudgetModel) {
-        self.newNecessaryBudgetValue = String(necessaryBudget.amount)
-        self.newDiscretionaryBudgetValue = String(discretionaryBudget.amount)
+        newNecessaryBudgetValue = necessaryBudget.amount
+        newDiscretionaryBudgetValue = discretionaryBudget.amount
         self.discretionaryBudget = discretionaryBudget
         self.necessaryBudget = necessaryBudget
-        self.discretionaryBudgetChanged = false
-        self.necessaryBudgetChanged = false
+        discretionaryBudgetChanged = false
+        necessaryBudgetChanged = false
     }
-
+    
+    let necessaryBudgetLabel:String = "Necessary Budget"
+    let discretionaryBudgetLabel:String = "Discretionary Budget"
     var body: some View {
         NavigationStack {
             Form {
                 VStack {
-                    BudgetEditorView(label: "Necessary Budget:", value: $newNecessaryBudgetValue).onChange(of: newNecessaryBudgetValue) { _, _ in
-                        necessaryBudgetChanged = true
-                        necessaryBudget.amount = Double(newNecessaryBudgetValue) ?? 0
+                    HStack {
+                        Text(necessaryBudgetLabel).padding().bold()
+                        TextField(necessaryBudgetLabel, value: $newNecessaryBudgetValue, formatter: formatter)
+                            .onChange(of: newNecessaryBudgetValue) { _, _ in
+                            necessaryBudgetChanged = true
+                            necessaryBudget.amount = newNecessaryBudgetValue
+                        }
+                   }
+                    HStack {
+                        Text(discretionaryBudgetLabel).padding().bold()
+                        TextField(discretionaryBudgetLabel, value: $newDiscretionaryBudgetValue, formatter: formatter)
+                            .onChange(of: newDiscretionaryBudgetValue) { _, _ in
+                            discretionaryBudgetChanged = true
+                            discretionaryBudget.amount = newDiscretionaryBudgetValue
+                        }
+                            
                     }
-                    BudgetEditorView(label: "Discretionary Budget:", value: $newDiscretionaryBudgetValue).onChange(of: newDiscretionaryBudgetValue) { _, _ in
-                        discretionaryBudgetChanged = true
-                        discretionaryBudget.amount = Double(newDiscretionaryBudgetValue) ?? 0
-                    }
-            }
+                }
 
             }.navigationTitle("Set Budgets")
                 .toolbar {
-
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button("Cancel") {
                             dismiss()
                         }
                     }
-             
+
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button("Save") {
                             saveBudget()
@@ -73,6 +94,7 @@ struct BudgetsView: View {
                 }
         }
     }
+
     func saveBudget() {
         if necessaryBudgetChanged {
             modelContext.insert(necessaryBudget)
@@ -83,19 +105,3 @@ struct BudgetsView: View {
     }
 }
 
-struct BudgetEditorView: View {
-    @State var label: String
-    @Binding var value: String
-
-    var body: some View {
-        Text(label).padding().bold()
-        TextField(label, text: $value)
-            .keyboardType(.numberPad)
-            .onReceive(Just(value)) { newValue in
-                let filtered = newValue.filter { "0123456789.".contains($0) }
-                if filtered != newValue {
-                    value = filtered
-                }
-            }
-    }
-}

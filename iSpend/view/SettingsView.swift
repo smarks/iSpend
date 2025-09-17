@@ -21,13 +21,12 @@ class AppVersion: ObservableObject {
     }
 }
 
-
 struct SettingsView: View {
     enum SettingsTypes: String, CaseIterable, Hashable {
         case budgets = "Budgets"
         case dataManagement = "Data Management"
         case categories = "Categories"
-        case mediations = "Mdiations"
+        case mediations = "Mediations"
         case about = "About"
     }
 
@@ -36,30 +35,32 @@ struct SettingsView: View {
 
     @Query
     private var expenses: [ExpenseModel]
-    
-    private var data:Data = Data()
-    
+
+    private var data: Data = Data()
+
     @State var showBudgetView: Bool = false
     @State var showDataManagementView: Bool = false
-    @State var showCategoriestView: Bool = false
+    @State var showCategoriesView: Bool = false
     @State var showMediationsView: Bool = false
     @State var showAboutView: Bool = false
 
-    var appVersion:AppVersion = AppVersion()
+    var appVersion: AppVersion = AppVersion()
 
     var isDirty: Bool = false
     var disableSave: Bool {
         isDirty
     }
 
-    @Query(filter: #Predicate<ExpenseModel> { expense in expense.type == NECESSARY }, sort: [SortDescriptor(\ExpenseModel.date)])
+    @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == NECESSARY }, sort: [SortDescriptor(\ExpenseModel.date)])
     var necessaryExpenses: [ExpenseModel]
 
-    @Query(filter: #Predicate<ExpenseModel> { expense in expense.type == DISCRETIONARY }, sort: [SortDescriptor(\ExpenseModel.date)])
+    @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == DISCRETIONARY }, sort: [SortDescriptor(\ExpenseModel.date)])
     var discretionaryExpenses: [ExpenseModel]
 
     @Query(filter: #Predicate<BudgetModel> { budget in budget.type == NECESSARY })
     var necessaryBudgets: [BudgetModel]
+
+    // Categories and mediations are now handled within EditableListManager
 
     var necessaryBudget: BudgetModel {
         if necessaryBudgets.isEmpty {
@@ -77,16 +78,15 @@ struct SettingsView: View {
     var discretionaryBudget: BudgetModel {
         if discretionaryBudgets.isEmpty {
             let budgetModel: BudgetModel = BudgetModel(type: DISCRETIONARY, amount: 0)
-            modelContext.insert(BudgetModel(type: DISCRETIONARY, amount: 0))
+            modelContext.insert(budgetModel)
             return budgetModel
         } else {
             return discretionaryBudgets[0]
         }
     }
-    
-    
+
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 List {
                     Button {
@@ -97,17 +97,27 @@ struct SettingsView: View {
                     Button {
                         showDataManagementView = true
                     } label: {
-                        Text("Datat Management")
+                        Text("Data Management")
                     }.frame(alignment: .leading)
                     Button {
-                        showCategoriestView = true
+                        showCategoriesView = true
                     } label: {
-                        Text("Categories")
+                        HStack {
+                            Text("Categories")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondary)
+                        }
                     }
                     Button {
                         showMediationsView = true
                     } label: {
-                        Text("Mediations")
+                        HStack {
+                            Text("Reflections")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondary)
+                        }
                     }
                     Button {
                         showAboutView = true
@@ -116,9 +126,11 @@ struct SettingsView: View {
                     }
                 }
             }
-            .navigationTitle("Preferences and Settings").navigationBarTitleDisplayMode(.inline).navigationBarBackButtonHidden(false)
+            .navigationTitle("Preferences and Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(false)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
                     }
@@ -126,13 +138,17 @@ struct SettingsView: View {
             }
 
         }.sheet(isPresented: $showBudgetView) {
-            BudgetsView(necessaryBudget:necessaryBudget, discretionaryBudget: discretionaryBudget)
+            BudgetsView(necessaryBudget: necessaryBudget, discretionaryBudget: discretionaryBudget)
+                .environment(\.modelContext, modelContext)
         }.sheet(isPresented: $showDataManagementView) {
-            DataManagementView(expenses:expenses)
-        }.sheet(isPresented: $showCategoriestView) {
-            ConfigurationView()
+            DataManagementView(expenses: expenses)
+                .environment(\.modelContext, modelContext)
+        }.sheet(isPresented: $showCategoriesView) {
+            EditableListManager(title: "Categories", itemType: CATEGORY, placeholder: "Add Category")
+                .environment(\.modelContext, modelContext)
         }.sheet(isPresented: $showMediationsView) {
-            ConfigurationView()
+            EditableListManager(title: "Mediations", itemType: MEDIATION, placeholder: "Add Mediation")
+                .environment(\.modelContext, modelContext)
         }.sheet(isPresented: $showAboutView) {
             AboutView(version: appVersion.version, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
         }
@@ -158,13 +174,4 @@ enum AppIconProvider {
     }
 }
 
-
-
-
-
-struct ConfigurationView: View {
-    var body: some View {
-        /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Hello, world!@*/Text("Hello, world!")/*@END_MENU_TOKEN@*/
-    }
-}
-
+// ConfigurationView and EditListItemView have been replaced with EditableListManager

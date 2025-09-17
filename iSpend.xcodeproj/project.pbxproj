@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2206E4082C6BA3EB000B5AE4 /* ExpenseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2206E4072C6BA3EB000B5AE4 /* ExpenseModel.swift */; };
-		2258BCF82E7B61FC0093F84B /* EditableListManager 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BCF72E7B61FC0093F84B /* EditableListManager 2.swift */; };
 		2258BCFA2E7B63740093F84B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BCF92E7B63740093F84B /* Constants.swift */; };
 		2258BCFC2E7B68EB0093F84B /* .githubworkflowsios.yml in Resources */ = {isa = PBXBuildFile; fileRef = 2258BCFB2E7B68EB0093F84B /* .githubworkflowsios.yml */; };
 		2258BCFE2E7B68F40093F84B /* Gemfile in Resources */ = {isa = PBXBuildFile; fileRef = 2258BCFD2E7B68F40093F84B /* Gemfile */; };
@@ -17,7 +16,6 @@
 		2258BD042E7B69160093F84B /* .githubdependabot.yml in Resources */ = {isa = PBXBuildFile; fileRef = 2258BD032E7B69160093F84B /* .githubdependabot.yml */; };
 		2258BD062E7B69240093F84B /* fastlaneFastfile in Resources */ = {isa = PBXBuildFile; fileRef = 2258BD052E7B69240093F84B /* fastlaneFastfile */; };
 		2258BD082E7B693A0093F84B /* scriptssecurity-fix.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2258BD072E7B693A0093F84B /* scriptssecurity-fix.sh */; };
-		2258BD0A2E7B6D1C0093F84B /* EditableListManager 3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD092E7B6D1C0093F84B /* EditableListManager 3.swift */; };
 		2270D4E72B9B8167004D26B8 /* AddItemTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */; };
 		2270D4F42B9B8E4A004D26B8 /* iSpendUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4F32B9B8E4A004D26B8 /* iSpendUITests.swift */; };
 		2270D4F62B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4F52B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift */; };
@@ -40,6 +38,9 @@
 		22851D9A2C73DE9B00240BD6 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22851D972C73DE9B00240BD6 /* Utils.swift */; };
 		2299EFB42C7A9C8300252AE1 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299EFB32C7A9C8300252AE1 /* SummaryView.swift */; };
 		22C3457C2B9E534C0049D67D /* iSpendUnitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C3457B2B9E534C0049D67D /* iSpendUnitTest.swift */; };
+		22CF97C82E7B7B08001E0E80 /* EditableListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CF97C72E7B7B08001E0E80 /* EditableListManager.swift */; };
+		22CF97C92E7B7B08001E0E80 /* EditableListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CF97C72E7B7B08001E0E80 /* EditableListManager.swift */; };
+		22CF97CA2E7B7B08001E0E80 /* EditableListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CF97C72E7B7B08001E0E80 /* EditableListManager.swift */; };
 		22D206FE2C7DF7410059DB2A /* EditableListItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D206FD2C7DF7410059DB2A /* EditableListItemModel.swift */; };
 		22D207022C7DF8150059DB2A /* BudgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D207012C7DF8150059DB2A /* BudgetModel.swift */; };
 		22D207042C7DFC800059DB2A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D207032C7DFC800059DB2A /* SettingsView.swift */; };
@@ -74,7 +75,6 @@
 		221B32422BA0ACAE0060BDF1 /* Fastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Fastfile; sourceTree = "<group>"; };
 		221B32432BA0ACAE0060BDF1 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		221B32442BA0ACAE0060BDF1 /* report.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = report.xml; sourceTree = "<group>"; };
-		2258BCF72E7B61FC0093F84B /* EditableListManager 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditableListManager 2.swift"; sourceTree = "<group>"; };
 		2258BCF92E7B63740093F84B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		2258BCFB2E7B68EB0093F84B /* .githubworkflowsios.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .githubworkflowsios.yml; sourceTree = "<group>"; };
 		2258BCFD2E7B68F40093F84B /* Gemfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Gemfile; sourceTree = "<group>"; };
@@ -83,7 +83,6 @@
 		2258BD032E7B69160093F84B /* .githubdependabot.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .githubdependabot.yml; sourceTree = "<group>"; };
 		2258BD052E7B69240093F84B /* fastlaneFastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = fastlaneFastfile; sourceTree = "<group>"; };
 		2258BD072E7B693A0093F84B /* scriptssecurity-fix.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "scriptssecurity-fix.sh"; sourceTree = "<group>"; };
-		2258BD092E7B6D1C0093F84B /* EditableListManager 3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditableListManager 3.swift"; sourceTree = "<group>"; };
 		2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemTestCase.swift; sourceTree = "<group>"; };
 		2270D4EC2B9B8AC6004D26B8 /* iSpendTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = iSpendTest.xctestplan; sourceTree = "<group>"; };
 		2270D4F12B9B8E4A004D26B8 /* iSpendUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iSpendUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,6 +102,7 @@
 		22C3457B2B9E534C0049D67D /* iSpendUnitTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iSpendUnitTest.swift; sourceTree = "<group>"; };
 		22C7D9652B97E27E00FA6A4D /* iSpend.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iSpend.entitlements; sourceTree = "<group>"; };
 		22CD64F92BFFD86E005565FF /* AppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AppIcon.png; path = iSpend/Assets.xcassets/AppIcon.png; sourceTree = "<group>"; };
+		22CF97C72E7B7B08001E0E80 /* EditableListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableListManager.swift; sourceTree = "<group>"; };
 		22D206FD2C7DF7410059DB2A /* EditableListItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableListItemModel.swift; sourceTree = "<group>"; };
 		22D207012C7DF8150059DB2A /* BudgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetModel.swift; sourceTree = "<group>"; };
 		22D207032C7DFC800059DB2A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -151,6 +151,7 @@
 		2206E40A2C6BA499000B5AE4 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				22CF97C72E7B7B08001E0E80 /* EditableListManager.swift */,
 				2276FDE32A70526200E0B60F /* ContentView.swift */,
 				22DF27562C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift */,
 				22851D8F2C73BAB700240BD6 /* ExpenseModelView.swift */,
@@ -159,7 +160,6 @@
 				22D207052C7E01B80059DB2A /* BudgetView.swift */,
 				22D207092C7E07200059DB2A /* AboutView.swift */,
 				22D2070B2C7E22B20059DB2A /* DataManagementView.swift */,
-				2258BCF72E7B61FC0093F84B /* EditableListManager 2.swift */,
 				2258BCF92E7B63740093F84B /* Constants.swift */,
 				2258BCFB2E7B68EB0093F84B /* .githubworkflowsios.yml */,
 				2258BCFD2E7B68F40093F84B /* Gemfile */,
@@ -168,7 +168,6 @@
 				2258BD032E7B69160093F84B /* .githubdependabot.yml */,
 				2258BD052E7B69240093F84B /* fastlaneFastfile */,
 				2258BD072E7B693A0093F84B /* scriptssecurity-fix.sh */,
-				2258BD092E7B6D1C0093F84B /* EditableListManager 3.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -395,6 +394,7 @@
 				22DF27592C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift in Sources */,
 				2270D4F62B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift in Sources */,
 				22851D9A2C73DE9B00240BD6 /* Utils.swift in Sources */,
+				22CF97C82E7B7B08001E0E80 /* EditableListManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,6 +403,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22DF27582C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift in Sources */,
+				22CF97C92E7B7B08001E0E80 /* EditableListManager.swift in Sources */,
 				22C3457C2B9E534C0049D67D /* iSpendUnitTest.swift in Sources */,
 				2276FDEF2A70526300E0B60F /* FormatStyle-LocalCurrency.swift in Sources */,
 				2276FDF12A70526300E0B60F /* ContentView.swift in Sources */,
@@ -418,6 +419,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22CF97CA2E7B7B08001E0E80 /* EditableListManager.swift in Sources */,
 				22D207022C7DF8150059DB2A /* BudgetModel.swift in Sources */,
 				2258BCFA2E7B63740093F84B /* Constants.swift in Sources */,
 				2276FDEE2A70526300E0B60F /* FormatStyle-LocalCurrency.swift in Sources */,
@@ -426,10 +428,8 @@
 				22DF27572C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift in Sources */,
 				22D207042C7DFC800059DB2A /* SettingsView.swift in Sources */,
 				2299EFB42C7A9C8300252AE1 /* SummaryView.swift in Sources */,
-				2258BD0A2E7B6D1C0093F84B /* EditableListManager 3.swift in Sources */,
 				22851D982C73DE9B00240BD6 /* Utils.swift in Sources */,
 				2276FDF02A70526300E0B60F /* ContentView.swift in Sources */,
-				2258BCF82E7B61FC0093F84B /* EditableListManager 2.swift in Sources */,
 				22D2070A2C7E07200059DB2A /* AboutView.swift in Sources */,
 				22D2070C2C7E22B20059DB2A /* DataManagementView.swift in Sources */,
 				2276FDF82A70526300E0B60F /* iSpendApp.swift in Sources */,

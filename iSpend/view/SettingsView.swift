@@ -9,6 +9,7 @@ import Foundation
 import SwiftData
 import SwiftUI
 
+ 
 class AppVersion: ObservableObject {
     @Published var version: String {
         didSet {
@@ -136,20 +137,24 @@ struct SettingsView: View {
                     }
                 }
             }
-
-        }.sheet(isPresented: $showBudgetView) {
+        }
+        .sheet(isPresented: $showBudgetView) {
             BudgetsView(necessaryBudget: necessaryBudget, discretionaryBudget: discretionaryBudget)
-                .environment(\.modelContext, modelContext)
-        }.sheet(isPresented: $showDataManagementView) {
+                .environment(\EnvironmentValues.modelContext, modelContext)
+        }
+        .sheet(isPresented: $showDataManagementView) {
             DataManagementView(expenses: expenses)
-                .environment(\.modelContext, modelContext)
-        }.sheet(isPresented: $showCategoriesView) {
+                .environment(\EnvironmentValues.modelContext, modelContext)
+        }
+        .sheet(isPresented: $showCategoriesView) {
             EditableListManager(title: "Categories", itemType: CATEGORY, placeholder: "Add Category")
-                .environment(\.modelContext, modelContext)
-        }.sheet(isPresented: $showMediationsView) {
+                .environment(\EnvironmentValues.modelContext, modelContext)
+        }
+        .sheet(isPresented: $showMediationsView) {
             EditableListManager(title: "Mediations", itemType: MEDIATION, placeholder: "Add Mediation")
-                .environment(\.modelContext, modelContext)
-        }.sheet(isPresented: $showAboutView) {
+                .environment(\EnvironmentValues.modelContext, modelContext)
+        }
+        .sheet(isPresented: $showAboutView) {
             AboutView(version: appVersion.version, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
         }
     }

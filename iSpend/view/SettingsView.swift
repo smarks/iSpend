@@ -9,6 +9,7 @@ import Foundation
 import SwiftData
 import SwiftUI
 
+ 
 class AppVersion: ObservableObject {
     @Published var version: String {
         didSet {
@@ -136,11 +137,12 @@ struct SettingsView: View {
                     }
                 }
             }
-
-        }.sheet(isPresented: $showBudgetView) {
+        }
+        .sheet(isPresented: $showBudgetView) {
             BudgetsView(necessaryBudget: necessaryBudget, discretionaryBudget: discretionaryBudget)
-                .environment(\.modelContext, modelContext)
-        }.sheet(isPresented: $showDataManagementView) {
+                .environment(\EnvironmentValues.modelContext, modelContext)
+        }
+        .sheet(isPresented: $showDataManagementView) {
             DataManagementView(expenses: expenses)
                 .environment(\.modelContext, modelContext)
         }.sheet(isPresented: $showCategoriesView) {
@@ -150,6 +152,7 @@ struct SettingsView: View {
             EditableListManager(title: "Mediations", itemType: 20, placeholder: "Add Mediation")
                 .environment(\.modelContext, modelContext)
         }.sheet(isPresented: $showAboutView) {
+
             AboutView(version: appVersion.version, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
         }
     }

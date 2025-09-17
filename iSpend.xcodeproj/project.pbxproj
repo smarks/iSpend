@@ -16,7 +16,7 @@
 		2258BD042E7B69160093F84B /* .githubdependabot.yml in Resources */ = {isa = PBXBuildFile; fileRef = 2258BD032E7B69160093F84B /* .githubdependabot.yml */; };
 		2258BD062E7B69240093F84B /* fastlaneFastfile in Resources */ = {isa = PBXBuildFile; fileRef = 2258BD052E7B69240093F84B /* fastlaneFastfile */; };
 		2258BD082E7B693A0093F84B /* scriptssecurity-fix.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2258BD072E7B693A0093F84B /* scriptssecurity-fix.sh */; };
-		2258BD0F2E7B75AD0093F84B /* ModelsExpenseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD0E2E7B75AD0093F84B /* ModelsExpenseModel.swift */; };
+ 		2258BD0F2E7B75AD0093F84B /* ModelsExpenseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD0E2E7B75AD0093F84B /* ModelsExpenseModel.swift */; };
 		2258BD112E7B75B20093F84B /* ModelsBudgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD102E7B75B20093F84B /* ModelsBudgetModel.swift */; };
 		2258BD132E7B75BB0093F84B /* ModelsEditableListItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD122E7B75BB0093F84B /* ModelsEditableListItemModel.swift */; };
 		2258BD152E7B75C70093F84B /* AppiSpendApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD142E7B75C70093F84B /* AppiSpendApp.swift */; };
@@ -27,7 +27,7 @@
 		2258BD1F2E7B76180093F84B /* ExtensionsFormatStyle-LocalCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD1E2E7B76180093F84B /* ExtensionsFormatStyle-LocalCurrency.swift */; };
 		2258BD212E7B761E0093F84B /* ExtensionsView-ExpenseStyling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD202E7B761E0093F84B /* ExtensionsView-ExpenseStyling.swift */; };
 		2258BD232E7B76270093F84B /* UtilsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD222E7B76270093F84B /* UtilsUtils.swift */; };
-		2270D4E72B9B8167004D26B8 /* AddItemTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */; };
+ 		2270D4E72B9B8167004D26B8 /* AddItemTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */; };
 		2270D4F42B9B8E4A004D26B8 /* iSpendUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4F32B9B8E4A004D26B8 /* iSpendUITests.swift */; };
 		2270D4F62B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4F52B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift */; };
 		2276FDEE2A70526300E0B60F /* FormatStyle-LocalCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2276FDE22A70526200E0B60F /* FormatStyle-LocalCurrency.swift */; };
@@ -49,6 +49,9 @@
 		22851D9A2C73DE9B00240BD6 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22851D972C73DE9B00240BD6 /* Utils.swift */; };
 		2299EFB42C7A9C8300252AE1 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299EFB32C7A9C8300252AE1 /* SummaryView.swift */; };
 		22C3457C2B9E534C0049D67D /* iSpendUnitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C3457B2B9E534C0049D67D /* iSpendUnitTest.swift */; };
+		22CF97C82E7B7B08001E0E80 /* EditableListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CF97C72E7B7B08001E0E80 /* EditableListManager.swift */; };
+		22CF97C92E7B7B08001E0E80 /* EditableListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CF97C72E7B7B08001E0E80 /* EditableListManager.swift */; };
+		22CF97CA2E7B7B08001E0E80 /* EditableListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CF97C72E7B7B08001E0E80 /* EditableListManager.swift */; };
 		22D206FE2C7DF7410059DB2A /* EditableListItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D206FD2C7DF7410059DB2A /* EditableListItemModel.swift */; };
 		22D207022C7DF8150059DB2A /* BudgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D207012C7DF8150059DB2A /* BudgetModel.swift */; };
 		22D207042C7DFC800059DB2A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D207032C7DFC800059DB2A /* SettingsView.swift */; };
@@ -91,7 +94,7 @@
 		2258BD032E7B69160093F84B /* .githubdependabot.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .githubdependabot.yml; sourceTree = "<group>"; };
 		2258BD052E7B69240093F84B /* fastlaneFastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = fastlaneFastfile; sourceTree = "<group>"; };
 		2258BD072E7B693A0093F84B /* scriptssecurity-fix.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "scriptssecurity-fix.sh"; sourceTree = "<group>"; };
-		2258BD0D2E7B73290093F84B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+ 		2258BD0D2E7B73290093F84B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		2258BD0E2E7B75AD0093F84B /* ModelsExpenseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsExpenseModel.swift; sourceTree = "<group>"; };
 		2258BD102E7B75B20093F84B /* ModelsBudgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsBudgetModel.swift; sourceTree = "<group>"; };
 		2258BD122E7B75BB0093F84B /* ModelsEditableListItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsEditableListItemModel.swift; sourceTree = "<group>"; };
@@ -103,6 +106,7 @@
 		2258BD1E2E7B76180093F84B /* ExtensionsFormatStyle-LocalCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionsFormatStyle-LocalCurrency.swift"; sourceTree = "<group>"; };
 		2258BD202E7B761E0093F84B /* ExtensionsView-ExpenseStyling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionsView-ExpenseStyling.swift"; sourceTree = "<group>"; };
 		2258BD222E7B76270093F84B /* UtilsUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilsUtils.swift; sourceTree = "<group>"; };
+ 
 		2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemTestCase.swift; sourceTree = "<group>"; };
 		2270D4EC2B9B8AC6004D26B8 /* iSpendTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = iSpendTest.xctestplan; sourceTree = "<group>"; };
 		2270D4F12B9B8E4A004D26B8 /* iSpendUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iSpendUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +126,7 @@
 		22C3457B2B9E534C0049D67D /* iSpendUnitTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iSpendUnitTest.swift; sourceTree = "<group>"; };
 		22C7D9652B97E27E00FA6A4D /* iSpend.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iSpend.entitlements; sourceTree = "<group>"; };
 		22CD64F92BFFD86E005565FF /* AppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AppIcon.png; path = iSpend/Assets.xcassets/AppIcon.png; sourceTree = "<group>"; };
+		22CF97C72E7B7B08001E0E80 /* EditableListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableListManager.swift; sourceTree = "<group>"; };
 		22D206FD2C7DF7410059DB2A /* EditableListItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditableListItemModel.swift; sourceTree = "<group>"; };
 		22D207012C7DF8150059DB2A /* BudgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetModel.swift; sourceTree = "<group>"; };
 		22D207032C7DFC800059DB2A /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -170,6 +175,7 @@
 		2206E40A2C6BA499000B5AE4 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				22CF97C72E7B7B08001E0E80 /* EditableListManager.swift */,
 				2276FDE32A70526200E0B60F /* ContentView.swift */,
 				22DF27562C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift */,
 				22851D8F2C73BAB700240BD6 /* ExpenseModelView.swift */,
@@ -186,7 +192,7 @@
 				2258BD032E7B69160093F84B /* .githubdependabot.yml */,
 				2258BD052E7B69240093F84B /* fastlaneFastfile */,
 				2258BD072E7B693A0093F84B /* scriptssecurity-fix.sh */,
-				2258BD0E2E7B75AD0093F84B /* ModelsExpenseModel.swift */,
+ 				2258BD0E2E7B75AD0093F84B /* ModelsExpenseModel.swift */,
 				2258BD102E7B75B20093F84B /* ModelsBudgetModel.swift */,
 				2258BD122E7B75BB0093F84B /* ModelsEditableListItemModel.swift */,
 				2258BD142E7B75C70093F84B /* AppiSpendApp.swift */,
@@ -197,6 +203,7 @@
 				2258BD1E2E7B76180093F84B /* ExtensionsFormatStyle-LocalCurrency.swift */,
 				2258BD202E7B761E0093F84B /* ExtensionsView-ExpenseStyling.swift */,
 				2258BD222E7B76270093F84B /* UtilsUtils.swift */,
+ 
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -424,6 +431,7 @@
 				22DF27592C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift in Sources */,
 				2270D4F62B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift in Sources */,
 				22851D9A2C73DE9B00240BD6 /* Utils.swift in Sources */,
+				22CF97C82E7B7B08001E0E80 /* EditableListManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,6 +440,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22DF27582C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift in Sources */,
+				22CF97C92E7B7B08001E0E80 /* EditableListManager.swift in Sources */,
 				22C3457C2B9E534C0049D67D /* iSpendUnitTest.swift in Sources */,
 				2276FDEF2A70526300E0B60F /* FormatStyle-LocalCurrency.swift in Sources */,
 				2276FDF12A70526300E0B60F /* ContentView.swift in Sources */,
@@ -447,7 +456,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+  contunue_8_27_24
 				2258BD232E7B76270093F84B /* UtilsUtils.swift in Sources */,
+ 
 				22D207022C7DF8150059DB2A /* BudgetModel.swift in Sources */,
 				2258BCFA2E7B63740093F84B /* Constants.swift in Sources */,
 				2276FDEE2A70526300E0B60F /* FormatStyle-LocalCurrency.swift in Sources */,

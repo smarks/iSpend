@@ -18,6 +18,31 @@ This app, iSPent, is based on Paul's example iExpense  project. I started with t
 https://github.com/twostraws/HackingWithSwift/tree/main/SwiftUI/project7
 https://www.hackingwithswift.com/books/ios-swiftui/iexpense-introduction
 
+### Security
+
+This project implements several security measures:
+- ✅ Input sanitization and validation
+- ✅ Secure dependency management 
+- ✅ Automated security scanning via GitHub Actions
+- ✅ Regular dependency updates via Dependabot
+- ✅ REXML ReDoS vulnerability fixed (>= 3.2.8)
+
+For security issues, please see [SECURITY.md](SECURITY.md).
+
+### Development Setup
+
+1. Clone the repository
+2. Run the security setup script: `bash scripts/security-fix.sh`
+3. Open `iSpend.xcodeproj` in Xcode
+4. Build and run the project
+
+### CI/CD Pipeline
+
+This project uses GitHub Actions for:
+- Automated building and testing
+- Security scanning
+- Dependency vulnerability checks
+
 ### Free / M.I.T License 
 I intend to publish this app on the App Store and will ask a small fee. It will be my first published app and a few small deposits will significantly boost my ego.
 

@@ -56,6 +56,12 @@ struct EditableListManager: View {
                             TextField(placeholder, text: $newItemText)
                                 .textFieldStyle(.roundedBorder)
                                 .focused($isTextFieldFocused)
+                                .onChange(of: newItemText) { oldValue, newValue in
+                                    // Limit input length in real-time
+                                    if newValue.count > 100 {
+                                        newItemText = String(newValue.prefix(100))
+                                    }
+                                }
                                 .onSubmit {
                                     addItem()
                                 }

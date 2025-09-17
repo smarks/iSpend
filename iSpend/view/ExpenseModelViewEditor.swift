@@ -37,17 +37,17 @@ struct ExpenseModelViewEditor: View {
     
     @State var expenseModel: ExpenseModel
     @State var originalExpenseModel: ExpenseModel
-    @State private var discretionaryValueString: String = "0"
     
 
     var messageToReflectOn: String = "This is a test message"
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
-    let types = [ExpenseType.Necessary, ExpenseType.Discretionary]
+    let types = [ExpenseType.necessary, ExpenseType.discretionary]
 
     private var categoryPicker: some View {
         Picker("Category", selection: $expenseModel.category) {
-            ForEach(categories, id: \.self) { category in
-                Text(category.text).tag(category)
+            Text("None").tag("None")
+            ForEach(categories, id: \.text) { category in
+                Text(category.text).tag(category.text)
             }
         }
         .pickerStyle(MenuPickerStyle())
@@ -61,8 +61,12 @@ struct ExpenseModelViewEditor: View {
         print("expenseModel \(expenseModel.name)")
         self.expenseModel = expenseModel
         self.originalExpenseModel = expenseModel
-        self.discretionaryValueString = String(expenseModel.discretionaryValue)
-        self.messageToReflectOn = mediations.randomElement()?.text ?? "Who knows what this will bring"
+        // Ensure discretionaryValue has a valid initial value
+        if expenseModel.discretionaryValue == 0 {
+            expenseModel.discretionaryValue = expenseModel.typeMap == NECESSARY ? 1 : 5
+        }
+        // Set default message - mediations will be loaded via @Query
+        self.messageToReflectOn = "Take a moment to reflect on this purchase"
     }
 
     // If expense record is incomplete or hasn't changed, disable save button.
@@ -71,9 +75,9 @@ struct ExpenseModelViewEditor: View {
     }
 
     private var typeColor: Color {
-        if expenseModel.discretionaryValue < 3 {
-            return Color.blue
-        } else if expenseModel.discretionaryValue < 6 {
+        if expenseModel.discretionaryValue <= 3 {
+            return Color.green
+        } else if expenseModel.discretionaryValue <= 5 {
             return Color.orange
         } else {
             return Color.red
@@ -109,7 +113,9 @@ struct ExpenseModelViewEditor: View {
                 HStack {
                     Text("Description:")
 
-                    TextField("Name", text: $expenseModel.name).focused($isFocused)
+                    TextField("Name", text: $expenseModel.name)
+                        .focused($isFocused)
+                        .submitLabel(.done)
                         .onChange(of: isFocused) {
                             if !isFocused && expenseModel.amount == 0.0 {
                                 print("TextField lost focus")
@@ -123,36 +129,37 @@ struct ExpenseModelViewEditor: View {
                 HStack {
                     Text("Amount:")
                     TextField("Enter number", value: $expenseModel.amount, formatter:numberFormatter )
-                               .keyboardType(.numberPad)
+                               .keyboardType(.decimalPad)
                                .textFieldStyle(RoundedBorderTextFieldStyle())
-                               .padding()
                     }
 
-                HStack {
-                    Text(String(expenseModel.expenseType.rawValue))
-                        .fontWeight(.bold).foregroundColor(typeColor)
-                        .frame(minWidth: CGFloat("DISCRETIONARY".count)).onChange(of: expenseModel.discretionaryValue) { _, newValue in
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text("Priority:")
+                        Text(String(expenseModel.expenseType.rawValue))
+                            .fontWeight(.bold)
+                            .foregroundColor(typeColor)
+                        Spacer()
+                        Text(String(format: "%.0f", expenseModel.discretionaryValue))
+                            .foregroundColor(.secondary)
+                    }
+
+                    Slider(value: $expenseModel.discretionaryValue, in: 1...7, step: 1)
+                        .accentColor(typeColor)
+                        .onChange(of: expenseModel.discretionaryValue) { _, newValue in
                             if newValue > 3 {
                                 expenseModel.typeMap = DISCRETIONARY
-                                expenseModel.expenseType = ExpenseType.Discretionary
+                                expenseModel.expenseType = ExpenseType.discretionary
                             } else {
                                 expenseModel.typeMap = NECESSARY
-                                expenseModel.expenseType = ExpenseType.Necessary
+                                expenseModel.expenseType = ExpenseType.necessary
                             }
-                        }.padding(.leading)
-
-                    ZStack {
-                        LinearGradient(gradient: gradient, startPoint: .leading, endPoint: .trailing)
-                            .mask(
-                                Slider(value: $expenseModel.discretionaryValue, in: 1 ... 7, step: 1)
-                            )
-                        Slider(value: $expenseModel.discretionaryValue, in: 1 ... 7, step: 1).opacity(0.05)
-                    }
+                        }
                 }
                 
                 typePicker.onChange(of: expenseModel.expenseType) {
-                
-                    if expenseModel.expenseType == ExpenseType.Necessary {
+
+                    if expenseModel.expenseType == ExpenseType.necessary {
                         expenseModel.typeMap = NECESSARY
                         expenseModel.discretionaryValue = 0
                     } else {
@@ -162,12 +169,13 @@ struct ExpenseModelViewEditor: View {
                 }
 
                 TextField("Notes", text: $expenseModel.note)
+                    .submitLabel(.done)
                 categoryPicker
 
-            }.onChange(of: discretionaryValueString) { _, _ in
-                expenseModel.discretionaryValue = Double(discretionaryValueString) ?? 0
-                
-            }.navigationTitle("Expense Editor")
+            }
+            .ignoresSafeArea(.keyboard, edges: .bottom)
+            .scrollDismissesKeyboard(.interactively)
+            .navigationTitle("Expense Editor")
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Done") {
@@ -187,13 +195,20 @@ struct ExpenseModelViewEditor: View {
 
     private func saveActivity() {
         print("save expense")
-        modelContext.insert(expenseModel)
+        // Only insert if it's a new expense (not already in context)
+        if modelContext.model(for: expenseModel.persistentModelID) == nil {
+            modelContext.insert(expenseModel)
+        }
         print(expenseModel)
     }
 
     private func cancelActivity() {
         expenseModel = originalExpenseModel // Revert to the original state
         print("Activity cancelled, reverted to original state")
+    }
+
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
 

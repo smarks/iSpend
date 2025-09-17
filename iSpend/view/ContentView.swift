@@ -37,7 +37,7 @@ struct ContentView: View {
     private var discretionaryBudget: BudgetModel {
         if discretionaryBudgets.isEmpty {
             let budgetModel: BudgetModel = BudgetModel(type: DISCRETIONARY, amount: 0)
-            modelContext.insert(BudgetModel(type: DISCRETIONARY, amount: 0))
+            modelContext.insert(budgetModel)
             return budgetModel
         } else {
             return discretionaryBudgets[0]
@@ -95,18 +95,24 @@ struct ContentView: View {
                 }.sheet(isPresented: $showingAddEntry) {
                     let item: ExpenseModel = self.selectedItem ?? ExpenseModel()
                     ExpenseModelViewEditor(expenseModel: item)
+                        .environment(\.modelContext, modelContext)
                 }.sheet(isPresented: $showingSettings) {
                     SettingsView()
+                        .environment(\.modelContext, modelContext)
                 }
         }
     }
 
     func delete(at offsets: IndexSet) {
-        modelContext.delete(necessaryExpenses[offsets.count - 1])
+        for index in offsets {
+            modelContext.delete(necessaryExpenses[index])
+        }
     }
 
     func deleteDiscretionary(at offsets: IndexSet) {
-        modelContext.delete(discretionaryExpenses[offsets.count - 1])
+        for index in offsets {
+            modelContext.delete(discretionaryExpenses[index])
+        }
     }
 }
 

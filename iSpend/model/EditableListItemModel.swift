@@ -7,19 +7,13 @@
 
 import Foundation
 import SwiftData
- 
- 
-
-let CATEGORY: Int = 1
-let MEDIATION: Int = 2
-let UNDEFINED : Int = 0
 
 @Model
-final class EditableListItem:  ObservableObject {
+final class EditableListItem {
     var id = UUID()
     var text: String = ""
     var type: Int = UNDEFINED
-    
+
     init(text: String = "", type: Int = CATEGORY) {
         self.text = text
         self.type = type

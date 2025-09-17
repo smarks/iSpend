@@ -9,14 +9,26 @@ import Foundation
 import SwiftData
 import SwiftUI
 
+enum ExpenseType: String, Codable, Equatable, CaseIterable {
+    case necessary = "Necessary"
+    case discretionary = "Discretionary"
 
-enum ExpenseType: String, Codable, Equatable {
-    case Necessary
-    case Discretionary
+    var intValue: Int {
+        switch self {
+        case .necessary: return 1
+        case .discretionary: return 2
+        }
+    }
+
+    init(from intValue: Int) {
+        switch intValue {
+        case 1: self = .necessary
+        default: self = .discretionary
+        }
+    }
 }
 
-let NECESSARY: Int = 1
-let DISCRETIONARY: Int = 2
+
 
 @Model
 final class ExpenseModel {
@@ -36,7 +48,7 @@ final class ExpenseModel {
          date: Date = Date(),
          category: String = "None",
          discretionaryValue: Double = 0) {
-        
+
         self.name = name
         self.typeMap = type
         self.amount = amount
@@ -44,10 +56,6 @@ final class ExpenseModel {
         self.date = date
         self.category = category
         self.discretionaryValue = discretionaryValue
-        if type == 1 {
-            expenseType = ExpenseType.Necessary
-        } else {
-            expenseType = ExpenseType.Discretionary
-        }
+        self.expenseType = ExpenseType(from: type)
     }
 }

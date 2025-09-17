@@ -26,7 +26,7 @@ struct SettingsView: View {
         case budgets = "Budgets"
         case dataManagement = "Data Management"
         case categories = "Categories"
-        case mediations = "Mdiations"
+        case mediations = "Mediations"
         case about = "About"
     }
 
@@ -40,7 +40,7 @@ struct SettingsView: View {
 
     @State var showBudgetView: Bool = false
     @State var showDataManagementView: Bool = false
-    @State var showCategoriestView: Bool = false
+    @State var showCategoriesView: Bool = false
     @State var showMediationsView: Bool = false
     @State var showAboutView: Bool = false
 
@@ -60,11 +60,7 @@ struct SettingsView: View {
     @Query(filter: #Predicate<BudgetModel> { budget in budget.type == NECESSARY })
     var necessaryBudgets: [BudgetModel]
 
-    @Query(filter: #Predicate<EditableListItem> { item in item.type == CATEGORY })
-    private var categories: [EditableListItem]
-
-    @Query(filter: #Predicate<EditableListItem> { item in item.type == MEDIATION })
-    private var mediations: [EditableListItem]
+    // Categories and mediations are now handled within EditableListManager
 
     var necessaryBudget: BudgetModel {
         if necessaryBudgets.isEmpty {
@@ -82,7 +78,7 @@ struct SettingsView: View {
     var discretionaryBudget: BudgetModel {
         if discretionaryBudgets.isEmpty {
             let budgetModel: BudgetModel = BudgetModel(type: DISCRETIONARY, amount: 0)
-            modelContext.insert(BudgetModel(type: DISCRETIONARY, amount: 0))
+            modelContext.insert(budgetModel)
             return budgetModel
         } else {
             return discretionaryBudgets[0]
@@ -90,7 +86,7 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 List {
                     Button {
@@ -104,14 +100,24 @@ struct SettingsView: View {
                         Text("Data Management")
                     }.frame(alignment: .leading)
                     Button {
-                        showCategoriestView = true
+                        showCategoriesView = true
                     } label: {
-                        Text("Categories")
+                        HStack {
+                            Text("Categories")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondary)
+                        }
                     }
                     Button {
                         showMediationsView = true
                     } label: {
-                        Text("Mediations")
+                        HStack {
+                            Text("Reflections")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.secondary)
+                        }
                     }
                     Button {
                         showAboutView = true
@@ -120,9 +126,11 @@ struct SettingsView: View {
                     }
                 }
             }
-            .navigationTitle("Preferences and Settings").navigationBarTitleDisplayMode(.inline).navigationBarBackButtonHidden(false)
+            .navigationTitle("Preferences and Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(false)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button("Done") {
                         dismiss()
                     }
@@ -131,12 +139,16 @@ struct SettingsView: View {
 
         }.sheet(isPresented: $showBudgetView) {
             BudgetsView(necessaryBudget: necessaryBudget, discretionaryBudget: discretionaryBudget)
+                .environment(\.modelContext, modelContext)
         }.sheet(isPresented: $showDataManagementView) {
             DataManagementView(expenses: expenses)
-        }.sheet(isPresented: $showCategoriestView) {
-            ConfigurationView(label: "Categories", editableTextItems: categories)
+                .environment(\.modelContext, modelContext)
+        }.sheet(isPresented: $showCategoriesView) {
+            EditableListManager(title: "Categories", itemType: CATEGORY, placeholder: "Add Category")
+                .environment(\.modelContext, modelContext)
         }.sheet(isPresented: $showMediationsView) {
-            ConfigurationView(label: "Mediations", editableTextItems: mediations)
+            EditableListManager(title: "Mediations", itemType: MEDIATION, placeholder: "Add Mediation")
+                .environment(\.modelContext, modelContext)
         }.sheet(isPresented: $showAboutView) {
             AboutView(version: appVersion.version, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())
         }
@@ -162,79 +174,4 @@ enum AppIconProvider {
     }
 }
 
-struct ConfigurationView: View {
-    let label: String
-    @State var editableTextItems: [EditableListItem]
-    @State private var isEditing = false
-    @FocusState private var focusedField: UUID?
-    @Environment(\.editMode) private var editMode
-    @Environment(\.dismiss) var dismiss
-    @State var showAddItem: Bool = false
-
-    var body: some View {
-        NavigationStack {
-            List {
-                ForEach($editableTextItems) { $item in
-                    TextField("Edit Item", text: $item.text)
-                        .disabled(editMode?.wrappedValue.isEditing == true)
-                        .focused($focusedField, equals: item.id)
-                }
-                .onDelete(perform: delete)
-                .onMove(perform: move)
-                //  .onTapGesture(perform: edit(at: <#IndexSet#>))
-            }
-            .navigationTitle(label)
-            .toolbar {
-                Button("Cancel") {
-                    dismiss()
-                }.padding()
-                EditButton()
-                Button("+") {
-                    showAddItem = true
-                }
-            }.id(isEditing)
-                .sheet(isPresented: $showAddItem) {
-                    EditListItemView(item: EditableListItem())
-                    
-                }
-
-        }
-    }
-
-    func edit(at offsets: IndexSet) {
-    }
-
-    func delete(at offsets: IndexSet) {
-        editableTextItems.remove(atOffsets: offsets)
-    }
-
-    func move(from source: IndexSet, to destination: Int) {
-        editableTextItems.move(fromOffsets: source, toOffset: destination)
-    }
-}
-
-struct EditListItemView: View {
-    @State var item: EditableListItem
-    @Environment(\.modelContext) var modelContext
-
-    var body: some View {
-        TextField("Edit Item", text: $item.text).onDisappear(perform: { update(item) })
-    }
-    
-    func update(_ item: EditableListItem)  {
-        modelContext.insert(item)
-
-        var newItem = EditableListItem(text:"foo")
-        newItem.text = "updated"
-        modelContext.insert(newItem)
-
-        newItem = EditableListItem(text:"bar")
-        newItem.text = "foo"
-        modelContext.insert(newItem)
-
-        newItem = EditableListItem(text:"nag")
-        newItem.text = "bar"
-        modelContext.insert(newItem)
-        
-    }
-}
+// ConfigurationView and EditListItemView have been replaced with EditableListManager

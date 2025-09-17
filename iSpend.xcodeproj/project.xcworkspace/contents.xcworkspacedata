@@ -4,4 +4,10 @@
    <FileRef
       location = "self:">
    </FileRef>
+   <FileRef
+      location = "group:EditableListManager.swift">
+   </FileRef>
+   <FileRef
+      location = "group:Constants.swift">
+   </FileRef>
 </Workspace>

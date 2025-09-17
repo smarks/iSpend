@@ -51,20 +51,20 @@ struct SettingsView: View {
         isDirty
     }
 
-    @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == NECESSARY }, sort: [SortDescriptor(\ExpenseModel.date)])
+    @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == 1 }, sort: [SortDescriptor<ExpenseModel>(\.date)])
     var necessaryExpenses: [ExpenseModel]
 
-    @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == DISCRETIONARY }, sort: [SortDescriptor(\ExpenseModel.date)])
+    @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == 2 }, sort: [SortDescriptor<ExpenseModel>(\.date)])
     var discretionaryExpenses: [ExpenseModel]
 
-    @Query(filter: #Predicate<BudgetModel> { budget in budget.type == NECESSARY })
+    @Query(filter: #Predicate<BudgetModel> { budget in budget.type == 1 })
     var necessaryBudgets: [BudgetModel]
 
     // Categories and mediations are now handled within EditableListManager
 
     var necessaryBudget: BudgetModel {
         if necessaryBudgets.isEmpty {
-            let budgetModel: BudgetModel = BudgetModel(type: NECESSARY, amount: 0)
+            let budgetModel: BudgetModel = BudgetModel(type: 1, amount: 0)
             modelContext.insert(budgetModel)
             return budgetModel
         } else {
@@ -72,12 +72,12 @@ struct SettingsView: View {
         }
     }
 
-    @Query(filter: #Predicate<BudgetModel> { budget in budget.type == DISCRETIONARY })
+    @Query(filter: #Predicate<BudgetModel> { budget in budget.type == 2 })
     var discretionaryBudgets: [BudgetModel]
 
     var discretionaryBudget: BudgetModel {
         if discretionaryBudgets.isEmpty {
-            let budgetModel: BudgetModel = BudgetModel(type: DISCRETIONARY, amount: 0)
+            let budgetModel: BudgetModel = BudgetModel(type: 2, amount: 0)
             modelContext.insert(budgetModel)
             return budgetModel
         } else {
@@ -144,10 +144,10 @@ struct SettingsView: View {
             DataManagementView(expenses: expenses)
                 .environment(\.modelContext, modelContext)
         }.sheet(isPresented: $showCategoriesView) {
-            EditableListManager(title: "Categories", itemType: CATEGORY, placeholder: "Add Category")
+            EditableListManager(title: "Categories", itemType: 10, placeholder: "Add Category")
                 .environment(\.modelContext, modelContext)
         }.sheet(isPresented: $showMediationsView) {
-            EditableListManager(title: "Mediations", itemType: MEDIATION, placeholder: "Add Mediation")
+            EditableListManager(title: "Mediations", itemType: 20, placeholder: "Add Mediation")
                 .environment(\.modelContext, modelContext)
         }.sheet(isPresented: $showAboutView) {
             AboutView(version: appVersion.version, buildNumber: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String, appIcon: AppIconProvider.appIcon())

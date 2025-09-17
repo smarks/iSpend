@@ -33,19 +33,47 @@ struct AboutView: View {
     }
 
     private var appIconImage: some View {
-        // Correctly handle the optional UIImage and ensure a view is always returned
         Group {
-            if let image = UIImage(named: appIcon) {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+            // Use a more modern approach for displaying app icon
+            if #available(iOS 15.0, *) {
+                // For iOS 15+, use a stylized app representation
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.blue, Color.purple],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
                     .frame(width: 100, height: 100)
+                    .overlay(
+                        VStack {
+                            Image(systemName: "dollarsign.circle.fill")
+                                .font(.system(size: 40))
+                                .foregroundColor(.white)
+                            Text("iSpend")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                        }
+                    )
+                    .shadow(radius: 5)
             } else {
-                // Provide a fallback view in case the image is not found
-                Image(systemName: "app.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+                // Fallback for older iOS versions
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.blue)
                     .frame(width: 100, height: 100)
+                    .overlay(
+                        VStack {
+                            Image(systemName: "dollarsign.circle.fill")
+                                .font(.system(size: 40))
+                                .foregroundColor(.white)
+                            Text("iSpend")
+                                .font(.caption)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                        }
+                    )
             }
         }
     }

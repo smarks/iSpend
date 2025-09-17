@@ -12,14 +12,14 @@ import SwiftData
 final class EditableListItem {
     var id = UUID()
     var text: String = ""
-    var type: Int = UNDEFINED
+    var type: Int = 0 // UNDEFINED = 0
 
-    init(text: String = "", type: Int = CATEGORY) {
+    init(text: String = "", type: Int = 10) { // CATEGORY = 10
         self.text = text
         self.type = type
     }
 }
-  
+
 
 /*
  class Mediations: Labels {

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2206E4082C6BA3EB000B5AE4 /* ExpenseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2206E4072C6BA3EB000B5AE4 /* ExpenseModel.swift */; };
-		2258BCF82E7B61FC0093F84B /* EditableListManager 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BCF72E7B61FC0093F84B /* EditableListManager 2.swift */; };
 		2258BCFA2E7B63740093F84B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BCF92E7B63740093F84B /* Constants.swift */; };
 		2258BCFC2E7B68EB0093F84B /* .githubworkflowsios.yml in Resources */ = {isa = PBXBuildFile; fileRef = 2258BCFB2E7B68EB0093F84B /* .githubworkflowsios.yml */; };
 		2258BCFE2E7B68F40093F84B /* Gemfile in Resources */ = {isa = PBXBuildFile; fileRef = 2258BCFD2E7B68F40093F84B /* Gemfile */; };
@@ -17,7 +16,17 @@
 		2258BD042E7B69160093F84B /* .githubdependabot.yml in Resources */ = {isa = PBXBuildFile; fileRef = 2258BD032E7B69160093F84B /* .githubdependabot.yml */; };
 		2258BD062E7B69240093F84B /* fastlaneFastfile in Resources */ = {isa = PBXBuildFile; fileRef = 2258BD052E7B69240093F84B /* fastlaneFastfile */; };
 		2258BD082E7B693A0093F84B /* scriptssecurity-fix.sh in Resources */ = {isa = PBXBuildFile; fileRef = 2258BD072E7B693A0093F84B /* scriptssecurity-fix.sh */; };
-		2258BD0A2E7B6D1C0093F84B /* EditableListManager 3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD092E7B6D1C0093F84B /* EditableListManager 3.swift */; };
+		2258BD0F2E7B75AD0093F84B /* ModelsExpenseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD0E2E7B75AD0093F84B /* ModelsExpenseModel.swift */; };
+		2258BD112E7B75B20093F84B /* ModelsBudgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD102E7B75B20093F84B /* ModelsBudgetModel.swift */; };
+		2258BD132E7B75BB0093F84B /* ModelsEditableListItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD122E7B75BB0093F84B /* ModelsEditableListItemModel.swift */; };
+		2258BD152E7B75C70093F84B /* AppiSpendApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD142E7B75C70093F84B /* AppiSpendApp.swift */; };
+		2258BD172E7B75CD0093F84B /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD162E7B75CD0093F84B /* AppConstants.swift */; };
+		2258BD192E7B75F20093F84B /* ViewsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD182E7B75F20093F84B /* ViewsSettingsView.swift */; };
+		2258BD1B2E7B76010093F84B /* ViewsEditableListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD1A2E7B76010093F84B /* ViewsEditableListManager.swift */; };
+		2258BD1D2E7B76120093F84B /* ViewsAboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD1C2E7B76120093F84B /* ViewsAboutView.swift */; };
+		2258BD1F2E7B76180093F84B /* ExtensionsFormatStyle-LocalCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD1E2E7B76180093F84B /* ExtensionsFormatStyle-LocalCurrency.swift */; };
+		2258BD212E7B761E0093F84B /* ExtensionsView-ExpenseStyling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD202E7B761E0093F84B /* ExtensionsView-ExpenseStyling.swift */; };
+		2258BD232E7B76270093F84B /* UtilsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2258BD222E7B76270093F84B /* UtilsUtils.swift */; };
 		2270D4E72B9B8167004D26B8 /* AddItemTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */; };
 		2270D4F42B9B8E4A004D26B8 /* iSpendUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4F32B9B8E4A004D26B8 /* iSpendUITests.swift */; };
 		2270D4F62B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2270D4F52B9B8E4A004D26B8 /* iSpendUITestsLaunchTests.swift */; };
@@ -74,7 +83,6 @@
 		221B32422BA0ACAE0060BDF1 /* Fastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Fastfile; sourceTree = "<group>"; };
 		221B32432BA0ACAE0060BDF1 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		221B32442BA0ACAE0060BDF1 /* report.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = report.xml; sourceTree = "<group>"; };
-		2258BCF72E7B61FC0093F84B /* EditableListManager 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditableListManager 2.swift"; sourceTree = "<group>"; };
 		2258BCF92E7B63740093F84B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		2258BCFB2E7B68EB0093F84B /* .githubworkflowsios.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .githubworkflowsios.yml; sourceTree = "<group>"; };
 		2258BCFD2E7B68F40093F84B /* Gemfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Gemfile; sourceTree = "<group>"; };
@@ -83,7 +91,18 @@
 		2258BD032E7B69160093F84B /* .githubdependabot.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .githubdependabot.yml; sourceTree = "<group>"; };
 		2258BD052E7B69240093F84B /* fastlaneFastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = fastlaneFastfile; sourceTree = "<group>"; };
 		2258BD072E7B693A0093F84B /* scriptssecurity-fix.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "scriptssecurity-fix.sh"; sourceTree = "<group>"; };
-		2258BD092E7B6D1C0093F84B /* EditableListManager 3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditableListManager 3.swift"; sourceTree = "<group>"; };
+		2258BD0D2E7B73290093F84B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2258BD0E2E7B75AD0093F84B /* ModelsExpenseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsExpenseModel.swift; sourceTree = "<group>"; };
+		2258BD102E7B75B20093F84B /* ModelsBudgetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsBudgetModel.swift; sourceTree = "<group>"; };
+		2258BD122E7B75BB0093F84B /* ModelsEditableListItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsEditableListItemModel.swift; sourceTree = "<group>"; };
+		2258BD142E7B75C70093F84B /* AppiSpendApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppiSpendApp.swift; sourceTree = "<group>"; };
+		2258BD162E7B75CD0093F84B /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		2258BD182E7B75F20093F84B /* ViewsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsSettingsView.swift; sourceTree = "<group>"; };
+		2258BD1A2E7B76010093F84B /* ViewsEditableListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsEditableListManager.swift; sourceTree = "<group>"; };
+		2258BD1C2E7B76120093F84B /* ViewsAboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewsAboutView.swift; sourceTree = "<group>"; };
+		2258BD1E2E7B76180093F84B /* ExtensionsFormatStyle-LocalCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionsFormatStyle-LocalCurrency.swift"; sourceTree = "<group>"; };
+		2258BD202E7B761E0093F84B /* ExtensionsView-ExpenseStyling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionsView-ExpenseStyling.swift"; sourceTree = "<group>"; };
+		2258BD222E7B76270093F84B /* UtilsUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilsUtils.swift; sourceTree = "<group>"; };
 		2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemTestCase.swift; sourceTree = "<group>"; };
 		2270D4EC2B9B8AC6004D26B8 /* iSpendTest.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = iSpendTest.xctestplan; sourceTree = "<group>"; };
 		2270D4F12B9B8E4A004D26B8 /* iSpendUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iSpendUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -159,7 +178,6 @@
 				22D207052C7E01B80059DB2A /* BudgetView.swift */,
 				22D207092C7E07200059DB2A /* AboutView.swift */,
 				22D2070B2C7E22B20059DB2A /* DataManagementView.swift */,
-				2258BCF72E7B61FC0093F84B /* EditableListManager 2.swift */,
 				2258BCF92E7B63740093F84B /* Constants.swift */,
 				2258BCFB2E7B68EB0093F84B /* .githubworkflowsios.yml */,
 				2258BCFD2E7B68F40093F84B /* Gemfile */,
@@ -168,7 +186,17 @@
 				2258BD032E7B69160093F84B /* .githubdependabot.yml */,
 				2258BD052E7B69240093F84B /* fastlaneFastfile */,
 				2258BD072E7B693A0093F84B /* scriptssecurity-fix.sh */,
-				2258BD092E7B6D1C0093F84B /* EditableListManager 3.swift */,
+				2258BD0E2E7B75AD0093F84B /* ModelsExpenseModel.swift */,
+				2258BD102E7B75B20093F84B /* ModelsBudgetModel.swift */,
+				2258BD122E7B75BB0093F84B /* ModelsEditableListItemModel.swift */,
+				2258BD142E7B75C70093F84B /* AppiSpendApp.swift */,
+				2258BD162E7B75CD0093F84B /* AppConstants.swift */,
+				2258BD182E7B75F20093F84B /* ViewsSettingsView.swift */,
+				2258BD1A2E7B76010093F84B /* ViewsEditableListManager.swift */,
+				2258BD1C2E7B76120093F84B /* ViewsAboutView.swift */,
+				2258BD1E2E7B76180093F84B /* ExtensionsFormatStyle-LocalCurrency.swift */,
+				2258BD202E7B761E0093F84B /* ExtensionsView-ExpenseStyling.swift */,
+				2258BD222E7B76270093F84B /* UtilsUtils.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -237,6 +265,7 @@
 				2276FD942A70512900E0B60F /* iSpend */,
 				2270D4F22B9B8E4A004D26B8 /* iSpendUITests */,
 				515A85BB272FD57B00C6A00C /* Products */,
+				2258BD0D2E7B73290093F84B /* SettingsView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -418,24 +447,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2258BD232E7B76270093F84B /* UtilsUtils.swift in Sources */,
 				22D207022C7DF8150059DB2A /* BudgetModel.swift in Sources */,
 				2258BCFA2E7B63740093F84B /* Constants.swift in Sources */,
 				2276FDEE2A70526300E0B60F /* FormatStyle-LocalCurrency.swift in Sources */,
 				22D206FE2C7DF7410059DB2A /* EditableListItemModel.swift in Sources */,
+				2258BD212E7B761E0093F84B /* ExtensionsView-ExpenseStyling.swift in Sources */,
+				2258BD172E7B75CD0093F84B /* AppConstants.swift in Sources */,
+				2258BD1B2E7B76010093F84B /* ViewsEditableListManager.swift in Sources */,
 				22D207062C7E01B80059DB2A /* BudgetView.swift in Sources */,
 				22DF27572C6E8BF0007D1B7D /* ExpenseModelViewEditor.swift in Sources */,
+				2258BD112E7B75B20093F84B /* ModelsBudgetModel.swift in Sources */,
+				2258BD192E7B75F20093F84B /* ViewsSettingsView.swift in Sources */,
 				22D207042C7DFC800059DB2A /* SettingsView.swift in Sources */,
+				2258BD0F2E7B75AD0093F84B /* ModelsExpenseModel.swift in Sources */,
 				2299EFB42C7A9C8300252AE1 /* SummaryView.swift in Sources */,
-				2258BD0A2E7B6D1C0093F84B /* EditableListManager 3.swift in Sources */,
 				22851D982C73DE9B00240BD6 /* Utils.swift in Sources */,
 				2276FDF02A70526300E0B60F /* ContentView.swift in Sources */,
-				2258BCF82E7B61FC0093F84B /* EditableListManager 2.swift in Sources */,
 				22D2070A2C7E07200059DB2A /* AboutView.swift in Sources */,
 				22D2070C2C7E22B20059DB2A /* DataManagementView.swift in Sources */,
+				2258BD152E7B75C70093F84B /* AppiSpendApp.swift in Sources */,
+				2258BD132E7B75BB0093F84B /* ModelsEditableListItemModel.swift in Sources */,
+				2258BD1D2E7B76120093F84B /* ViewsAboutView.swift in Sources */,
 				2276FDF82A70526300E0B60F /* iSpendApp.swift in Sources */,
 				22851D902C73BAB700240BD6 /* ExpenseModelView.swift in Sources */,
 				2206E4082C6BA3EB000B5AE4 /* ExpenseModel.swift in Sources */,
 				2276FDF22A70526300E0B60F /* View-ExpenseStyling.swift in Sources */,
+				2258BD1F2E7B76180093F84B /* ExtensionsFormatStyle-LocalCurrency.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

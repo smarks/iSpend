@@ -1,0 +1,173 @@
+2025-09-18 22:02:54 +0000  Initial pipeline context: <IDEDistributionProcessingPipelineContext: 0xb8ed34f00; archive(resolved)="<IDEArchive: 0xb79ce2840>", distributionTask(resolved)="2", distributionDestination(resolved)="2", distributionMethod(resolved)="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team(resolved)="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	Chain (17, self inclusive):
+	<IDEDistributionProcessingPipelineContext: 0xb8ed34f00; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionProcessingPipelineContext: 0xb8ed37c00; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0xb76627c00; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0xb765daf80; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0xb765dad00; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0xb765db480; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0xb765d9900; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0xb765d9e00; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0xb765ced00; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0xb8490cf00; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0xb8490c780; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0xb8490d400; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="<IDEProvisioningDisambiguatableBasicTeam: 0xb8604a280; teamID='NJ55UC9QDK', teamName='Spencer Marks', teamType='Individual', username='smarks@origamisoftware.com', isFreeProvisioningTeam='0'>">
+	<IDEDistributionContext: 0xb8490ca00; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="(null)">
+	<IDEDistributionContext: 0xb8490de00; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="<IDEDistributionMethodiOSAppStoreDistribution: 0xb7f48d170>", team="(null)">
+	<IDEDistributionContext: 0xb8490ea80; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="(null)", team="(null)">
+	<IDEDistributionContext: 0xb79eec280; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="(null)", team="(null)">
+	<IDEDistributionContext: 0xb79eee080; archive = "<IDEArchive: 0xb79ce2840>", distributionMethod="(null)", team="(null)">
+</IDEDistributionProcessingPipelineContext: 0xb8ed34f00>
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionCreateDestRootStep
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionCopyItemStep
+2025-09-18 22:02:54 +0000  Running /usr/bin/ditto '-V' '/Users/sam/Library/Developer/Xcode/Archives/2025-09-18/iSpend 2025-09-18 17.50.09.xcarchive/Products/Applications/iSpend.app' '/var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/Root/Payload/iSpend.app'
+2025-09-18 22:02:54 +0000  >>> Copying /Users/sam/Library/Developer/Xcode/Archives/2025-09-18/iSpend 2025-09-18 17.50.09.xcarchive/Products/Applications/iSpend.app 
+2025-09-18 22:02:54 +0000  copying file ./_CodeSignature/CodeResources ... 
+2025-09-18 22:02:54 +0000  4501 bytes for ./_CodeSignature/CodeResources
+2025-09-18 22:02:54 +0000  copying file ./.githubworkflowsios.yml ... 
+2025-09-18 22:02:54 +0000  1264 bytes for ./.githubworkflowsios.yml
+2025-09-18 22:02:54 +0000  copying file ./AppIcon60x60@2x.png ... 
+2025-09-18 22:02:54 +0000  10940 bytes for ./AppIcon60x60@2x.png
+2025-09-18 22:02:54 +0000  copying file ./README.md ... 
+2025-09-18 22:02:54 +0000  1677 bytes for ./README.md
+2025-09-18 22:02:54 +0000  copying file ./Assets.car ... 
+2025-09-18 22:02:54 +0000  717432 bytes for ./Assets.car
+2025-09-18 22:02:54 +0000  copying file ./.gitignore ... 
+2025-09-18 22:02:54 +0000  2318 bytes for ./.gitignore
+2025-09-18 22:02:54 +0000  copying file ./AppIcon76x76@2x~ipad.png ... 
+2025-09-18 22:02:54 +0000  15682 bytes for ./AppIcon76x76@2x~ipad.png
+2025-09-18 22:02:54 +0000  copying file ./Gemfile ... 
+2025-09-18 22:02:54 +0000  577 bytes for ./Gemfile
+2025-09-18 22:02:54 +0000  copying file ./fastlaneFastfile ... 
+2025-09-18 22:02:54 +0000  1441 bytes for ./fastlaneFastfile
+2025-09-18 22:02:54 +0000  copying file ./iSpend ... 
+2025-09-18 22:02:54 +0000  373312 bytes for ./iSpend
+2025-09-18 22:02:54 +0000  copying file ./embedded.mobileprovision ... 
+2025-09-18 22:02:54 +0000  12589 bytes for ./embedded.mobileprovision
+2025-09-18 22:02:54 +0000  copying file ./.githubdependabot.yml ... 
+2025-09-18 22:02:54 +0000  1012 bytes for ./.githubdependabot.yml
+2025-09-18 22:02:54 +0000  copying file ./Info.plist ... 
+2025-09-18 22:02:54 +0000  1533 bytes for ./Info.plist
+2025-09-18 22:02:54 +0000  copying file ./SECURITY.md ... 
+2025-09-18 22:02:54 +0000  1061 bytes for ./SECURITY.md
+2025-09-18 22:02:54 +0000  copying file ./scriptssecurity-fix.sh ... 
+2025-09-18 22:02:54 +0000  2056 bytes for ./scriptssecurity-fix.sh
+2025-09-18 22:02:54 +0000  copying file ./PkgInfo ... 
+2025-09-18 22:02:54 +0000  8 bytes for ./PkgInfo
+2025-09-18 22:02:54 +0000  /usr/bin/ditto exited with 0
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionEmbedProfileStep
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionInfoPlistStep
+2025-09-18 22:02:54 +0000  Skipping setting DTXcodeBuildDistribution because toolsBuildVersionName was nil.
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionItemRemovalStep
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionAppThinningPlistStep
+2025-09-18 22:02:54 +0000  Skipping step: IDEDistributionAppThinningPlistStep because it said so
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionSymbolsStep
+2025-09-18 22:02:54 +0000  Writing /var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/Symbols/69157445-D181-36B8-8DBA-83B428C8DB7A.symbols
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionCopyAppleProvidedContentStep
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionAppThinningStep
+2025-09-18 22:02:54 +0000  Skipping step: IDEDistributionAppThinningStep because it said so
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionArchThinningStep
+2025-09-18 22:02:54 +0000  Archs to thin for item /Users/sam/Library/Developer/Xcode/Archives/2025-09-18/iSpend 2025-09-18 17.50.09.xcarchive/Products/Applications/iSpend.app are []
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionODRStep
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionStripXattrsStep
+2025-09-18 22:02:54 +0000  Skipping stripping extended attributes because the codesign step will strip them.
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionCodesignStep
+2025-09-18 22:02:54 +0000  Entitlements for <IDEDistributionItem: 0xb76a2d7a0; bundleID='com.orgiamisoftware.ispend', path='<DVTFilePath:0xb7f3316e0:'/Users/sam/Library/Developer/Xcode/Archives/2025-09-18/iSpend 2025-09-18 17.50.09.xcarchive/Products/Applications/iSpend.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xb76a2e460; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0xb8eec03c0; name='Apple Development: Spencer Marks (27ZN3WGRBH)', hash='553F3292769E4B1E93278F758DA4C7A32D2D27DA', serialNumber='1515EFFB488E0430068130E3F4CC05F9', certificateKinds='(
+    "1.2.840.113635.100.6.1.12",
+    "1.2.840.113635.100.6.1.2"
+), issueDate='2025-09-17 21:33:39 +0000''>', entitlements='{
+    "application-identifier" = "NJ55UC9QDK.com.orgiamisoftware.ispend";
+    "com.apple.developer.team-identifier" = NJ55UC9QDK;
+    "get-task-allow" = 1;
+}', teamID='NJ55UC9QDK', identifier='com.orgiamisoftware.ispend', executablePath='<DVTFilePath:0xb7653e640:'/Users/sam/Library/Developer/Xcode/Archives/2025-09-18/iSpend 2025-09-18 17.50.09.xcarchive/Products/Applications/iSpend.app/iSpend'>', hardenedRuntime='0'>'>: {
+    "application-identifier" = "NJ55UC9QDK.com.orgiamisoftware.ispend";
+    "beta-reports-active" = 1;
+    "com.apple.developer.team-identifier" = NJ55UC9QDK;
+    "get-task-allow" = 0;
+}
+2025-09-18 22:02:54 +0000  Associated App Clip Identifiers Filter: Skipping because "com.apple.developer.associated-appclip-app-identifiers" is not present
+2025-09-18 22:02:54 +0000  Entitlements for <IDEDistributionItem: 0xb76a2d7a0; bundleID='com.orgiamisoftware.ispend', path='<DVTFilePath:0xb7f3316e0:'/Users/sam/Library/Developer/Xcode/Archives/2025-09-18/iSpend 2025-09-18 17.50.09.xcarchive/Products/Applications/iSpend.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xb76a2e460; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0xb8eec1a40; name='Apple Development: Spencer Marks (27ZN3WGRBH)', hash='553F3292769E4B1E93278F758DA4C7A32D2D27DA', serialNumber='1515EFFB488E0430068130E3F4CC05F9', certificateKinds='(
+    "1.2.840.113635.100.6.1.12",
+    "1.2.840.113635.100.6.1.2"
+), issueDate='2025-09-17 21:33:39 +0000''>', entitlements='{
+    "application-identifier" = "NJ55UC9QDK.com.orgiamisoftware.ispend";
+    "com.apple.developer.team-identifier" = NJ55UC9QDK;
+    "get-task-allow" = 1;
+}', teamID='NJ55UC9QDK', identifier='com.orgiamisoftware.ispend', executablePath='<DVTFilePath:0xb7653e640:'/Users/sam/Library/Developer/Xcode/Archives/2025-09-18/iSpend 2025-09-18 17.50.09.xcarchive/Products/Applications/iSpend.app/iSpend'>', hardenedRuntime='0'>'> are: {
+    "application-identifier" = "NJ55UC9QDK.com.orgiamisoftware.ispend";
+    "beta-reports-active" = 1;
+    "com.apple.developer.team-identifier" = NJ55UC9QDK;
+    "get-task-allow" = 0;
+}
+2025-09-18 22:02:54 +0000  Writing entitlements for <IDEDistributionItem: 0xb76a2d7a0; bundleID='com.orgiamisoftware.ispend', path='<DVTFilePath:0xb7f3316e0:'/Users/sam/Library/Developer/Xcode/Archives/2025-09-18/iSpend 2025-09-18 17.50.09.xcarchive/Products/Applications/iSpend.app'>', codeSigningInfo='<_DVTCodeSigningInformation_Path: 0xb76a2e460; isSigned='1', isAdHocSigned='0', signingCertificate='<DVTSigningCertificate: 0xb8eec1a40; name='Apple Development: Spencer Marks (27ZN3WGRBH)', hash='553F3292769E4B1E93278F758DA4C7A32D2D27DA', serialNumber='1515EFFB488E0430068130E3F4CC05F9', certificateKinds='(
+    "1.2.840.113635.100.6.1.12",
+    "1.2.840.113635.100.6.1.2"
+), issueDate='2025-09-17 21:33:39 +0000''>', entitlements='{
+    "application-identifier" = "NJ55UC9QDK.com.orgiamisoftware.ispend";
+    "com.apple.developer.team-identifier" = NJ55UC9QDK;
+    "get-task-allow" = 1;
+}', teamID='NJ55UC9QDK', identifier='com.orgiamisoftware.ispend', executablePath='<DVTFilePath:0xb7653e640:'/Users/sam/Library/Developer/Xcode/Archives/2025-09-18/iSpend 2025-09-18 17.50.09.xcarchive/Products/Applications/iSpend.app/iSpend'>', hardenedRuntime='0'>'> to: /var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/entitlements~~~pFfOSr
+2025-09-18 22:02:54 +0000  invoking codesign: <NSConcreteTask: 0xb864fee90; launchPath='/usr/bin/codesign', arguments='(
+    "-f",
+    "-s",
+    2491C352C8FBD23348831C82726BBE3B56D28E86,
+    "--entitlements",
+    "/var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/entitlements~~~pFfOSr",
+    "--preserve-metadata=identifier,flags,runtime,launch-constraints,library-constraints",
+    "--generate-entitlement-der",
+    "--strip-disallowed-xattrs",
+    "-vvv",
+    "/var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/Root/Payload/iSpend.app"
+)'>
+2025-09-18 22:02:54 +0000  codesign output: /var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/Root/Payload/iSpend.app: replacing existing signature
+/var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/Root/Payload/iSpend.app: signed app bundle with Mach-O thin (arm64) [com.orgiamisoftware.ispend]
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionZipODRItemStep
+2025-09-18 22:02:54 +0000  Skipping step: IDEDistributionZipODRItemStep because it said so
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionCreateIPAStep
+2025-09-18 22:02:54 +0000  Running /usr/bin/rsync '-8aPhhE' '/var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/Symbols' '--link-dest' '/var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S' '/var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/Root'
+2025-09-18 22:02:54 +0000  Symbols/
+Symbols/69157445-D181-36B8-8DBA-83B428C8DB7A.symbols
+2025-09-18 22:02:54 +0000  /usr/bin/rsync exited with 0
+2025-09-18 22:02:54 +0000  Running /usr/bin/ditto '-V' '-c' '-k' '--norsrc' '/var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/Root' '/var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/Packages/iSpend.ipa'
+2025-09-18 22:02:54 +0000  >>> Copying /var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/Root 
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/_CodeSignature/CodeResources ... 
+2025-09-18 22:02:54 +0000  4501 bytes for ./Payload/iSpend.app/_CodeSignature/CodeResources
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/.githubworkflowsios.yml ... 
+2025-09-18 22:02:54 +0000  1264 bytes for ./Payload/iSpend.app/.githubworkflowsios.yml
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/AppIcon60x60@2x.png ... 
+2025-09-18 22:02:54 +0000  10940 bytes for ./Payload/iSpend.app/AppIcon60x60@2x.png
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/README.md ... 
+2025-09-18 22:02:54 +0000  1677 bytes for ./Payload/iSpend.app/README.md
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/Assets.car ... 
+2025-09-18 22:02:54 +0000  717432 bytes for ./Payload/iSpend.app/Assets.car
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/.gitignore ... 
+2025-09-18 22:02:54 +0000  2318 bytes for ./Payload/iSpend.app/.gitignore
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/AppIcon76x76@2x~ipad.png ... 
+2025-09-18 22:02:54 +0000  15682 bytes for ./Payload/iSpend.app/AppIcon76x76@2x~ipad.png
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/Gemfile ... 
+2025-09-18 22:02:54 +0000  577 bytes for ./Payload/iSpend.app/Gemfile
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/fastlaneFastfile ... 
+2025-09-18 22:02:54 +0000  1441 bytes for ./Payload/iSpend.app/fastlaneFastfile
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/iSpend ... 
+2025-09-18 22:02:54 +0000  373376 bytes for ./Payload/iSpend.app/iSpend
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/embedded.mobileprovision ... 
+2025-09-18 22:02:54 +0000  14468 bytes for ./Payload/iSpend.app/embedded.mobileprovision
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/.githubdependabot.yml ... 
+2025-09-18 22:02:54 +0000  1012 bytes for ./Payload/iSpend.app/.githubdependabot.yml
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/Info.plist ... 
+2025-09-18 22:02:54 +0000  1533 bytes for ./Payload/iSpend.app/Info.plist
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/SECURITY.md ... 
+2025-09-18 22:02:54 +0000  1061 bytes for ./Payload/iSpend.app/SECURITY.md
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/scriptssecurity-fix.sh ... 
+2025-09-18 22:02:54 +0000  2056 bytes for ./Payload/iSpend.app/scriptssecurity-fix.sh
+2025-09-18 22:02:54 +0000  copying file ./Payload/iSpend.app/PkgInfo ... 
+2025-09-18 22:02:54 +0000  8 bytes for ./Payload/iSpend.app/PkgInfo
+2025-09-18 22:02:54 +0000  copying file ./Symbols/69157445-D181-36B8-8DBA-83B428C8DB7A.symbols ... 
+2025-09-18 22:02:54 +0000  593308 bytes for ./Symbols/69157445-D181-36B8-8DBA-83B428C8DB7A.symbols
+2025-09-18 22:02:54 +0000  /usr/bin/ditto exited with 0
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionAppStoreInformationStep
+2025-09-18 22:02:54 +0000  Skipping step: IDEDistributionAppStoreInformationStep because it said so
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionGenerateProcessedDistributionItems
+2025-09-18 22:02:54 +0000  IDEDistributionItem init <DVTFilePath:0xb76a2cc00:'/var/folders/rq/7fd31sl90l3gg4ky8h1xqwgr0000gn/T/XcodeDistPipeline.~~~wdIV7S/Root/Payload/iSpend.app'>
+2025-09-18 22:02:54 +0000  Processing step: IDEDistributionCreateManifestStep
+2025-09-18 22:02:54 +0000  Skipping step: IDEDistributionCreateManifestStep because it said so

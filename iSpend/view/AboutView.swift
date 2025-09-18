@@ -13,17 +13,30 @@ struct AboutView: View {
     let version: String
     let buildNumber: String
     let appIcon: String
+    
+    @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        VStack(spacing: 10) {
-            appTitle
-            appIconImage
-            appDescription
-            versionInformation
-            developerInformation
-            linksSection
+        NavigationView {
+            VStack(spacing: 10) {
+                appTitle
+                appIconImage
+                appDescription
+                versionInformation
+                developerInformation
+                linksSection
+            }
+            .padding()
+            .navigationTitle("About")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Done") {
+                        dismiss()
+                    }
+                }
+            }
         }
-        .padding()
     }
 
     private var appTitle: some View {

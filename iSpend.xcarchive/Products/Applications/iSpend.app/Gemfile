@@ -1,0 +1,24 @@
+# Gemfile for iSpend iOS Project
+source 'https://rubygems.org'
+
+# Specify Ruby version
+ruby '>= 3.0.0'
+
+# Fixed REXML version to address ReDoS vulnerability
+gem 'rexml', '>= 3.2.8'
+
+# Fastlane for iOS deployment automation
+gem 'fastlane', '>= 2.217.0'
+
+# CocoaPods for dependency management (if needed)
+gem 'cocoapods', '>= 1.15.0'
+
+# Additional security-focused gems
+gem 'bundler-audit', '>= 0.9.1'
+gem 'brakeman', '>= 6.0.0' # Static analysis security scanner
+
+# Development and testing
+group :development, :test do
+  gem 'minitest', '>= 5.20.0'
+  gem 'rake', '>= 13.0.0'
+end

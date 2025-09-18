@@ -1,0 +1,42 @@
+# This file is used by Dependabot to check for dependency updates
+version: 2
+updates:
+  # Enable updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci"
+      prefix-development: "ci"
+      include: "scope"
+
+  # Enable updates for Ruby dependencies (Gemfile)
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps"
+      include: "scope"
+    # Group security updates
+    groups:
+      security-updates:
+        patterns:
+          - "rexml"
+          - "fastlane"
+          - "bundler-audit"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Enable updates for Swift Package Manager (if used)
+  - package-ecosystem: "swift"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "deps"
+      prefix-development: "deps"
+      include: "scope"

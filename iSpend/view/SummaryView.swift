@@ -31,7 +31,19 @@ struct SummaryView: View {
 
     var body: some View {
         VStack {
-            
+
+            HStack {
+                Text(budget.budgetPeriod.rawValue)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Spacer()
+                Text(budget.periodLabel)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            Divider()
+
             HStack {
                 Text("Total:").font(.headline).fontWeight(.bold)
                 Text("\(totalExpenses, format: .localCurrency)").fontWeight(.bold).foregroundColor(balanceColor).frame(maxWidth: .infinity, alignment: .trailing).font(.headline)

@@ -667,3 +667,155 @@ struct PriorityColorTierTests {
         #expect(classify(6) == "red")
     }
 }
+
+// MARK: - BudgetPeriod enum
+
+@Suite("BudgetPeriod")
+struct BudgetPeriodTests {
+
+    @Test("weekly has intValue 1")
+    func weeklyIntValue() { #expect(BudgetPeriod.weekly.intValue == 1) }
+
+    @Test("monthly has intValue 2")
+    func monthlyIntValue() { #expect(BudgetPeriod.monthly.intValue == 2) }
+
+    @Test("yearly has intValue 3")
+    func yearlyIntValue() { #expect(BudgetPeriod.yearly.intValue == 3) }
+
+    @Test("custom has intValue 4")
+    func customIntValue() { #expect(BudgetPeriod.custom.intValue == 4) }
+
+    @Test("init(from: 1) produces .weekly")
+    func initFromOne() { #expect(BudgetPeriod(from: 1) == .weekly) }
+
+    @Test("init(from: 2) produces .monthly")
+    func initFromTwo() { #expect(BudgetPeriod(from: 2) == .monthly) }
+
+    @Test("init(from: 3) produces .yearly")
+    func initFromThree() { #expect(BudgetPeriod(from: 3) == .yearly) }
+
+    @Test("init(from: 4) produces .custom")
+    func initFromFour() { #expect(BudgetPeriod(from: 4) == .custom) }
+
+    @Test("init(from:) defaults to .monthly for unknown values", arguments: [0, -1, 5, 99])
+    func initFromUnknown(value: Int) {
+        #expect(BudgetPeriod(from: value) == .monthly)
+    }
+
+    @Test("intValue → init(from:) roundtrip is identity")
+    func intValueRoundtrip() {
+        for period in BudgetPeriod.allCases {
+            #expect(BudgetPeriod(from: period.intValue) == period)
+        }
+    }
+
+    @Test("rawValues are human-readable strings")
+    func rawValues() {
+        #expect(BudgetPeriod.weekly.rawValue == "Weekly")
+        #expect(BudgetPeriod.monthly.rawValue == "Monthly")
+        #expect(BudgetPeriod.yearly.rawValue == "Yearly")
+        #expect(BudgetPeriod.custom.rawValue == "Custom")
+    }
+
+    @Test("allCases contains exactly four values")
+    func allCasesCount() { #expect(BudgetPeriod.allCases.count == 4) }
+
+    @Test("Codable roundtrip preserves each case")
+    func codableRoundtrip() throws {
+        for period in BudgetPeriod.allCases {
+            let data = try JSONEncoder().encode(period)
+            let decoded = try JSONDecoder().decode(BudgetPeriod.self, from: data)
+            #expect(decoded == period)
+        }
+    }
+}
+
+// MARK: - BudgetPeriod date ranges
+
+@Suite("BudgetPeriod date ranges")
+struct BudgetPeriodDateRangeTests {
+
+    @Test("Monthly period start is the first of the current month")
+    func monthlyPeriodStart() {
+        let budget = BudgetModel(type: NECESSARY, amount: 100)
+        budget.budgetPeriod = .monthly
+        let day = Calendar.current.component(.day, from: budget.currentPeriodStart)
+        #expect(day == 1)
+    }
+
+    @Test("Weekly period start is the first day of the current week")
+    func weeklyPeriodStart() {
+        let budget = BudgetModel(type: NECESSARY, amount: 100)
+        budget.budgetPeriod = .weekly
+        let weekday = Calendar.current.component(.weekday, from: budget.currentPeriodStart)
+        #expect(weekday == Calendar.current.firstWeekday)
+    }
+
+    @Test("Yearly period start is January 1 of the current year")
+    func yearlyPeriodStart() {
+        let budget = BudgetModel(type: NECESSARY, amount: 100)
+        budget.budgetPeriod = .yearly
+        let components = Calendar.current.dateComponents([.month, .day], from: budget.currentPeriodStart)
+        #expect(components.month == 1)
+        #expect(components.day == 1)
+    }
+
+    @Test("Period end is strictly after period start for all period types")
+    func periodEndAfterStart() {
+        for period in BudgetPeriod.allCases {
+            let budget = BudgetModel(type: NECESSARY, amount: 100)
+            budget.budgetPeriod = period
+            #expect(budget.currentPeriodEnd > budget.currentPeriodStart)
+        }
+    }
+
+    @Test("Custom period spans the configured number of days")
+    func customPeriodSpan() {
+        let budget = BudgetModel(type: NECESSARY, amount: 100)
+        budget.budgetPeriod = .custom
+        budget.customPeriodDays = 14
+        budget.periodStartDate = Date()
+        let days = Calendar.current.dateComponents([.day], from: budget.currentPeriodStart, to: budget.currentPeriodEnd).day
+        #expect(days == 14)
+    }
+
+    @Test("Default periodMap is monthly (2)")
+    func defaultPeriodIsMonthly() {
+        let budget = BudgetModel(type: NECESSARY, amount: 500)
+        #expect(budget.periodMap == 2)
+        #expect(budget.budgetPeriod == .monthly)
+    }
+
+    @Test("budgetPeriod getter and setter stay in sync with periodMap")
+    func periodGetterSetterSync() {
+        let budget = BudgetModel(type: NECESSARY, amount: 100)
+        budget.budgetPeriod = .weekly
+        #expect(budget.periodMap == 1)
+        budget.budgetPeriod = .yearly
+        #expect(budget.periodMap == 3)
+        budget.periodMap = 4
+        #expect(budget.budgetPeriod == .custom)
+    }
+
+    @Test("customPeriodDays defaults to 30")
+    func defaultCustomDays() {
+        #expect(BudgetModel(type: NECESSARY, amount: 0).customPeriodDays == 30)
+    }
+
+    @Test("periodLabel for monthly contains the month name")
+    func monthlyPeriodLabel() {
+        let budget = BudgetModel(type: NECESSARY, amount: 0)
+        budget.budgetPeriod = .monthly
+        let label = budget.periodLabel
+        #expect(!label.isEmpty)
+        // Should be something like "Mar 2026"
+        #expect(label.contains(" "))
+    }
+
+    @Test("periodLabel for weekly contains a date range with dash")
+    func weeklyPeriodLabel() {
+        let budget = BudgetModel(type: NECESSARY, amount: 0)
+        budget.budgetPeriod = .weekly
+        #expect(budget.periodLabel.contains("–"))
+    }
+}

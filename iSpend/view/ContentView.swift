@@ -32,6 +32,19 @@ struct ContentView: View {
         discretionaryBudgets.first ?? BudgetModel(type: DISCRETIONARY, amount: 0)
     }
 
+    // Expenses filtered to each budget's current period (used by SummaryView).
+    private var necessaryExpensesInPeriod: [ExpenseModel] {
+        let start = necessaryBudget.currentPeriodStart
+        let end = necessaryBudget.currentPeriodEnd
+        return necessaryExpenses.filter { $0.date >= start && $0.date < end }
+    }
+
+    private var discretionaryExpensesInPeriod: [ExpenseModel] {
+        let start = discretionaryBudget.currentPeriodStart
+        let end = discretionaryBudget.currentPeriodEnd
+        return discretionaryExpenses.filter { $0.date >= start && $0.date < end }
+    }
+
     @State private var showingAddEntry: Bool = false
     @State private var showingSettings: Bool = false
     @State private var selectedItem: ExpenseModel?
@@ -40,25 +53,31 @@ struct ContentView: View {
         NavigationStack {
             List {
                 Section(header: Text("Necessary Expenses")) {
-                    SummaryView(expenses: necessaryExpenses, label: "Necessary", budget: necessaryBudget)
+                    SummaryView(expenses: necessaryExpensesInPeriod, label: "Necessary", budget: necessaryBudget)
                     Heading()
                     ForEach(necessaryExpenses) { item in
-                        ExpenseModelView(expenseModel: item)
-                            .onTapGesture(count: 2) {
-                                selectedItem = item
-                                showingAddEntry = true
-                            }
+                        ExpenseModelView(
+                            expenseModel: item,
+                            isInPeriod: necessaryExpensesInPeriod.contains { $0.id == item.id }
+                        )
+                        .onTapGesture(count: 2) {
+                            selectedItem = item
+                            showingAddEntry = true
+                        }
                     }.onDelete { offsets in delete(from: necessaryExpenses, at: offsets) }
                 }
                 Section(header: Text("Discretionary Expenses")) {
-                    SummaryView(expenses: discretionaryExpenses, label: "Discretionary", budget: discretionaryBudget)
+                    SummaryView(expenses: discretionaryExpensesInPeriod, label: "Discretionary", budget: discretionaryBudget)
                     Heading()
                     ForEach(discretionaryExpenses) { item in
-                        ExpenseModelView(expenseModel: item)
-                            .onTapGesture(count: 2) {
-                                selectedItem = item
-                                showingAddEntry = true
-                            }
+                        ExpenseModelView(
+                            expenseModel: item,
+                            isInPeriod: discretionaryExpensesInPeriod.contains { $0.id == item.id }
+                        )
+                        .onTapGesture(count: 2) {
+                            selectedItem = item
+                            showingAddEntry = true
+                        }
                     }.onDelete { offsets in delete(from: discretionaryExpenses, at: offsets) }
                 }
             }

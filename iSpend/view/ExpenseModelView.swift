@@ -11,6 +11,7 @@ import SwiftUI
 
 struct ExpenseModelView: View {
     @State var expenseModel: ExpenseModel
+    var isInPeriod: Bool = true
 
     var body: some View {
         HStack {
@@ -30,5 +31,6 @@ struct ExpenseModelView: View {
                 .fontWeight(.regular).font(.caption)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .opacity(isInPeriod ? 1.0 : 0.35)
     }
 }

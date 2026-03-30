@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Other keys... -->
+    
+    <!-- This is the key that controls the Build Version -->
+    <key>CFBundleVersion</key>
+    <string>apple generic</string>
+    
+    <!-- This is the App Version (different from Build Version) -->
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    
+    <!-- Other keys... -->
+</dict>
+</plist>

@@ -5,95 +5,80 @@ import SwiftUI
 struct DataManagementView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
-    
+
     var expenses: [ExpenseModel]
-    
-    @State private var isPresentingConfirm: Bool = false
-    @State private var showAlert = false
+
+    @State private var showExportAlert = false
+    @State private var showExpenseResetConfirm = false
+    @State private var showBudgetResetConfirm = false
+    @State private var showCategoryResetConfirm = false
     @State private var showErrorAlert = false
-    @State private var errorMessage: String = ""
-    
-    private var exportButtonLabel: String {
-        expenses.isEmpty ? "Export (No data to export)" : "Export"
-    }
-    
+    @State private var errorMessage = ""
+
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
-                resetButton(title: "Reset all expense data", modelTypes: [ExpenseModel.self], errorMessage: "Failed to clear all ExpenseModel data")
-                
-                resetButton(title: "Reset budget data", modelTypes: [BudgetModel.self], errorMessage: "Failed to clear all BudgetModel data.")
-                
-                resetButton(title: "Delete all data",
-                            modelTypes: [EditableListItem.self],
-                            errorMessage: "Failed to clear all data.")
-                
-                Button(exportButtonLabel) {
-                    let csvString = generateCSV(from: expenses)
-                    UIPasteboard.general.string = csvString
-                    print("CSV string copied to clipboard.")
-                    showAlert = true
-                }.alert(isPresented: $showAlert) {
-                    Alert(
-                        title: Text("\(expenses.count) exported"),
-                        message: Text("Your data is now ready to paste into a file. Save the file with a .csv extension and view in your favorite spreadsheet program"),
-                        dismissButton: .default(Text("OK"))
-                    )
-                }.disabled(expenses.isEmpty)
+                Button("Reset all expense data", role: .destructive) {
+                    showExpenseResetConfirm = true
+                }
+                .confirmationDialog("Delete all expense data?", isPresented: $showExpenseResetConfirm, titleVisibility: .visible) {
+                    Button("Delete", role: .destructive) {
+                        deleteModel(ExpenseModel.self, errorMessage: "Failed to clear expense data")
+                    }
+                }
+
+                Button("Reset budget data", role: .destructive) {
+                    showBudgetResetConfirm = true
+                }
+                .confirmationDialog("Delete budget data?", isPresented: $showBudgetResetConfirm, titleVisibility: .visible) {
+                    Button("Delete", role: .destructive) {
+                        deleteModel(BudgetModel.self, errorMessage: "Failed to clear budget data")
+                    }
+                }
+
+                Button("Reset categories and reflections", role: .destructive) {
+                    showCategoryResetConfirm = true
+                }
+                .confirmationDialog("Delete all categories and reflections?", isPresented: $showCategoryResetConfirm, titleVisibility: .visible) {
+                    Button("Delete", role: .destructive) {
+                        deleteModel(EditableListItem.self, errorMessage: "Failed to delete categories and reflections")
+                    }
+                }
+
+                Button(expenses.isEmpty ? "Export (no data)" : "Export") {
+                    UIPasteboard.general.string = generateCSV(from: expenses)
+                    showExportAlert = true
+                }
+                .disabled(expenses.isEmpty)
+                .alert("\(expenses.count) records exported", isPresented: $showExportAlert) {
+                    Button("OK", role: .cancel) {}
+                } message: {
+                    Text("Your data has been copied to the clipboard. Paste into a file with a .csv extension to open in a spreadsheet.")
+                }
             }
+            .alert("Error", isPresented: $showErrorAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(errorMessage)
+            }
+            .navigationTitle("Data Management")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
+                    Button("Done") { dismiss() }
                 }
             }
         }
     }
-    
-    private func resetButton<T: PersistentModel>(title: String, modelTypes: [T.Type], errorMessage: String) -> some View {
-        Button(title, role: .destructive) {
-            isPresentingConfirm = true
-        }
-        .confirmationDialog("Are you sure?", isPresented: $isPresentingConfirm) {
-            Button("Delete all data?", role: .destructive) {
-                do {
-                    for modelType in modelTypes {
-                        try modelContext.delete(model: modelType)
-                    }
-                    dismiss()
-                } catch {
-                    self.errorMessage = errorMessage
-                    showErrorAlert = true
-                }
-            }
-        }
-        .alert(isPresented: $showErrorAlert) {
-            Alert(
-                title: Text("Error"),
-                message: Text(self.errorMessage),
-                dismissButton: .default(Text("OK"))
-            )
+
+    private func deleteModel<T: PersistentModel>(_ type: T.Type, errorMessage: String) {
+        do {
+            try modelContext.delete(model: type)
+            dismiss()
+        } catch {
+            self.errorMessage = errorMessage
+            showErrorAlert = true
         }
     }
-    
-    func generateCSV(from expenses: [ExpenseModel]) -> String {
-        var csvString = "date, name, expenseType, amount, note,  category, discretionaryValue\n"
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
-        
-        for expense in expenses {
-            let dateString = dateFormatter.string(from: expense.date)
-            let escapedNote = expense.note.replacingOccurrences(of: "\"", with: "\"\"") // Escape double quotes
-            
-            let csvRow = """
-        "\(dateString)",\(expense.name),\(expense.expenseType),\(expense.amount),"\(escapedNote)"\n
-        """
-            csvString.append(contentsOf: csvRow)
-        }
-        
-        return csvString
-    }
-} 
+
+    // generateCSV is defined in Utils.swift as a free function.
+}

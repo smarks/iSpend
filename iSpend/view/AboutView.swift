@@ -8,16 +8,15 @@
 import Foundation
 import SwiftUI
 
-
 struct AboutView: View {
     let version: String
     let buildNumber: String
     let appIcon: String
-    
+
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 10) {
                 appTitle
                 appIconImage
@@ -46,7 +45,6 @@ struct AboutView: View {
     }
 
     private var appIconImage: some View {
-        // Correctly handle the optional UIImage and ensure a view is always returned
         Group {
             if let image = UIImage(named: appIcon) {
                 Image(uiImage: image)
@@ -54,7 +52,6 @@ struct AboutView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100)
             } else {
-                // Provide a fallback view in case the image is not found
                 Image(systemName: "app.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -96,9 +93,4 @@ struct AboutView: View {
         }
         .font(.system(size: 12))
     }
-}
-
-struct About: Identifiable, Hashable {
-    let name: String
-    let id: Int
 }

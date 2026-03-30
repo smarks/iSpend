@@ -7,32 +7,40 @@
 
 import Foundation
 
-/**
- * for a given string, parse it and return numbers as a double and the non numeric charactersas a string. 
- */
+/// Parses a string and returns the non-numeric text and the first number found.
+/// For example, "Lunch 12.50" returns ("Lunch", 12.50).
 func separateNumbersAndLetters(from input: String) -> (letters: String, number: Double?) {
-    // Define the regular expression pattern to match numbers
     let numberPattern = "[0-9]+(?:\\.[0-9]+)?"
-
-    // Create a regular expression object
     let regex = try? NSRegularExpression(pattern: numberPattern, options: [])
-
-    // Find matches in the input string
     let matches = regex?.matches(in: input, options: [], range: NSRange(location: 0, length: input.utf16.count))
 
-    // Extract the number from the matches
     var numberString: String?
-    if let match = matches?.first {
-        if let range = Range(match.range, in: input) {
-            numberString = String(input[range])
-        }
+    if let match = matches?.first, let range = Range(match.range, in: input) {
+        numberString = String(input[range])
     }
 
-    // Convert the number string to a Double
     let number = numberString.flatMap { Double($0) }
-
-    // Remove the number from the input string to get the letters
-    let letters = input.replacingOccurrences(of: numberString ?? "", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
+    let letters = input.replacingOccurrences(of: numberString ?? "", with: "")
+        .trimmingCharacters(in: .whitespacesAndNewlines)
 
     return (letters, number)
+}
+
+/// Converts an array of expenses to a CSV string with all fields.
+func generateCSV(from expenses: [ExpenseModel]) -> String {
+    var csv = "date,name,expenseType,amount,note,category,discretionaryValue\n"
+
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateStyle = .short
+    dateFormatter.timeStyle = .none
+
+    for expense in expenses {
+        let date = dateFormatter.string(from: expense.date)
+        let name = expense.name.replacingOccurrences(of: "\"", with: "\"\"")
+        let note = expense.note.replacingOccurrences(of: "\"", with: "\"\"")
+        let category = expense.category.replacingOccurrences(of: "\"", with: "\"\"")
+        csv.append("\"\(date)\",\"\(name)\",\(expense.expenseType.rawValue),\(expense.amount),\"\(note)\",\"\(category)\",\(expense.discretionaryValue)\n")
+    }
+
+    return csv
 }

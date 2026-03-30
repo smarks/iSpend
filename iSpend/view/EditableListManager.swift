@@ -2,7 +2,7 @@
 //  EditableListManager.swift
 //  iSpend
 //
-//  A reusable component for managing editable lists (categories, mediations)
+//  A reusable component for managing editable lists (categories, reflections)
 //
 
 import SwiftUI
@@ -15,30 +15,26 @@ struct EditableListManager: View {
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Query private var allItems: [EditableListItem]
+    @Query private var items: [EditableListItem]
 
-    @State private var showingAddSheet = false
     @State private var newItemText = ""
     @State private var editMode: EditMode = .inactive
-
-    private var filteredItems: [EditableListItem] {
-        allItems.filter { $0.type == itemType }
-    }
 
     init(title: String, itemType: Int, placeholder: String = "New Item") {
         self.title = title
         self.itemType = itemType
         self.placeholder = placeholder
+        let type = itemType
+        _items = Query(filter: #Predicate<EditableListItem> { $0.type == type })
     }
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(filteredItems) { item in
+                ForEach(items) { item in
                     EditableListRow(item: item)
                 }
                 .onDelete(perform: deleteItems)
-                .onMove(perform: moveItems)
 
                 if editMode == .inactive {
                     AddNewItemRow(text: $newItemText, placeholder: placeholder) {
@@ -64,11 +60,9 @@ struct EditableListManager: View {
 
     private func addItem() {
         guard !newItemText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
-
         let newItem = EditableListItem(text: newItemText, type: itemType)
         modelContext.insert(newItem)
         newItemText = ""
-
         do {
             try modelContext.save()
         } catch {
@@ -78,20 +72,13 @@ struct EditableListManager: View {
 
     private func deleteItems(at offsets: IndexSet) {
         for index in offsets {
-            let item = filteredItems[index]
-            modelContext.delete(item)
+            modelContext.delete(items[index])
         }
-
         do {
             try modelContext.save()
         } catch {
             print("Failed to delete items: \(error)")
         }
-    }
-
-    private func moveItems(from source: IndexSet, to destination: Int) {
-        // SwiftData handles ordering through the query
-        // For custom ordering, you'd need to add an order property to the model
     }
 }
 
@@ -155,10 +142,7 @@ struct AddNewItemRow: View {
     }
 }
 
-// Preview helper
-struct EditableListManager_Previews: PreviewProvider {
-    static var previews: some View {
-        EditableListManager(title: "Categories", itemType: CATEGORY, placeholder: "Add Category")
-            .modelContainer(for: [EditableListItem.self])
-    }
+#Preview {
+    EditableListManager(title: "Categories", itemType: CATEGORY, placeholder: "Add Category")
+        .modelContainer(for: [EditableListItem.self])
 }

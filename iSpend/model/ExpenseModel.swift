@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftData
-import SwiftUI
 
 enum ExpenseType: String, Codable, Equatable, CaseIterable {
     case necessary = "Necessary"
@@ -28,18 +27,22 @@ enum ExpenseType: String, Codable, Equatable, CaseIterable {
     }
 }
 
-
-
 @Model
 final class ExpenseModel {
-    var name: String
-    var typeMap: Int
-    var expenseType: ExpenseType
-    var amount: Double
-    var note: String
-    var date: Date
-    var category: String
-    var discretionaryValue: Double
+    var id: UUID = UUID()
+    var name: String = ""
+    var typeMap: Int = NECESSARY
+    var amount: Double = 0
+    var note: String = ""
+    var date: Date = Date()
+    var category: String = "None"
+    var discretionaryValue: Double = 0
+
+    // Computed from typeMap — not persisted separately.
+    var expenseType: ExpenseType {
+        get { ExpenseType(from: typeMap) }
+        set { typeMap = newValue.intValue }
+    }
 
     init(name: String = "",
          type: Int = NECESSARY,
@@ -49,6 +52,7 @@ final class ExpenseModel {
          category: String = "None",
          discretionaryValue: Double = 0) {
 
+        self.id = UUID()
         self.name = name
         self.typeMap = type
         self.amount = amount
@@ -56,6 +60,5 @@ final class ExpenseModel {
         self.date = date
         self.category = category
         self.discretionaryValue = discretionaryValue
-        self.expenseType = ExpenseType(from: type)
     }
 }

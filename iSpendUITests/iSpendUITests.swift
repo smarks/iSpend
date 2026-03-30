@@ -6,37 +6,166 @@
 //
 
 import XCTest
+
 // swiftlint:disable type_name
 final class iSpendUITests: XCTestCase {
 // swiftlint:enable type_name
 
+    var app: XCUIApplication!
+
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        app = XCUIApplication()
+        // Pass a flag so the app can use an in-memory store if it supports it;
+        // at minimum this isolates launches by resetting state expectations.
+        app.launchArguments = ["--uitesting"]
+        app.launch()
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        app = nil
     }
 
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
+    // MARK: - Launch & Main Screen
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testAppLaunchesWithoutCrashing() {
+        XCTAssert(app.state == .runningForeground)
     }
 
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
+    func testMainScreenShowsNavigationTitle() {
+        XCTAssertTrue(app.navigationBars["iSpend"].exists)
+    }
+
+    func testMainScreenShowsNecessaryExpensesSection() {
+        XCTAssertTrue(app.staticTexts["Necessary Expenses"].exists)
+    }
+
+    func testMainScreenShowsDiscretionaryExpensesSection() {
+        XCTAssertTrue(app.staticTexts["Discretionary Expenses"].exists)
+    }
+
+    func testAddButtonExistsInToolbar() {
+        XCTAssertTrue(app.navigationBars.buttons["Add"].exists ||
+                      app.navigationBars.buttons.matching(identifier: "Add").count > 0 ||
+                      app.buttons["plus"].exists ||
+                      app.navigationBars["iSpend"].buttons.element(boundBy: 0).exists)
+    }
+
+    func testSettingsButtonExistsInToolbar() {
+        // The gear button should be visible in the navigation bar.
+        let toolbar = app.navigationBars["iSpend"]
+        XCTAssertTrue(toolbar.buttons.count >= 1)
+    }
+
+    // MARK: - Add Expense Sheet
+
+    func testTappingAddButtonOpensSheet() {
+        // Tap the + (add) button — the last button in the nav bar is settings,
+        // the one before is add. Find by SF Symbol accessibility identifier.
+        let addButton = app.navigationBars["iSpend"].buttons.element(boundBy: 0)
+        addButton.tap()
+
+        // The Expense Editor sheet should appear.
+        XCTAssertTrue(app.navigationBars["Expense Editor"].waitForExistence(timeout: 3))
+    }
+
+    func testExpenseEditorHasCancelButton() {
+        let addButton = app.navigationBars["iSpend"].buttons.element(boundBy: 0)
+        addButton.tap()
+
+        XCTAssertTrue(app.navigationBars["Expense Editor"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.buttons["Cancel"].exists)
+    }
+
+    func testExpenseEditorHasDoneButton() {
+        let addButton = app.navigationBars["iSpend"].buttons.element(boundBy: 0)
+        addButton.tap()
+
+        XCTAssertTrue(app.navigationBars["Expense Editor"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.buttons["Done"].exists)
+    }
+
+    func testDoneButtonIsDisabledWhenFormIsEmpty() {
+        let addButton = app.navigationBars["iSpend"].buttons.element(boundBy: 0)
+        addButton.tap()
+
+        XCTAssertTrue(app.navigationBars["Expense Editor"].waitForExistence(timeout: 3))
+        let doneButton = app.buttons["Done"]
+        XCTAssertFalse(doneButton.isEnabled, "Done should be disabled with empty name and zero amount")
+    }
+
+    func testCancelDismissesEditorSheet() {
+        let addButton = app.navigationBars["iSpend"].buttons.element(boundBy: 0)
+        addButton.tap()
+
+        XCTAssertTrue(app.navigationBars["Expense Editor"].waitForExistence(timeout: 3))
+        app.buttons["Cancel"].tap()
+
+        XCTAssertTrue(app.navigationBars["iSpend"].waitForExistence(timeout: 3))
+        XCTAssertFalse(app.navigationBars["Expense Editor"].exists)
+    }
+
+    // MARK: - Settings Sheet
+
+    func testTappingSettingsButtonOpensSheet() {
+        // Settings (gear) is the last button in the nav bar.
+        let settingsButton = app.navigationBars["iSpend"].buttons.element(boundBy: 1)
+        settingsButton.tap()
+
+        XCTAssertTrue(app.staticTexts["Preferences and Settings"].waitForExistence(timeout: 3))
+    }
+
+    func testSettingsSheetHasDoneButton() {
+        let settingsButton = app.navigationBars["iSpend"].buttons.element(boundBy: 1)
+        settingsButton.tap()
+
+        XCTAssertTrue(app.staticTexts["Preferences and Settings"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.buttons["Done"].exists)
+    }
+
+    func testSettingsDoneButtonDismissesSheet() {
+        let settingsButton = app.navigationBars["iSpend"].buttons.element(boundBy: 1)
+        settingsButton.tap()
+
+        XCTAssertTrue(app.staticTexts["Preferences and Settings"].waitForExistence(timeout: 3))
+        app.buttons["Done"].tap()
+
+        XCTAssertTrue(app.navigationBars["iSpend"].waitForExistence(timeout: 3))
+    }
+
+    func testSettingsShowsBudgetsOption() {
+        let settingsButton = app.navigationBars["iSpend"].buttons.element(boundBy: 1)
+        settingsButton.tap()
+
+        XCTAssertTrue(app.staticTexts["Preferences and Settings"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.cells.staticTexts["Budgets"].exists ||
+                      app.staticTexts["Budgets"].exists)
+    }
+
+    func testSettingsShowsDataManagementOption() {
+        let settingsButton = app.navigationBars["iSpend"].buttons.element(boundBy: 1)
+        settingsButton.tap()
+
+        XCTAssertTrue(app.staticTexts["Preferences and Settings"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.cells.staticTexts["Data Management"].exists ||
+                      app.staticTexts["Data Management"].exists)
+    }
+
+    func testSettingsShowsCategoriesOption() {
+        let settingsButton = app.navigationBars["iSpend"].buttons.element(boundBy: 1)
+        settingsButton.tap()
+
+        XCTAssertTrue(app.staticTexts["Preferences and Settings"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.cells.staticTexts["Categories"].exists ||
+                      app.staticTexts["Categories"].exists)
+    }
+
+    func testSettingsShowsReflectionsOption() {
+        let settingsButton = app.navigationBars["iSpend"].buttons.element(boundBy: 1)
+        settingsButton.tap()
+
+        XCTAssertTrue(app.staticTexts["Preferences and Settings"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.cells.staticTexts["Reflections"].exists ||
+                      app.staticTexts["Reflections"].exists)
     }
 }

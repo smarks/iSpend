@@ -9,7 +9,6 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
 
     @Query(filter: #Predicate<ExpenseModel> { expense in expense.typeMap == NECESSARY }, sort: [SortDescriptor(\ExpenseModel.date)])
@@ -21,32 +20,21 @@ struct ContentView: View {
     @Query(filter: #Predicate<BudgetModel> { budget in budget.type == NECESSARY })
     private var necessaryBudgets: [BudgetModel]
 
-    private var necessaryBudget: BudgetModel {
-        if necessaryBudgets.isEmpty {
-            let budgetModel: BudgetModel = BudgetModel(type: NECESSARY, amount: 0)
-            modelContext.insert(budgetModel)
-            return budgetModel
-        } else {
-            return necessaryBudgets[0]
-        }
-    }
-
     @Query(filter: #Predicate<BudgetModel> { budget in budget.type == DISCRETIONARY })
     private var discretionaryBudgets: [BudgetModel]
 
-    private var discretionaryBudget: BudgetModel {
-        if discretionaryBudgets.isEmpty {
-            let budgetModel: BudgetModel = BudgetModel(type: DISCRETIONARY, amount: 0)
-            modelContext.insert(budgetModel)
-            return budgetModel
-        } else {
-            return discretionaryBudgets[0]
-        }
+    // These computed properties are read-only — budget creation happens in iSpendApp on first launch.
+    private var necessaryBudget: BudgetModel {
+        necessaryBudgets.first ?? BudgetModel(type: NECESSARY, amount: 0)
     }
 
-    @State var showingAddEntry: Bool = false
-    @State var showingSettings: Bool = false
-    @State var selectedItem: ExpenseModel?
+    private var discretionaryBudget: BudgetModel {
+        discretionaryBudgets.first ?? BudgetModel(type: DISCRETIONARY, amount: 0)
+    }
+
+    @State private var showingAddEntry: Bool = false
+    @State private var showingSettings: Bool = false
+    @State private var selectedItem: ExpenseModel?
 
     var body: some View {
         NavigationStack {
@@ -57,11 +45,10 @@ struct ContentView: View {
                     ForEach(necessaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
                             .onTapGesture(count: 2) {
-                                self.selectedItem = item
-                                self.showingAddEntry = true
-                                print("selected item: \(selectedItem?.name ?? "tear")")
+                                selectedItem = item
+                                showingAddEntry = true
                             }
-                    }.onDelete(perform: delete)
+                    }.onDelete { offsets in delete(from: necessaryExpenses, at: offsets) }
                 }
                 Section(header: Text("Discretionary Expenses")) {
                     SummaryView(expenses: discretionaryExpenses, label: "Discretionary", budget: discretionaryBudget)
@@ -69,49 +56,45 @@ struct ContentView: View {
                     ForEach(discretionaryExpenses) { item in
                         ExpenseModelView(expenseModel: item)
                             .onTapGesture(count: 2) {
-                                self.selectedItem = item
-                                self.showingAddEntry = true
-                                print("selected item: \(selectedItem?.name ?? "tear")")
-                                print(item)
+                                selectedItem = item
+                                showingAddEntry = true
                             }
-                    }.onDelete(perform: deleteDiscretionary)
+                    }.onDelete { offsets in delete(from: discretionaryExpenses, at: offsets) }
                 }
-            }.navigationTitle("iSpend")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            showingAddEntry = true
-                        } label: {
-                            Image(systemName: "plus")
-                        }
+            }
+            .navigationTitle("iSpend")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showingAddEntry = true
+                    } label: {
+                        Image(systemName: "plus")
                     }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            showingSettings = true
-                        } label: {
-                            Image(systemName: "gear")
-                        }
-                    }
-                }.sheet(isPresented: $showingAddEntry) {
-                    let item: ExpenseModel = self.selectedItem ?? ExpenseModel()
-                    ExpenseModelViewEditor(expenseModel: item)
-                        .environment(\.modelContext, modelContext)
-                }.sheet(isPresented: $showingSettings) {
-                    SettingsView()
-                        .environment(\.modelContext, modelContext)
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showingSettings = true
+                    } label: {
+                        Image(systemName: "gear")
+                    }
+                }
+            }
+            .sheet(isPresented: $showingAddEntry, onDismiss: { selectedItem = nil }) {
+                let isNew = selectedItem == nil
+                let item = selectedItem ?? ExpenseModel()
+                ExpenseModelViewEditor(expenseModel: item, isNew: isNew)
+                    .environment(\.modelContext, modelContext)
+            }
+            .sheet(isPresented: $showingSettings) {
+                SettingsView()
+                    .environment(\.modelContext, modelContext)
+            }
         }
     }
 
-    func delete(at offsets: IndexSet) {
+    private func delete(from expenses: [ExpenseModel], at offsets: IndexSet) {
         for index in offsets {
-            modelContext.delete(necessaryExpenses[index])
-        }
-    }
-
-    func deleteDiscretionary(at offsets: IndexSet) {
-        for index in offsets {
-            modelContext.delete(discretionaryExpenses[index])
+            modelContext.delete(expenses[index])
         }
     }
 }

@@ -27,22 +27,38 @@ platform :ios do
       duration: 1200,
       in_house: false
     )
-    
+
     increment_build_number(xcodeproj: "iSpend.xcodeproj")
 
-    # Build and export IPA
+    # Build and upload iOS
     gym(
       scheme: "iSpend",
       output_directory: "./build",
-      output_name: "iSpend",
+      output_name: "iSpend-iOS",
       clean: true,
       export_options: "./ExportOptions.plist",
       xcargs: "-allowProvisioningUpdates"
     )
-    
+
     upload_to_testflight(
       api_key: api_key,
-      ipa: "./build/iSpend.ipa",
+      ipa: "./build/iSpend-iOS.ipa",
+      skip_waiting_for_build_processing: true
+    )
+
+    # Build and upload Mac Catalyst
+    gym(
+      scheme: "iSpend",
+      destination: "platform=macOS,variant=Mac Catalyst",
+      output_directory: "./build",
+      output_name: "iSpend-Mac",
+      export_options: "./ExportOptions-mac.plist",
+      xcargs: "-allowProvisioningUpdates"
+    )
+
+    upload_to_testflight(
+      api_key: api_key,
+      pkg: "./build/iSpend-Mac.pkg",
       skip_waiting_for_build_processing: true
     )
   end

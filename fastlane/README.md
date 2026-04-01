@@ -37,6 +37,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
+### test_auth
+
+```sh
+[bundle exec] fastlane test_auth
+```
+
+
+
 ----
 
 

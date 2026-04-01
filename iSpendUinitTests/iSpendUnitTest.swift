@@ -7,6 +7,7 @@
 
 import Testing
 import Foundation
+import UIKit
 @testable import iSpend
 
 // MARK: - ExpenseType
@@ -1047,5 +1048,283 @@ struct CSVParsingTests {
         }
         let calendar = Calendar.current
         #expect(calendar.isDate(parsedExpense.date, inSameDayAs: date))
+    }
+}
+
+// MARK: - Export to Clipboard
+
+@Suite("Export to Clipboard")
+struct ExportToClipboardTests {
+
+    private func makeDate(_ year: Int, _ month: Int, _ day: Int) -> Date {
+        var comps = DateComponents()
+        comps.year = year; comps.month = month; comps.day = day
+        return Calendar.current.date(from: comps) ?? Date()
+    }
+
+    @Test("generateCSV output can be written to and read back from the clipboard")
+    func clipboardWriteAndRead() {
+        let csv = generateCSV(from: [ExpenseModel(name: "Coffee", amount: 4.50)])
+        UIPasteboard.general.string = csv
+        #expect(UIPasteboard.general.string == csv)
+    }
+
+    @Test("Clipboard content after export is parseable with zero failures")
+    func clipboardContentParseable() {
+        let date = makeDate(2026, 3, 15)
+        let csv = generateCSV(from: [
+            ExpenseModel(name: "Rent", type: NECESSARY, amount: 1500.0, note: "monthly", date: date, category: "Bills", discretionaryValue: 0.0)
+        ])
+        UIPasteboard.general.string = csv
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(failedRows == 0)
+        #expect(parsed.count == 1)
+        #expect(parsed.first?.name == "Rent")
+        #expect(parsed.first?.amount == 1500.0)
+    }
+
+    @Test("Exporting empty array produces header-only CSV that parses to zero expenses")
+    func emptyExportParsesToZero() {
+        UIPasteboard.general.string = generateCSV(from: [])
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(parsed.isEmpty)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Full export → clipboard → import roundtrip preserves all fields")
+    func fullClipboardRoundtrip() {
+        let date = makeDate(2026, 3, 15)
+        let originals = [
+            ExpenseModel(name: "Coffee", type: NECESSARY, amount: 4.5, note: "morning", date: date, category: "Food", discretionaryValue: 1.0),
+            ExpenseModel(name: "Games", type: DISCRETIONARY, amount: 60.0, note: "", date: date, category: "Entertainment", discretionaryValue: 6.0),
+        ]
+        UIPasteboard.general.string = generateCSV(from: originals)
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(failedRows == 0)
+        #expect(parsed.count == originals.count)
+        for (original, parsedExpense) in zip(originals, parsed) {
+            #expect(parsedExpense.name == original.name)
+            #expect(parsedExpense.amount == original.amount)
+            #expect(parsedExpense.expenseType == original.expenseType)
+            #expect(parsedExpense.note == original.note)
+            #expect(parsedExpense.category == original.category)
+            #expect(parsedExpense.discretionaryValue == original.discretionaryValue)
+        }
+    }
+}
+
+// MARK: - Export to File
+
+@Suite("Export to File")
+struct ExportToFileTests {
+
+    private func makeDate(_ year: Int, _ month: Int, _ day: Int) -> Date {
+        var comps = DateComponents()
+        comps.year = year; comps.month = month; comps.day = day
+        return Calendar.current.date(from: comps) ?? Date()
+    }
+
+    @Test("generateCSV written to a temp file round-trips correctly")
+    func fileRoundtrip() throws {
+        let date = makeDate(2026, 3, 15)
+        let expense = ExpenseModel(name: "Lunch", type: NECESSARY, amount: 12.0, date: date, category: "Food")
+        let csv = generateCSV(from: [expense])
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("ispend-test-roundtrip.csv")
+        try csv.write(to: url, atomically: true, encoding: .utf8)
+        let content = try String(contentsOf: url, encoding: .utf8)
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(failedRows == 0)
+        #expect(parsed.count == 1)
+        #expect(parsed.first?.name == "Lunch")
+        #expect(parsed.first?.amount == 12.0)
+    }
+
+    @Test("File export of N expenses produces a file with N data rows plus the header")
+    func multipleExpensesLineCount() throws {
+        let date = makeDate(2026, 3, 15)
+        let expenses = (1...3).map { i in
+            ExpenseModel(name: "Item \(i)", type: NECESSARY, amount: Double(i) * 10.0, date: date)
+        }
+        let csv = generateCSV(from: expenses)
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("ispend-test-count.csv")
+        try csv.write(to: url, atomically: true, encoding: .utf8)
+        let content = try String(contentsOf: url, encoding: .utf8)
+        let lines = content.components(separatedBy: "\n").filter { !$0.isEmpty }
+        #expect(lines.count == 4) // 1 header + 3 data rows
+    }
+
+    @Test("Exported file uses the .csv extension")
+    func fileExtension() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("ispend-\(formatter.string(from: Date())).csv")
+        #expect(url.pathExtension == "csv")
+        #expect(url.lastPathComponent.hasPrefix("ispend-"))
+    }
+
+    @Test("File exported from generateCSV is UTF-8 encoded and readable as String")
+    func fileIsUTF8() throws {
+        let expense = ExpenseModel(name: "Café", type: NECESSARY, amount: 3.0)
+        let csv = generateCSV(from: [expense])
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("ispend-test-utf8.csv")
+        try csv.write(to: url, atomically: true, encoding: .utf8)
+        let content = try String(contentsOf: url, encoding: .utf8)
+        #expect(content.contains("Café"))
+    }
+}
+
+// MARK: - Import from Clipboard Logic
+
+@Suite("Import from Clipboard Logic")
+struct ImportFromClipboardLogicTests {
+
+    private func makeDate(_ year: Int, _ month: Int, _ day: Int) -> Date {
+        var comps = DateComponents()
+        comps.year = year; comps.month = month; comps.day = day
+        return Calendar.current.date(from: comps) ?? Date()
+    }
+
+    @Test("Valid CSV written to clipboard can be read and parsed into expenses")
+    func validCSVParsesFromClipboard() {
+        let date = makeDate(2026, 3, 15)
+        let expense = ExpenseModel(name: "Groceries", type: NECESSARY, amount: 55.0, date: date, category: "Food")
+        UIPasteboard.general.string = generateCSV(from: [expense])
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(failedRows == 0)
+        #expect(parsed.first?.name == "Groceries")
+        #expect(parsed.first?.amount == 55.0)
+    }
+
+    @Test("Non-CSV text on clipboard produces no valid expenses")
+    func invalidCSVOnClipboard() {
+        UIPasteboard.general.string = "this is not csv data at all"
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, _) = parseCSV(content)
+        #expect(parsed.isEmpty)
+    }
+
+    @Test("Empty string on clipboard produces empty result with zero failures")
+    func emptyClipboard() {
+        UIPasteboard.general.string = ""
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(parsed.isEmpty)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Header-only clipboard content produces no expenses and no failures")
+    func headerOnlyClipboard() {
+        UIPasteboard.general.string = "date,name,expenseType,amount,note,category,discretionaryValue"
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(parsed.isEmpty)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Multiple expenses on clipboard are all parsed correctly")
+    func multipleExpensesOnClipboard() {
+        let date = makeDate(2026, 3, 15)
+        let originals = (1...4).map { i in
+            ExpenseModel(name: "Expense \(i)", type: NECESSARY, amount: Double(i) * 5.0, date: date)
+        }
+        UIPasteboard.general.string = generateCSV(from: originals)
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(failedRows == 0)
+        #expect(parsed.count == 4)
+    }
+}
+
+// MARK: - Import Duplicate Detection
+
+/// Tests the deduplication logic used in performImport:
+/// a duplicate requires name + amount + same calendar day to all match.
+@Suite("Import Duplicate Detection")
+struct ImportDuplicateDetectionTests {
+
+    private let calendar = Calendar.current
+
+    private func makeDate(_ year: Int, _ month: Int, _ day: Int) -> Date {
+        var comps = DateComponents()
+        comps.year = year; comps.month = month; comps.day = day
+        return Calendar.current.date(from: comps) ?? Date()
+    }
+
+    private func isDuplicate(_ incoming: ExpenseModel, among existing: [ExpenseModel]) -> Bool {
+        existing.contains { e in
+            e.name == incoming.name &&
+            e.amount == incoming.amount &&
+            calendar.isDate(e.date, inSameDayAs: incoming.date)
+        }
+    }
+
+    @Test("Exact match on name, amount, and date is a duplicate")
+    func exactMatchIsDuplicate() {
+        let date = makeDate(2026, 3, 15)
+        let existing = [ExpenseModel(name: "Coffee", amount: 4.50, date: date)]
+        let incoming = ExpenseModel(name: "Coffee", amount: 4.50, date: date)
+        #expect(isDuplicate(incoming, among: existing))
+    }
+
+    @Test("Same name and date but different amount is not a duplicate")
+    func differentAmountNotDuplicate() {
+        let date = makeDate(2026, 3, 15)
+        let existing = [ExpenseModel(name: "Coffee", amount: 4.50, date: date)]
+        let incoming = ExpenseModel(name: "Coffee", amount: 5.00, date: date)
+        #expect(!isDuplicate(incoming, among: existing))
+    }
+
+    @Test("Same name and amount but different day is not a duplicate")
+    func differentDayNotDuplicate() {
+        let existing = [ExpenseModel(name: "Coffee", amount: 4.50, date: makeDate(2026, 3, 15))]
+        let incoming = ExpenseModel(name: "Coffee", amount: 4.50, date: makeDate(2026, 3, 16))
+        #expect(!isDuplicate(incoming, among: existing))
+    }
+
+    @Test("Different name with same amount and date is not a duplicate")
+    func differentNameNotDuplicate() {
+        let date = makeDate(2026, 3, 15)
+        let existing = [ExpenseModel(name: "Coffee", amount: 4.50, date: date)]
+        let incoming = ExpenseModel(name: "Tea", amount: 4.50, date: date)
+        #expect(!isDuplicate(incoming, among: existing))
+    }
+
+    @Test("Same expense on same day at a different time of day is still a duplicate")
+    func sameDayDifferentTimeIsDuplicate() {
+        let morning = makeDate(2026, 3, 15).addingTimeInterval(8 * 3600)
+        let evening = makeDate(2026, 3, 15).addingTimeInterval(18 * 3600)
+        let existing = [ExpenseModel(name: "Coffee", amount: 4.50, date: morning)]
+        let incoming = ExpenseModel(name: "Coffee", amount: 4.50, date: evening)
+        #expect(isDuplicate(incoming, among: existing))
+    }
+
+    @Test("No duplicates are detected against an empty existing list")
+    func emptyExistingListNoDuplicate() {
+        let incoming = ExpenseModel(name: "Coffee", amount: 4.50, date: makeDate(2026, 3, 15))
+        #expect(!isDuplicate(incoming, among: []))
+    }
+
+    @Test("One matching expense among several existing ones is correctly detected")
+    func oneDuplicateAmongMany() {
+        let date = makeDate(2026, 3, 15)
+        let existing = [
+            ExpenseModel(name: "Rent", amount: 1500.0, date: date),
+            ExpenseModel(name: "Coffee", amount: 4.50, date: date),
+            ExpenseModel(name: "Groceries", amount: 55.0, date: date),
+        ]
+        let incoming = ExpenseModel(name: "Coffee", amount: 4.50, date: date)
+        #expect(isDuplicate(incoming, among: existing))
+    }
+
+    @Test("Expense from a previous month with the same name and amount is not a duplicate")
+    func sameNameAmountDifferentMonthNotDuplicate() {
+        let existing = [ExpenseModel(name: "Netflix", amount: 15.99, date: makeDate(2026, 2, 1))]
+        let incoming = ExpenseModel(name: "Netflix", amount: 15.99, date: makeDate(2026, 3, 1))
+        #expect(!isDuplicate(incoming, among: existing))
     }
 }

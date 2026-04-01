@@ -12,7 +12,9 @@ struct SummaryView: View {
     @Environment(\.modelContext) private var modelContext
     let expenses: [ExpenseModel]
     let label: String
-    let budget: BudgetModel
+    @Bindable var budget: BudgetModel
+    @State private var isEditingBudget = false
+    @State private var budgetAmountText = ""
 
     var totalExpenses: Double {
         expenses.reduce(0) { $0 + $1.amount }
@@ -23,45 +25,78 @@ struct SummaryView: View {
     }
 
     var balanceColor: Color {
-        if balance < 0 {
-            return Color.red
-        }
-        return Color.blue
+        balance < 0 ? .red : .blue
+    }
+
+    private var progressBar: some View {
+        let rawProgress = budget.amount > 0 ? totalExpenses / budget.amount : 0
+        let clampedProgress = min(max(rawProgress, 0), 1.0)
+        let barColor: Color = rawProgress < 0.6 ? .green : rawProgress < 0.9 ? .orange : .red
+        return ProgressView(value: clampedProgress)
+            .tint(barColor)
+            .animation(.easeInOut(duration: 0.3), value: clampedProgress)
     }
 
     var body: some View {
-        VStack {
-
+        VStack(spacing: 6) {
             HStack {
-                Text(budget.budgetPeriod.rawValue)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                Text("Budget Period:")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                Picker("", selection: $budget.periodMap) {
+                    ForEach(BudgetPeriod.allCases, id: \.intValue) { period in
+                        Text(period.rawValue).tag(period.intValue)
+                    }
+                }
+                .pickerStyle(.menu)
+                .font(.subheadline)
+                .labelsHidden()
                 Spacer()
                 Text(budget.periodLabel)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
             }
 
             Divider()
 
             HStack {
-                Text("Total:").font(.headline).fontWeight(.bold)
-                Text("\(totalExpenses, format: .localCurrency)").fontWeight(.bold).foregroundColor(balanceColor).frame(maxWidth: .infinity, alignment: .trailing).font(.headline)
-            }.frame(maxWidth: .infinity, alignment: .leading)
+                statColumn(label: "Spent", value: totalExpenses, color: balanceColor)
+                Spacer()
+                Button {
+                    budgetAmountText = String(format: "%.2f", budget.amount)
+                    isEditingBudget = true
+                } label: {
+                    statColumn(label: "Budget ✎", value: budget.amount, color: .blue)
+                }
+                .buttonStyle(.plain)
+                Spacer()
+                statColumn(label: "Remaining", value: balance, color: balanceColor)
+            }
 
-            Divider()
-            
-            HStack {
-                Text("Budget:").font(.subheadline).padding(.trailing)
-                Text("\(budget.amount, format: .localCurrency)").font(.subheadline).padding(.trailing).frame(maxWidth: .infinity, alignment: .trailing)
-            }.frame(maxWidth: .infinity, alignment: .leading)
-            
-            Divider()
-           
-            HStack {
-                Text("Remaining:").font(.subheadline).padding(.trailing)
-                Text("\(balance, format: .localCurrency)").foregroundColor(balanceColor).font(.subheadline).padding(.trailing).frame(maxWidth: .infinity, alignment: .trailing)
-            }.frame(maxWidth: .infinity, alignment: .leading)
+            progressBar
         }
+        .alert("Edit Budget", isPresented: $isEditingBudget) {
+            TextField("Amount", text: $budgetAmountText)
+                .keyboardType(.decimalPad)
+            Button("Save") {
+                if let value = Double(budgetAmountText), value >= 0 {
+                    budget.amount = value
+                }
+            }
+            Button("Cancel", role: .cancel) { }
+        }
+    }
+
+    private func statColumn(label: String, value: Double, color: Color) -> some View {
+        VStack(alignment: .center, spacing: 2) {
+            Text(value, format: .localCurrency)
+                .font(.body)
+                .fontWeight(.bold)
+                .foregroundColor(color)
+            Text(label)
+                .font(.caption)
+                .foregroundStyle(.primary)
+        }
+        .frame(maxWidth: .infinity)
     }
 }

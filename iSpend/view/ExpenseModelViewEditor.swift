@@ -97,6 +97,18 @@ struct ExpenseModelViewEditor: View {
         }
     }
 
+    private var priorityLabel: String {
+        switch expenseModel.discretionaryValue {
+        case 1: return "Essential"
+        case 2: return "Important"
+        case 3: return "Necessary"
+        case 4: return "Could Skip"
+        case 5: return "Discretionary"
+        case 6: return "Indulgent"
+        default: return "Luxury"
+        }
+    }
+
     private var reflectionSection: some View {
         Section {
             Text(messageToReflectOn)
@@ -148,32 +160,32 @@ struct ExpenseModelViewEditor: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
 
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Text("Priority:")
-                        Text(expenseModel.expenseType.rawValue)
-                            .fontWeight(.bold)
-                            .foregroundColor(typeColor)
                         Spacer()
-                        Text(String(format: "%.0f", expenseModel.discretionaryValue))
-                            .foregroundColor(.secondary)
+                        Text(priorityLabel)
+                            .fontWeight(.semibold)
+                            .foregroundColor(typeColor)
+                            .animation(.easeInOut(duration: 0.15), value: priorityLabel)
                     }
 
                     Slider(value: $expenseModel.discretionaryValue, in: 1...7, step: 1)
-                        .accentColor(typeColor)
+                        .tint(typeColor)
                         .onChange(of: expenseModel.discretionaryValue) { _, newValue in
                             expenseModel.typeMap = newValue > 3 ? DISCRETIONARY : NECESSARY
                         }
-                }
 
-                typePicker
-                    .onChange(of: expenseModel.expenseType) {
-                        if expenseModel.expenseType == .necessary {
-                            expenseModel.discretionaryValue = 1
-                        } else {
-                            expenseModel.discretionaryValue = 7
-                        }
+                    HStack {
+                        Text("Essential")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text("Luxury")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
+                }
 
                 TextField("Notes", text: $expenseModel.note)
                     .submitLabel(.done)
@@ -185,12 +197,14 @@ struct ExpenseModelViewEditor: View {
             .ignoresSafeArea(.keyboard, edges: .bottom)
             .scrollDismissesKeyboard(.interactively)
             .navigationTitle("Expense Editor")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
                         saveActivity()
                         dismiss()
-                    }.disabled(disableSave)
+                    }
+                    .disabled(disableSave)
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Cancel") {

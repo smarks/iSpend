@@ -11,6 +11,7 @@ struct DataManagementView: View {
 
     // Export
     @State private var showShareSheet = false
+    @State private var exportURL: URL?
 
     // Resets
     @State private var showExpenseResetConfirm = false
@@ -20,6 +21,7 @@ struct DataManagementView: View {
     // Import
     @State private var showFileImporter = false
     @State private var pendingImportExpenses: [ExpenseModel] = []
+    @State private var pendingFailedRows = 0
     @State private var showImportOptions = false
     @State private var importResultMessage = ""
     @State private var showImportResultAlert = false
@@ -70,6 +72,7 @@ struct DataManagementView: View {
                 }
             }
             .navigationTitle("Data Management")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") { dismiss() }
@@ -92,8 +95,10 @@ struct DataManagementView: View {
                 }
             }
             .sheet(isPresented: $showShareSheet) {
-                ActivityShareSheet(items: [csvExportURL])
-                    .ignoresSafeArea()
+                if let url = exportURL {
+                    ActivityShareSheet(items: [url])
+                        .ignoresSafeArea()
+                }
             }
             .fileImporter(
                 isPresented: $showFileImporter,
@@ -136,16 +141,22 @@ struct DataManagementView: View {
         // Copy to clipboard so Import from Clipboard works immediately after
         UIPasteboard.general.setValue(csv, forPasteboardType: UTType.commaSeparatedText.identifier)
         UIPasteboard.general.string = csv
-        showShareSheet = true
+        do {
+            exportURL = try makeCSVExportURL(csv: csv)
+            showShareSheet = true
+        } catch {
+            errorMessage = "Export failed: \(error.localizedDescription)"
+            showErrorAlert = true
+        }
     }
 
     /// Writes CSV to a dated temp file and returns its URL for the share sheet.
-    private var csvExportURL: URL {
+    private func makeCSVExportURL(csv: String) throws -> URL {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let url = FileManager.default.temporaryDirectory
             .appendingPathComponent("ispend-\(formatter.string(from: Date())).csv")
-        try? generateCSV(from: expenses).write(to: url, atomically: true, encoding: .utf8)
+        try csv.write(to: url, atomically: true, encoding: .utf8)
         return url
     }
 
@@ -192,6 +203,7 @@ struct DataManagementView: View {
             return
         }
         pendingImportExpenses = parsed
+        pendingFailedRows = failedRows
         showImportOptions = true
     }
 
@@ -222,9 +234,12 @@ struct DataManagementView: View {
             }
         }
 
+        let failedRows = pendingFailedRows
         pendingImportExpenses = []
+        pendingFailedRows = 0
         var message = "\(insertedCount) record(s) imported."
         if skippedCount > 0 { message += " \(skippedCount) duplicate(s) skipped." }
+        if failedRows > 0 { message += " \(failedRows) row(s) could not be parsed." }
         importResultMessage = message
         showImportResultAlert = true
     }

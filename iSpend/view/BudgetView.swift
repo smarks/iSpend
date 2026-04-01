@@ -60,6 +60,7 @@ struct BudgetsView: View {
                 }
             }
             .navigationTitle("Set Budgets")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {

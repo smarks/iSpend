@@ -819,3 +819,233 @@ struct BudgetPeriodDateRangeTests {
         #expect(budget.periodLabel.contains("–"))
     }
 }
+
+// MARK: - CSV Parsing
+
+@Suite("parseCSV")
+struct CSVParsingTests {
+
+    // Returns the short-style date string that generateCSV/parseCSV use.
+    private func csvDateString(year: Int, month: Int, day: Int) -> String {
+        var comps = DateComponents()
+        comps.year = year; comps.month = month; comps.day = day
+        let date = Calendar.current.date(from: comps) ?? Date()
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
+    }
+
+    private func makeDate(year: Int, month: Int, day: Int) -> Date {
+        var comps = DateComponents()
+        comps.year = year; comps.month = month; comps.day = day
+        return Calendar.current.date(from: comps) ?? Date()
+    }
+
+    private func singleRowCSV(dateStr: String, name: String = "Item", type expenseType: String = "Necessary",
+                               amount: Double = 5.0, note: String = "", category: String = "None",
+                               discretionaryValue: Double = 0.0) -> String {
+        let escapedName = name.replacingOccurrences(of: "\"", with: "\"\"")
+        let escapedNote = note.replacingOccurrences(of: "\"", with: "\"\"")
+        let header = "date,name,expenseType,amount,note,category,discretionaryValue"
+        let row = "\"\(dateStr)\",\"\(escapedName)\",\(expenseType),\(amount),\"\(escapedNote)\",\"\(category)\",\(discretionaryValue)"
+        return "\(header)\n\(row)\n"
+    }
+
+    @Test("Empty string returns empty array and zero failed rows")
+    func emptyString() {
+        let (expenses, failedRows) = parseCSV("")
+        #expect(expenses.isEmpty)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Header-only input returns empty array and zero failed rows")
+    func headerOnly() {
+        let (expenses, failedRows) = parseCSV("date,name,expenseType,amount,note,category,discretionaryValue\n")
+        #expect(expenses.isEmpty)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Single valid row produces one expense and zero failed rows")
+    func singleValidRow() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), name: "Coffee", amount: 4.5)
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.count == 1)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Name field is parsed correctly")
+    func parsedName() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), name: "Groceries")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.name == "Groceries")
+    }
+
+    @Test("Amount field is parsed correctly")
+    func parsedAmount() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), amount: 12.75)
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.amount == 12.75)
+    }
+
+    @Test("Note field is parsed correctly")
+    func parsedNote() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), note: "extra shot")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.note == "extra shot")
+    }
+
+    @Test("Category field is parsed correctly")
+    func parsedCategory() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), category: "Bills")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.category == "Bills")
+    }
+
+    @Test("DiscretionaryValue field is parsed correctly")
+    func parsedDiscretionaryValue() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), discretionaryValue: 6.0)
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.discretionaryValue == 6.0)
+    }
+
+    @Test("Necessary expenseType is parsed to .necessary")
+    func necessaryType() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), type: "Necessary")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.expenseType == .necessary)
+    }
+
+    @Test("Discretionary expenseType is parsed to .discretionary")
+    func discretionaryType() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), type: "Discretionary")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.expenseType == .discretionary)
+    }
+
+    @Test("Unknown expenseType string defaults to .necessary")
+    func unknownTypeDefaultsToNecessary() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), type: "BogusType")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.expenseType == .necessary)
+    }
+
+    @Test("Empty category string is stored as 'None'")
+    func emptyCategoryBecomesNone() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), category: "")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.category == "None")
+    }
+
+    @Test("Multiple valid rows are all parsed")
+    func multipleRows() {
+        let dateStr = csvDateString(year: 2026, month: 3, day: 15)
+        let header = "date,name,expenseType,amount,note,category,discretionaryValue"
+        let rows = (1...5).map { i in "\"\(dateStr)\",\"Item \(i)\",Necessary,\(Double(i)),\"\",\"None\",0.0" }
+        let csv = header + "\n" + rows.joined(separator: "\n") + "\n"
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.count == 5)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Row with too few columns increments failedRows and produces no expense")
+    func tooFewColumns() {
+        let csv = "date,name,expenseType,amount,note,category,discretionaryValue\n\"1/1/26\",\"Item\"\n"
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.isEmpty)
+        #expect(failedRows == 1)
+    }
+
+    @Test("Row with an invalid date increments failedRows")
+    func invalidDate() {
+        let csv = "date,name,expenseType,amount,note,category,discretionaryValue\n\"not-a-date\",\"Item\",Necessary,5.0,\"\",\"None\",0.0\n"
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.isEmpty)
+        #expect(failedRows == 1)
+    }
+
+    @Test("Row with a non-numeric amount increments failedRows")
+    func invalidAmount() {
+        let dateStr = csvDateString(year: 2026, month: 3, day: 15)
+        let csv = "date,name,expenseType,amount,note,category,discretionaryValue\n\"\(dateStr)\",\"Item\",Necessary,notanumber,\"\",\"None\",0.0\n"
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.isEmpty)
+        #expect(failedRows == 1)
+    }
+
+    @Test("Mix of valid and invalid rows: valid ones returned, invalid counted")
+    func mixedValidAndInvalid() {
+        let dateStr = csvDateString(year: 2026, month: 3, day: 15)
+        let csv = """
+        date,name,expenseType,amount,note,category,discretionaryValue
+        "\(dateStr)","Coffee",Necessary,4.5,"","Food",0.0
+        "bad-date","Broken",Necessary,5.0,"","None",0.0
+        "\(dateStr)","Tea",Necessary,2.0,"","Food",0.0
+        """
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.count == 2)
+        #expect(failedRows == 1)
+    }
+
+    @Test("Escaped double-quotes inside a quoted field are unescaped")
+    func escapedQuotesUnescaped() {
+        // The name in the CSV is: ""Fancy"" Dinner  →  parsed as: "Fancy" Dinner
+        let dateStr = csvDateString(year: 2026, month: 3, day: 15)
+        let csv = "date,name,expenseType,amount,note,category,discretionaryValue\n\"\(dateStr)\",\"\"\"Fancy\"\" Dinner\",Necessary,80.0,\"\",\"None\",0.0\n"
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.name == "\"Fancy\" Dinner")
+    }
+
+    @Test("Comma inside a quoted field does not split the field")
+    func commaInQuotedField() {
+        let dateStr = csvDateString(year: 2026, month: 3, day: 15)
+        let csv = singleRowCSV(dateStr: dateStr, name: "Salt, Pepper")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.name == "Salt, Pepper")
+    }
+
+    @Test("Windows CRLF line endings are handled correctly")
+    func windowsLineEndings() {
+        let dateStr = csvDateString(year: 2026, month: 3, day: 15)
+        let csv = "date,name,expenseType,amount,note,category,discretionaryValue\r\n\"\(dateStr)\",\"Item\",Necessary,5.0,\"\",\"Food\",0.0\r\n"
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.count == 1)
+        #expect(failedRows == 0)
+    }
+
+    @Test("generateCSV → parseCSV roundtrip preserves all non-date fields")
+    func generateParseRoundtrip() {
+        let date = makeDate(year: 2026, month: 3, day: 15)
+        let originals = [
+            ExpenseModel(name: "Coffee", type: NECESSARY, amount: 4.5, note: "morning", date: date, category: "Food", discretionaryValue: 1.0),
+            ExpenseModel(name: "Games", type: DISCRETIONARY, amount: 60.0, note: "", date: date, category: "Entertainment", discretionaryValue: 6.0),
+            ExpenseModel(name: "\"Fancy\" Dinner", type: NECESSARY, amount: 95.0, note: "special, occasion", date: date, category: "None", discretionaryValue: 0.0)
+        ]
+        let csv = generateCSV(from: originals)
+        let (parsed, failedRows) = parseCSV(csv)
+        #expect(failedRows == 0)
+        #expect(parsed.count == originals.count)
+        for (original, parsedExpense) in zip(originals, parsed) {
+            #expect(parsedExpense.name == original.name)
+            #expect(parsedExpense.amount == original.amount)
+            #expect(parsedExpense.expenseType == original.expenseType)
+            #expect(parsedExpense.note == original.note)
+            #expect(parsedExpense.category == original.category)
+            #expect(parsedExpense.discretionaryValue == original.discretionaryValue)
+        }
+    }
+
+    @Test("generateCSV → parseCSV roundtrip preserves the date (day precision)")
+    func roundtripPreservesDate() {
+        let date = makeDate(year: 2026, month: 3, day: 15)
+        let original = ExpenseModel(name: "Test", type: NECESSARY, amount: 1.0, date: date)
+        let csv = generateCSV(from: [original])
+        let (parsed, _) = parseCSV(csv)
+        guard let parsedExpense = parsed.first else {
+            Issue.record("No expense was parsed")
+            return
+        }
+        let calendar = Calendar.current
+        #expect(calendar.isDate(parsedExpense.date, inSameDayAs: date))
+    }
+}

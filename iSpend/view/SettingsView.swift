@@ -130,17 +130,18 @@ struct SettingsView: View {
 
 enum AppIconProvider {
     static func appIcon(in bundle: Bundle = .main) -> String {
-        if let iconFileName = bundle.object(forInfoDictionaryKey: "CFBundleIconFile") as? String {
+        if let iconFileName = bundle.object(forInfoDictionaryKey: "CFBundleIconFile") as? String,
+           !iconFileName.isEmpty {
             return iconFileName
         }
 
-        guard let icons = bundle.object(forInfoDictionaryKey: "CFBundleIcons") as? [String: Any],
-              let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
-              let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
-              let iconFileName = iconFiles.last else {
-            fatalError("Could not find icons in bundle")
+        if let icons = bundle.object(forInfoDictionaryKey: "CFBundleIcons") as? [String: Any],
+           let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
+           let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+           let iconFileName = iconFiles.last {
+            return iconFileName
         }
 
-        return iconFileName
+        return "" // Fallback: AboutView should handle an empty string gracefully
     }
 }

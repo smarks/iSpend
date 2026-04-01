@@ -49,6 +49,8 @@ struct CloudSyncStatusView: View {
                     self.iCloudAvailable = true
                 case .noAccount, .restricted, .couldNotDetermine:
                     self.iCloudAvailable = false
+                case .temporarilyUnavailable:
+                    self.iCloudAvailable = false
                 @unknown default:
                     self.iCloudAvailable = false
                 }

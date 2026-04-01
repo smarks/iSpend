@@ -29,13 +29,45 @@ struct ExpenseModelViewEditor: View {
     }
 
     private var categoryPicker: some View {
-        Picker("Category", selection: $expenseModel.category) {
-            Text("None").tag("None")
-            ForEach(categories, id: \.text) { category in
-                Text(category.text).tag(category.text)
+        VStack(alignment: .leading, spacing: 8) {
+            Picker("Category", selection: $selectedCategory) {
+                Text("None").tag("None")
+                ForEach(categories, id: \.text) { category in
+                    Text(category.text).tag(category.text)
+                }
+                Text("New Category…").tag("__new__")
+            }
+            .pickerStyle(MenuPickerStyle())
+            .onChange(of: selectedCategory) { _, newValue in
+                if newValue == "__new__" {
+                    isAddingNewCategory = true
+                    newCategoryText = ""
+                } else {
+                    isAddingNewCategory = false
+                    expenseModel.category = newValue
+                }
+            }
+
+            if isAddingNewCategory {
+                TextField("Type new category name", text: $newCategoryText)
+                    .submitLabel(.done)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .focused($isNewCategoryFocused)
+                    .onSubmit { finaliseNewCategory() }
+                    .onAppear { isNewCategoryFocused = true }
             }
         }
-        .pickerStyle(MenuPickerStyle())
+    }
+
+    private func finaliseNewCategory() {
+        let trimmed = newCategoryText.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return }
+        expenseModel.category = trimmed
+        if !categories.contains(where: { $0.text.lowercased() == trimmed.lowercased() }) {
+            modelContext.insert(EditableListItem(text: trimmed, type: CATEGORY))
+        }
+        isAddingNewCategory = false
+        selectedCategory = trimmed
     }
 
     private var datePicker: some View {
@@ -45,6 +77,7 @@ struct ExpenseModelViewEditor: View {
     init(expenseModel: ExpenseModel, isNew: Bool = false) {
         self.expenseModel = expenseModel
         self.isNew = isNew
+        self._selectedCategory = State(initialValue: expenseModel.category)
         if isNew {
             expenseModel.discretionaryValue = 1
         }
@@ -82,7 +115,12 @@ struct ExpenseModelViewEditor: View {
         }
     }
 
+    @State private var selectedCategory: String
+    @State private var isAddingNewCategory = false
+    @State private var newCategoryText = ""
+
     @FocusState private var isFocused: Bool
+    @FocusState private var isNewCategoryFocused: Bool
 
     var body: some View {
         NavigationStack {
@@ -165,6 +203,7 @@ struct ExpenseModelViewEditor: View {
     }
 
     private func saveActivity() {
+        if isAddingNewCategory { finaliseNewCategory() }
         if isNew {
             modelContext.insert(expenseModel)
         }

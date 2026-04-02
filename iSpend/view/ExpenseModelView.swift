@@ -14,9 +14,12 @@ struct ExpenseModelView: View {
     var isInPeriod: Bool = true
 
     private var priorityColor: Color {
+        // Must stay in sync with ExpenseModelViewEditor.typeColor
         switch expenseModel.discretionaryValue {
         case ...3: return .green
-        case ...5: return .orange
+        case 4:    return .yellow
+        case 5:    return .orange
+        case 6:    return Color(red: 0.95, green: 0.42, blue: 0.32)  // warm red
         default:   return .red
         }
     }

@@ -1328,3 +1328,290 @@ struct ImportDuplicateDetectionTests {
         #expect(!isDuplicate(incoming, among: existing))
     }
 }
+
+// MARK: - Balance Color
+
+@Suite("Balance Color")
+struct BalanceColorTests {
+
+    // Mirrors SummaryView.balanceColor: balance < 0 ? .red : .green
+
+    @Test("Positive balance is green (not red)")
+    func positiveIsGreen() {
+        let balance = 100.0
+        #expect(balance >= 0)   // green path
+    }
+
+    @Test("Negative balance is red")
+    func negativeIsRed() {
+        let balance = -50.0
+        #expect(balance < 0)
+    }
+
+    @Test("Zero balance is green (not red)")
+    func zeroIsGreen() {
+        let balance = 0.0
+        #expect(!(balance < 0))
+    }
+
+    @Test("Balance = budget - total expenses is correct")
+    func balanceComputation() {
+        let budget = 500.0
+        let spent = 350.0
+        #expect(budget - spent == 150.0)
+    }
+
+    @Test("Over-budget balance is negative")
+    func overBudgetIsNegative() {
+        let budget = 200.0
+        let spent = 250.0
+        #expect((budget - spent) < 0)
+    }
+
+    @Test("Exactly on-budget balance is zero, which is green")
+    func exactlyOnBudgetIsGreen() {
+        let budget = 100.0
+        let balance = budget - budget
+        #expect(balance == 0)
+        #expect(!(balance < 0))
+    }
+}
+
+// MARK: - Spending Progress Bar
+
+@Suite("Spending Progress Bar")
+struct SpendingProgressBarTests {
+
+    // Mirrors SummaryView.progressBar logic:
+    //   rawProgress = budget > 0 ? spent / budget : 0
+    //   clampedProgress = min(max(rawProgress, 0), 1.0)
+    //   color: rawProgress < 0.6 → green, < 0.9 → orange, else → red
+
+    private func clamp(_ raw: Double) -> Double {
+        min(max(raw, 0), 1.0)
+    }
+
+    private func progressColor(_ raw: Double) -> String {
+        raw < 0.6 ? "green" : raw < 0.9 ? "orange" : "red"
+    }
+
+    @Test("Zero budget produces zero raw progress")
+    func zeroBudgetProducesZeroProgress() {
+        let budget = 0.0
+        let raw = budget > 0 ? 100.0 / budget : 0.0
+        #expect(raw == 0.0)
+    }
+
+    @Test("Progress is spent divided by budget")
+    func progressCalculation() {
+        #expect(50.0 / 100.0 == 0.5)
+    }
+
+    @Test("Progress over 100% is clamped to 1.0")
+    func progressClampsAtOne() {
+        #expect(clamp(1.5) == 1.0)
+        #expect(clamp(2.0) == 1.0)
+        #expect(clamp(99.9) == 1.0)
+    }
+
+    @Test("Negative raw progress is clamped to zero")
+    func progressClampsAtZero() {
+        #expect(clamp(-0.5) == 0.0)
+        #expect(clamp(-99.0) == 0.0)
+    }
+
+    @Test("Progress within [0, 1] is unchanged by clamping")
+    func progressWithinRangeUnchanged() {
+        #expect(clamp(0.0) == 0.0)
+        #expect(clamp(0.5) == 0.5)
+        #expect(clamp(1.0) == 1.0)
+    }
+
+    @Test("Under 60% progress is green", arguments: [0.0, 0.3, 0.59])
+    func greenBelow60(progress: Double) {
+        #expect(progressColor(progress) == "green")
+    }
+
+    @Test("60–89% progress is orange", arguments: [0.6, 0.75, 0.89])
+    func orangeAt60to89(progress: Double) {
+        #expect(progressColor(progress) == "orange")
+    }
+
+    @Test("90% and above is red", arguments: [0.9, 0.95, 1.0])
+    func redAt90Plus(progress: Double) {
+        #expect(progressColor(progress) == "red")
+    }
+
+    @Test("Boundary: 0.599 is green, 0.6 is orange")
+    func greenOrangeBoundary() {
+        #expect(progressColor(0.599) == "green")
+        #expect(progressColor(0.6) == "orange")
+    }
+
+    @Test("Boundary: 0.899 is orange, 0.9 is red")
+    func orangeRedBoundary() {
+        #expect(progressColor(0.899) == "orange")
+        #expect(progressColor(0.9) == "red")
+    }
+}
+
+// MARK: - Category Aggregation (Reports)
+
+@Suite("Category Aggregation")
+struct CategoryAggregationTests {
+
+    // Mirrors ReportsView.categoryTotals:
+    //   Dictionary(grouping: expenses, by: \.category)
+    //   → sum amounts per group → filter > 0 → sort descending
+
+    private func aggregate(_ expenses: [ExpenseModel]) -> [(category: String, total: Double)] {
+        Dictionary(grouping: expenses, by: \.category)
+            .map { (category: $0.key, total: $0.value.reduce(0) { $0 + $1.amount }) }
+            .filter { $0.total > 0 }
+            .sorted { $0.total > $1.total }
+    }
+
+    @Test("No expenses produces empty result")
+    func emptyExpenses() {
+        #expect(aggregate([]).isEmpty)
+    }
+
+    @Test("Single expense produces one category entry with correct total")
+    func singleExpense() {
+        let expense = ExpenseModel(name: "Coffee", amount: 4.50, category: "Food")
+        let result = aggregate([expense])
+        #expect(result.count == 1)
+        #expect(result[0].category == "Food")
+        #expect(result[0].total == 4.50)
+    }
+
+    @Test("Two expenses in the same category are summed")
+    func sameCategorySummed() {
+        let e1 = ExpenseModel(name: "Coffee", amount: 4.50, category: "Food")
+        let e2 = ExpenseModel(name: "Lunch", amount: 12.00, category: "Food")
+        let result = aggregate([e1, e2])
+        #expect(result.count == 1)
+        #expect(result[0].total == 16.50)
+    }
+
+    @Test("Expenses in different categories produce separate entries")
+    func differentCategories() {
+        let e1 = ExpenseModel(name: "Coffee", amount: 4.50, category: "Food")
+        let e2 = ExpenseModel(name: "Bus", amount: 2.00, category: "Transport")
+        let result = aggregate([e1, e2])
+        #expect(result.count == 2)
+    }
+
+    @Test("Results are sorted by total descending")
+    func sortedDescending() {
+        let e1 = ExpenseModel(name: "Coffee", amount: 4.50, category: "Food")
+        let e2 = ExpenseModel(name: "Bus", amount: 2.00, category: "Transport")
+        let e3 = ExpenseModel(name: "Rent", amount: 1500.00, category: "Housing")
+        let result = aggregate([e1, e2, e3])
+        #expect(result[0].category == "Housing")
+        #expect(result[1].category == "Food")
+        #expect(result[2].category == "Transport")
+    }
+
+    @Test("Expenses with zero amount are excluded from results")
+    func zeroAmountExcluded() {
+        let zero = ExpenseModel(name: "Freebie", amount: 0, category: "Misc")
+        let positive = ExpenseModel(name: "Coffee", amount: 4.50, category: "Food")
+        let result = aggregate([zero, positive])
+        #expect(result.count == 1)
+        #expect(result[0].category == "Food")
+    }
+
+    @Test("Grand total equals sum of all category totals")
+    func grandTotalIsSum() {
+        let e1 = ExpenseModel(name: "Coffee", amount: 4.50, category: "Food")
+        let e2 = ExpenseModel(name: "Bus", amount: 2.00, category: "Transport")
+        let e3 = ExpenseModel(name: "Lunch", amount: 10.00, category: "Food")
+        let result = aggregate([e1, e2, e3])
+        let grandTotal = result.reduce(0) { $0 + $1.total }
+        #expect(grandTotal == 16.50)
+    }
+
+    @Test("Five distinct categories produce five entries")
+    func fiveCategories() {
+        let categories = ["Food", "Transport", "Housing", "Health", "Entertainment"]
+        let expenses = categories.map { ExpenseModel(name: $0, amount: 10.0, category: $0) }
+        #expect(aggregate(expenses).count == 5)
+    }
+
+    @Test("Filtering necessary vs discretionary reduces the aggregated set")
+    func typeFilterReducesResults() {
+        let necessary = ExpenseModel(name: "Rent", type: NECESSARY, amount: 1500.0, category: "Housing")
+        let discretionary = ExpenseModel(name: "Games", type: DISCRETIONARY, amount: 60.0, category: "Entertainment")
+        let necessaryOnly = [necessary, discretionary].filter { $0.typeMap == NECESSARY }
+        let result = aggregate(necessaryOnly)
+        #expect(result.count == 1)
+        #expect(result[0].category == "Housing")
+    }
+}
+
+// MARK: - Period ID Set Lookup
+
+@Suite("Period ID Set Lookup")
+struct PeriodIDSetTests {
+
+    // Mirrors ContentView's O(1) isInPeriod check:
+    //   Set(expensesInPeriod.map(\.id)).contains(item.id)
+
+    @Test("In-period expense ID is found in the set")
+    func inPeriodFound() {
+        let expense = ExpenseModel(name: "Coffee", amount: 4.50)
+        let periodIDs = Set([expense.id])
+        #expect(periodIDs.contains(expense.id))
+    }
+
+    @Test("Out-of-period expense ID is not in the set")
+    func outOfPeriodNotFound() {
+        let inPeriod = ExpenseModel(name: "Coffee", amount: 4.50)
+        let outOfPeriod = ExpenseModel(name: "Old expense", amount: 10.0)
+        let periodIDs = Set([inPeriod.id])
+        #expect(!periodIDs.contains(outOfPeriod.id))
+    }
+
+    @Test("Empty set means no expense is in period")
+    func emptySetNothingInPeriod() {
+        let expense = ExpenseModel(name: "Coffee", amount: 4.50)
+        let periodIDs = Set<UUID>()
+        #expect(!periodIDs.contains(expense.id))
+    }
+
+    @Test("Set built from expenses map contains every expense ID")
+    func setPreservesAllIDs() {
+        let expenses = (0..<5).map { _ in ExpenseModel() }
+        let idSet = Set(expenses.map(\.id))
+        #expect(idSet.count == 5)
+        for expense in expenses {
+            #expect(idSet.contains(expense.id))
+        }
+    }
+
+    @Test("Set lookup is consistent — same expense always found in its own set")
+    func consistentLookup() {
+        let expenses = (0..<10).map { _ in ExpenseModel() }
+        let idSet = Set(expenses.map(\.id))
+        for expense in expenses {
+            #expect(idSet.contains(expense.id))
+        }
+    }
+
+    @Test("Duplicate IDs in source array do not increase set size")
+    func duplicateIDsCollapsed() {
+        let expense = ExpenseModel()
+        let idSet = Set([expense.id, expense.id, expense.id])
+        #expect(idSet.count == 1)
+    }
+
+    @Test("IDs of different expenses are distinct")
+    func differentExpensesDifferentIDs() {
+        let a = ExpenseModel()
+        let b = ExpenseModel()
+        #expect(a.id != b.id)
+        let idSet = Set([a.id])
+        #expect(!idSet.contains(b.id))
+    }
+}

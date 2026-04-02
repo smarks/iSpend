@@ -24,9 +24,7 @@ struct ExpenseModelViewEditor: View {
 
     let types = [ExpenseType.necessary, ExpenseType.discretionary]
 
-    private var messageToReflectOn: String {
-        mediations.randomElement()?.text ?? "Take a moment to reflect on this purchase."
-    }
+    @State private var messageToReflectOn: String = ""
 
     private var categoryPicker: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -78,8 +76,12 @@ struct ExpenseModelViewEditor: View {
         self.expenseModel = expenseModel
         self.isNew = isNew
         self._selectedCategory = State(initialValue: expenseModel.category)
-        if isNew {
-            expenseModel.discretionaryValue = 1
+        // Normalize discretionaryValue to the slider range 1...7.
+        // Handles new expenses (default is 0) and old expenses saved before
+        // the slider existed. Seed based on typeMap so the slider starts in
+        // the right zone (necessary → 2 "Important", discretionary → 5 "Discretionary").
+        if expenseModel.discretionaryValue < 1 || expenseModel.discretionaryValue > 7 {
+            expenseModel.discretionaryValue = expenseModel.typeMap == DISCRETIONARY ? 5 : 2
         }
     }
 
@@ -88,12 +90,13 @@ struct ExpenseModelViewEditor: View {
     }
 
     private var typeColor: Color {
-        if expenseModel.discretionaryValue <= 3 {
-            return Color.green
-        } else if expenseModel.discretionaryValue <= 5 {
-            return Color.orange
-        } else {
-            return Color.red
+        // Must stay in sync with ExpenseModelView.priorityColor
+        switch expenseModel.discretionaryValue {
+        case ...3: return .green
+        case 4:    return .yellow
+        case 5:    return .orange
+        case 6:    return Color(red: 0.95, green: 0.42, blue: 0.32)  // warm red
+        default:   return .red
         }
     }
 
@@ -105,7 +108,8 @@ struct ExpenseModelViewEditor: View {
         case 4: return "Could Skip"
         case 5: return "Discretionary"
         case 6: return "Indulgent"
-        default: return "Luxury"
+        case 7: return "Luxury"
+        default: return "–"
         }
     }
 
@@ -196,6 +200,11 @@ struct ExpenseModelViewEditor: View {
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
             .scrollDismissesKeyboard(.interactively)
+            .onAppear {
+                if messageToReflectOn.isEmpty {
+                    messageToReflectOn = mediations.randomElement()?.text ?? "Take a moment to reflect on this purchase."
+                }
+            }
             .navigationTitle("Expense Editor")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

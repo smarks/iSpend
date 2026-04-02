@@ -79,7 +79,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section {
+                Section(header: sectionHeader("Overview", type: NECESSARY).allowsHitTesting(false)) {
                     OverviewView(
                         necessaryExpenses: necessaryExpenses,
                         discretionaryExpenses: discretionaryExpenses,

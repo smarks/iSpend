@@ -23,6 +23,7 @@
 		22851D982C73DE9B00240BD6 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22851D972C73DE9B00240BD6 /* Utils.swift */; };
 		2299EFB42C7A9C8300252AE1 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2299EFB32C7A9C8300252AE1 /* SummaryView.swift */; };
 		22B358CC2F7DCAC4002EC7A4 /* OverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B358CB2F7DCAC4002EC7A4 /* OverviewView.swift */; };
+		22B358CE2F7DE91C002EC7A4 /* ReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B358CD2F7DE91C002EC7A4 /* ReportsView.swift */; };
 		22C3457C2B9E534C0049D67D /* iSpendUnitTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C3457B2B9E534C0049D67D /* iSpendUnitTest.swift */; };
 		22CF97CA2E7B7B08001E0E80 /* EditableListManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22CF97C72E7B7B08001E0E80 /* EditableListManager.swift */; };
 		22D206FE2C7DF7410059DB2A /* EditableListItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22D206FD2C7DF7410059DB2A /* EditableListItemModel.swift */; };
@@ -75,6 +76,7 @@
 		22851D972C73DE9B00240BD6 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		2299EFB32C7A9C8300252AE1 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
 		22B358CB2F7DCAC4002EC7A4 /* OverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewView.swift; sourceTree = "<group>"; };
+		22B358CD2F7DE91C002EC7A4 /* ReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsView.swift; sourceTree = "<group>"; };
 		22C3457B2B9E534C0049D67D /* iSpendUnitTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iSpendUnitTest.swift; sourceTree = "<group>"; };
 		22C7D9652B97E27E00FA6A4D /* iSpend.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iSpend.entitlements; sourceTree = "<group>"; };
 		22CD64F92BFFD86E005565FF /* AppIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AppIcon.png; path = iSpend/Assets.xcassets/AppIcon.png; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				2258BCF92E7B63740093F84B /* Constants.swift */,
 				2253AB512E7DD19B002CE388 /* CloudSyncStatusView.swift */,
 				22B358CB2F7DCAC4002EC7A4 /* OverviewView.swift */,
+				22B358CD2F7DE91C002EC7A4 /* ReportsView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -382,6 +385,7 @@
 				2253AB522E7DD19B002CE388 /* CloudSyncStatusView.swift in Sources */,
 				22851D982C73DE9B00240BD6 /* Utils.swift in Sources */,
 				2276FDF02A70526300E0B60F /* ContentView.swift in Sources */,
+				22B358CE2F7DE91C002EC7A4 /* ReportsView.swift in Sources */,
 				22D2070A2C7E07200059DB2A /* AboutView.swift in Sources */,
 				22B358CC2F7DCAC4002EC7A4 /* OverviewView.swift in Sources */,
 				22D2070C2C7E22B20059DB2A /* DataManagementView.swift in Sources */,
@@ -412,7 +416,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 20;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
@@ -433,7 +437,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 20;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
@@ -455,7 +459,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 20;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
@@ -477,7 +481,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 20;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
@@ -627,7 +631,7 @@
 				CODE_SIGN_ENTITLEMENTS = iSpend/iSpend.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_ASSET_PATHS = "\"iSpend/Preview Content\"";
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				ENABLE_APP_SANDBOX = YES;
@@ -681,7 +685,7 @@
 				CODE_SIGN_ENTITLEMENTS = iSpend/iSpend.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_ASSET_PATHS = "\"iSpend/Preview Content\"";
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				ENABLE_APP_SANDBOX = YES;

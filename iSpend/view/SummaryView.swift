@@ -25,7 +25,7 @@ struct SummaryView: View {
     }
 
     var balanceColor: Color {
-        balance < 0 ? .red : .blue
+        balance < 0 ? .red : .green
     }
 
     private var progressBar: some View {

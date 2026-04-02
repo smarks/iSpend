@@ -33,6 +33,7 @@ struct SettingsView: View {
 
     @State private var showBudgetView: Bool = false
     @State private var showDataManagementView: Bool = false
+    @State private var showReportsView: Bool = false
     @State private var showCategoriesView: Bool = false
     @State private var showMediationsView: Bool = false
     @State private var showAboutView: Bool = false
@@ -62,6 +63,11 @@ struct SettingsView: View {
                             showBudgetView = true
                         } label: {
                             Text("Budgets")
+                        }
+                        Button {
+                            showReportsView = true
+                        } label: {
+                            Text("Reports")
                         }
                         Button {
                             showDataManagementView = true
@@ -109,6 +115,10 @@ struct SettingsView: View {
         }
         .sheet(isPresented: $showBudgetView) {
             BudgetsView(necessaryBudget: necessaryBudget, discretionaryBudget: discretionaryBudget)
+                .environment(\.modelContext, modelContext)
+        }
+        .sheet(isPresented: $showReportsView) {
+            ReportsView()
                 .environment(\.modelContext, modelContext)
         }
         .sheet(isPresented: $showDataManagementView) {

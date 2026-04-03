@@ -26,12 +26,23 @@ struct ExpenseModelViewEditor: View {
 
     @State private var messageToReflectOn: String = ""
 
+    /// All known category names from the query, plus the expense's current
+    /// category if it was deleted from Settings (prevents an orphaned selection).
+    private var categoryNames: [String] {
+        var names = categories.map(\.text)
+        let current = expenseModel.category
+        if current != "None" && !names.contains(current) {
+            names.append(current)
+        }
+        return names
+    }
+
     private var categoryPicker: some View {
         VStack(alignment: .leading, spacing: 8) {
             Picker("Category", selection: $selectedCategory) {
                 Text("None").tag("None")
-                ForEach(categories, id: \.text) { category in
-                    Text(category.text).tag(category.text)
+                ForEach(categoryNames, id: \.self) { name in
+                    Text(name).tag(name)
                 }
                 Text("New Category…").tag("__new__")
             }
@@ -58,14 +69,21 @@ struct ExpenseModelViewEditor: View {
     }
 
     private func finaliseNewCategory() {
-        let trimmed = newCategoryText.trimmingCharacters(in: .whitespaces)
+        let trimmed = newCategoryText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
-        expenseModel.category = trimmed
-        if !categories.contains(where: { $0.text.lowercased() == trimmed.lowercased() }) {
-            modelContext.insert(EditableListItem(text: trimmed, type: CATEGORY))
+        // Re-use existing category if one matches (case-insensitive) to avoid duplicates.
+        if let existing = categories.first(where: { $0.text.caseInsensitiveCompare(trimmed) == .orderedSame }) {
+            expenseModel.category = existing.text
+            selectedCategory = existing.text
+        } else {
+            let newItem = EditableListItem(text: trimmed, type: CATEGORY)
+            modelContext.insert(newItem)
+            // Save immediately so @Query picks it up and the Picker tag exists.
+            try? modelContext.save()
+            expenseModel.category = trimmed
+            selectedCategory = trimmed
         }
         isAddingNewCategory = false
-        selectedCategory = trimmed
     }
 
     private var datePicker: some View {
@@ -97,6 +115,16 @@ struct ExpenseModelViewEditor: View {
         case 5:    return .orange
         case 6:    return Color(red: 0.95, green: 0.42, blue: 0.32)  // warm red
         default:   return .red
+        }
+    }
+
+    private func colorForLevel(_ level: Int) -> Color {
+        switch level {
+        case 1...3: return .green
+        case 4:     return .yellow
+        case 5:     return .orange
+        case 6:     return Color(red: 0.95, green: 0.42, blue: 0.32)
+        default:    return .red
         }
     }
 
@@ -164,21 +192,38 @@ struct ExpenseModelViewEditor: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Text("Priority:")
                         Spacer()
                         Text(priorityLabel)
                             .fontWeight(.semibold)
                             .foregroundColor(typeColor)
+                            .contentTransition(.numericText())
                             .animation(.easeInOut(duration: 0.15), value: priorityLabel)
                     }
 
-                    Slider(value: $expenseModel.discretionaryValue, in: 1...7, step: 1)
-                        .tint(typeColor)
-                        .onChange(of: expenseModel.discretionaryValue) { _, newValue in
-                            expenseModel.typeMap = newValue > 3 ? DISCRETIONARY : NECESSARY
+                    HStack(spacing: 0) {
+                        ForEach(1...7, id: \.self) { level in
+                            Button {
+                                expenseModel.discretionaryValue = Double(level)
+                                expenseModel.typeMap = level > 3 ? DISCRETIONARY : NECESSARY
+                            } label: {
+                                Circle()
+                                    .fill(colorForLevel(level))
+                                    .frame(width: 30, height: 30)
+                                    .overlay {
+                                        if Int(expenseModel.discretionaryValue) == level {
+                                            Circle()
+                                                .strokeBorder(.white, lineWidth: 3)
+                                                .shadow(radius: 2)
+                                        }
+                                    }
+                            }
+                            .buttonStyle(.plain)
+                            .frame(maxWidth: .infinity)
                         }
+                    }
 
                     HStack {
                         Text("Essential")

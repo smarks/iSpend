@@ -59,8 +59,14 @@ struct EditableListManager: View {
     }
 
     private func addItem() {
-        guard !newItemText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
-        let newItem = EditableListItem(text: newItemText, type: itemType)
+        let trimmed = newItemText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        // Prevent duplicates (case-insensitive).
+        guard !items.contains(where: { $0.text.caseInsensitiveCompare(trimmed) == .orderedSame }) else {
+            newItemText = ""
+            return
+        }
+        let newItem = EditableListItem(text: trimmed, type: itemType)
         modelContext.insert(newItem)
         newItemText = ""
         do {

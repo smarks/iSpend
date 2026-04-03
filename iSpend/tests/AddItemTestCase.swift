@@ -615,3 +615,81 @@ struct DefaultDataInitTests {
         #expect(names.contains("Bills"))
     }
 }
+
+// MARK: - Budget period persistence
+
+@Suite("Budget period persistence")
+struct BudgetPeriodPersistenceTests {
+
+    private func makeContainer() throws -> ModelContainer {
+        let schema = Schema([ExpenseModel.self, BudgetModel.self, EditableListItem.self])
+        let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
+        return try ModelContainer(for: schema, configurations: [config])
+    }
+
+    @Test("Seeded budgets default to monthly period")
+    func seededBudgetsDefaultToMonthly() throws {
+        let container = try makeContainer()
+        let context = ModelContext(container)
+        try seedDefaultData(into: context)
+
+        let budgets = try context.fetch(FetchDescriptor<BudgetModel>())
+        for budget in budgets {
+            #expect(budget.periodMap == 2)
+            #expect(budget.budgetPeriod == .monthly)
+        }
+    }
+
+    @Test("Budget period persists after save and fetch")
+    func budgetPeriodPersists() throws {
+        let container = try makeContainer()
+        let context = ModelContext(container)
+
+        let budget = BudgetModel(type: NECESSARY, amount: 500)
+        budget.budgetPeriod = .weekly
+        context.insert(budget)
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<BudgetModel>())
+        #require(fetched.count == 1)
+        #expect(fetched[0].periodMap == 1)
+        #expect(fetched[0].budgetPeriod == .weekly)
+    }
+
+    @Test("Custom period days persist after save and fetch")
+    func customPeriodDaysPersist() throws {
+        let container = try makeContainer()
+        let context = ModelContext(container)
+
+        let budget = BudgetModel(type: DISCRETIONARY, amount: 200)
+        budget.budgetPeriod = .custom
+        budget.customPeriodDays = 14
+        context.insert(budget)
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<BudgetModel>())
+        #require(fetched.count == 1)
+        #expect(fetched[0].budgetPeriod == .custom)
+        #expect(fetched[0].customPeriodDays == 14)
+    }
+
+    @Test("Necessary and discretionary budgets can have independent periods")
+    func independentPeriods() throws {
+        let container = try makeContainer()
+        let context = ModelContext(container)
+
+        let necessary = BudgetModel(type: NECESSARY, amount: 1000)
+        necessary.budgetPeriod = .monthly
+        let discretionary = BudgetModel(type: DISCRETIONARY, amount: 300)
+        discretionary.budgetPeriod = .weekly
+        context.insert(necessary)
+        context.insert(discretionary)
+        try context.save()
+
+        let fetched = try context.fetch(FetchDescriptor<BudgetModel>())
+        let nec = fetched.first { $0.type == NECESSARY }
+        let disc = fetched.first { $0.type == DISCRETIONARY }
+        #expect(nec?.budgetPeriod == .monthly)
+        #expect(disc?.budgetPeriod == .weekly)
+    }
+}

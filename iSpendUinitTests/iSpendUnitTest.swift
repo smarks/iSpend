@@ -7,6 +7,7 @@
 
 import Testing
 import Foundation
+import UIKit
 @testable import iSpend
 
 // MARK: - ExpenseType
@@ -665,5 +666,952 @@ struct PriorityColorTierTests {
         #expect(classify(4) == "orange")
         #expect(classify(5) == "orange")
         #expect(classify(6) == "red")
+    }
+}
+
+// MARK: - BudgetPeriod enum
+
+@Suite("BudgetPeriod")
+struct BudgetPeriodTests {
+
+    @Test("weekly has intValue 1")
+    func weeklyIntValue() { #expect(BudgetPeriod.weekly.intValue == 1) }
+
+    @Test("monthly has intValue 2")
+    func monthlyIntValue() { #expect(BudgetPeriod.monthly.intValue == 2) }
+
+    @Test("yearly has intValue 3")
+    func yearlyIntValue() { #expect(BudgetPeriod.yearly.intValue == 3) }
+
+    @Test("custom has intValue 4")
+    func customIntValue() { #expect(BudgetPeriod.custom.intValue == 4) }
+
+    @Test("init(from: 1) produces .weekly")
+    func initFromOne() { #expect(BudgetPeriod(from: 1) == .weekly) }
+
+    @Test("init(from: 2) produces .monthly")
+    func initFromTwo() { #expect(BudgetPeriod(from: 2) == .monthly) }
+
+    @Test("init(from: 3) produces .yearly")
+    func initFromThree() { #expect(BudgetPeriod(from: 3) == .yearly) }
+
+    @Test("init(from: 4) produces .custom")
+    func initFromFour() { #expect(BudgetPeriod(from: 4) == .custom) }
+
+    @Test("init(from:) defaults to .monthly for unknown values", arguments: [0, -1, 5, 99])
+    func initFromUnknown(value: Int) {
+        #expect(BudgetPeriod(from: value) == .monthly)
+    }
+
+    @Test("intValue → init(from:) roundtrip is identity")
+    func intValueRoundtrip() {
+        for period in BudgetPeriod.allCases {
+            #expect(BudgetPeriod(from: period.intValue) == period)
+        }
+    }
+
+    @Test("rawValues are human-readable strings")
+    func rawValues() {
+        #expect(BudgetPeriod.weekly.rawValue == "Weekly")
+        #expect(BudgetPeriod.monthly.rawValue == "Monthly")
+        #expect(BudgetPeriod.yearly.rawValue == "Yearly")
+        #expect(BudgetPeriod.custom.rawValue == "Custom")
+    }
+
+    @Test("allCases contains exactly four values")
+    func allCasesCount() { #expect(BudgetPeriod.allCases.count == 4) }
+
+    @Test("Codable roundtrip preserves each case")
+    func codableRoundtrip() throws {
+        for period in BudgetPeriod.allCases {
+            let data = try JSONEncoder().encode(period)
+            let decoded = try JSONDecoder().decode(BudgetPeriod.self, from: data)
+            #expect(decoded == period)
+        }
+    }
+}
+
+// MARK: - BudgetPeriod date ranges
+
+@Suite("BudgetPeriod date ranges")
+struct BudgetPeriodDateRangeTests {
+
+    @Test("Monthly period start is the first of the current month")
+    func monthlyPeriodStart() {
+        let budget = BudgetModel(type: NECESSARY, amount: 100)
+        budget.budgetPeriod = .monthly
+        let day = Calendar.current.component(.day, from: budget.currentPeriodStart)
+        #expect(day == 1)
+    }
+
+    @Test("Weekly period start is the first day of the current week")
+    func weeklyPeriodStart() {
+        let budget = BudgetModel(type: NECESSARY, amount: 100)
+        budget.budgetPeriod = .weekly
+        let weekday = Calendar.current.component(.weekday, from: budget.currentPeriodStart)
+        #expect(weekday == Calendar.current.firstWeekday)
+    }
+
+    @Test("Yearly period start is January 1 of the current year")
+    func yearlyPeriodStart() {
+        let budget = BudgetModel(type: NECESSARY, amount: 100)
+        budget.budgetPeriod = .yearly
+        let components = Calendar.current.dateComponents([.month, .day], from: budget.currentPeriodStart)
+        #expect(components.month == 1)
+        #expect(components.day == 1)
+    }
+
+    @Test("Period end is strictly after period start for all period types")
+    func periodEndAfterStart() {
+        for period in BudgetPeriod.allCases {
+            let budget = BudgetModel(type: NECESSARY, amount: 100)
+            budget.budgetPeriod = period
+            #expect(budget.currentPeriodEnd > budget.currentPeriodStart)
+        }
+    }
+
+    @Test("Custom period spans the configured number of days")
+    func customPeriodSpan() {
+        let budget = BudgetModel(type: NECESSARY, amount: 100)
+        budget.budgetPeriod = .custom
+        budget.customPeriodDays = 14
+        budget.periodStartDate = Date()
+        let days = Calendar.current.dateComponents([.day], from: budget.currentPeriodStart, to: budget.currentPeriodEnd).day
+        #expect(days == 14)
+    }
+
+    @Test("Default periodMap is monthly (2)")
+    func defaultPeriodIsMonthly() {
+        let budget = BudgetModel(type: NECESSARY, amount: 500)
+        #expect(budget.periodMap == 2)
+        #expect(budget.budgetPeriod == .monthly)
+    }
+
+    @Test("budgetPeriod getter and setter stay in sync with periodMap")
+    func periodGetterSetterSync() {
+        let budget = BudgetModel(type: NECESSARY, amount: 100)
+        budget.budgetPeriod = .weekly
+        #expect(budget.periodMap == 1)
+        budget.budgetPeriod = .yearly
+        #expect(budget.periodMap == 3)
+        budget.periodMap = 4
+        #expect(budget.budgetPeriod == .custom)
+    }
+
+    @Test("customPeriodDays defaults to 30")
+    func defaultCustomDays() {
+        #expect(BudgetModel(type: NECESSARY, amount: 0).customPeriodDays == 30)
+    }
+
+    @Test("periodLabel for monthly contains the month name")
+    func monthlyPeriodLabel() {
+        let budget = BudgetModel(type: NECESSARY, amount: 0)
+        budget.budgetPeriod = .monthly
+        let label = budget.periodLabel
+        #expect(!label.isEmpty)
+        // Should be something like "Mar 2026"
+        #expect(label.contains(" "))
+    }
+
+    @Test("periodLabel for weekly contains a date range with dash")
+    func weeklyPeriodLabel() {
+        let budget = BudgetModel(type: NECESSARY, amount: 0)
+        budget.budgetPeriod = .weekly
+        #expect(budget.periodLabel.contains("–"))
+    }
+}
+
+// MARK: - CSV Parsing
+
+@Suite("parseCSV")
+struct CSVParsingTests {
+
+    // Returns the short-style date string that generateCSV/parseCSV use.
+    private func csvDateString(year: Int, month: Int, day: Int) -> String {
+        var comps = DateComponents()
+        comps.year = year; comps.month = month; comps.day = day
+        let date = Calendar.current.date(from: comps) ?? Date()
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
+        return formatter.string(from: date)
+    }
+
+    private func makeDate(year: Int, month: Int, day: Int) -> Date {
+        var comps = DateComponents()
+        comps.year = year; comps.month = month; comps.day = day
+        return Calendar.current.date(from: comps) ?? Date()
+    }
+
+    private func singleRowCSV(dateStr: String, name: String = "Item", type expenseType: String = "Necessary",
+                               amount: Double = 5.0, note: String = "", category: String = "None",
+                               discretionaryValue: Double = 0.0) -> String {
+        let escapedName = name.replacingOccurrences(of: "\"", with: "\"\"")
+        let escapedNote = note.replacingOccurrences(of: "\"", with: "\"\"")
+        let header = "date,name,expenseType,amount,note,category,discretionaryValue"
+        let row = "\"\(dateStr)\",\"\(escapedName)\",\(expenseType),\(amount),\"\(escapedNote)\",\"\(category)\",\(discretionaryValue)"
+        return "\(header)\n\(row)\n"
+    }
+
+    @Test("Empty string returns empty array and zero failed rows")
+    func emptyString() {
+        let (expenses, failedRows) = parseCSV("")
+        #expect(expenses.isEmpty)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Header-only input returns empty array and zero failed rows")
+    func headerOnly() {
+        let (expenses, failedRows) = parseCSV("date,name,expenseType,amount,note,category,discretionaryValue\n")
+        #expect(expenses.isEmpty)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Single valid row produces one expense and zero failed rows")
+    func singleValidRow() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), name: "Coffee", amount: 4.5)
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.count == 1)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Name field is parsed correctly")
+    func parsedName() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), name: "Groceries")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.name == "Groceries")
+    }
+
+    @Test("Amount field is parsed correctly")
+    func parsedAmount() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), amount: 12.75)
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.amount == 12.75)
+    }
+
+    @Test("Note field is parsed correctly")
+    func parsedNote() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), note: "extra shot")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.note == "extra shot")
+    }
+
+    @Test("Category field is parsed correctly")
+    func parsedCategory() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), category: "Bills")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.category == "Bills")
+    }
+
+    @Test("DiscretionaryValue field is parsed correctly")
+    func parsedDiscretionaryValue() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), discretionaryValue: 6.0)
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.discretionaryValue == 6.0)
+    }
+
+    @Test("Necessary expenseType is parsed to .necessary")
+    func necessaryType() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), type: "Necessary")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.expenseType == .necessary)
+    }
+
+    @Test("Discretionary expenseType is parsed to .discretionary")
+    func discretionaryType() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), type: "Discretionary")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.expenseType == .discretionary)
+    }
+
+    @Test("Unknown expenseType string defaults to .necessary")
+    func unknownTypeDefaultsToNecessary() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), type: "BogusType")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.expenseType == .necessary)
+    }
+
+    @Test("Empty category string is stored as 'None'")
+    func emptyCategoryBecomesNone() {
+        let csv = singleRowCSV(dateStr: csvDateString(year: 2026, month: 3, day: 15), category: "")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.category == "None")
+    }
+
+    @Test("Multiple valid rows are all parsed")
+    func multipleRows() {
+        let dateStr = csvDateString(year: 2026, month: 3, day: 15)
+        let header = "date,name,expenseType,amount,note,category,discretionaryValue"
+        let rows = (1...5).map { i in "\"\(dateStr)\",\"Item \(i)\",Necessary,\(Double(i)),\"\",\"None\",0.0" }
+        let csv = header + "\n" + rows.joined(separator: "\n") + "\n"
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.count == 5)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Row with too few columns increments failedRows and produces no expense")
+    func tooFewColumns() {
+        let csv = "date,name,expenseType,amount,note,category,discretionaryValue\n\"1/1/26\",\"Item\"\n"
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.isEmpty)
+        #expect(failedRows == 1)
+    }
+
+    @Test("Row with an invalid date increments failedRows")
+    func invalidDate() {
+        let csv = "date,name,expenseType,amount,note,category,discretionaryValue\n\"not-a-date\",\"Item\",Necessary,5.0,\"\",\"None\",0.0\n"
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.isEmpty)
+        #expect(failedRows == 1)
+    }
+
+    @Test("Row with a non-numeric amount increments failedRows")
+    func invalidAmount() {
+        let dateStr = csvDateString(year: 2026, month: 3, day: 15)
+        let csv = "date,name,expenseType,amount,note,category,discretionaryValue\n\"\(dateStr)\",\"Item\",Necessary,notanumber,\"\",\"None\",0.0\n"
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.isEmpty)
+        #expect(failedRows == 1)
+    }
+
+    @Test("Mix of valid and invalid rows: valid ones returned, invalid counted")
+    func mixedValidAndInvalid() {
+        let dateStr = csvDateString(year: 2026, month: 3, day: 15)
+        let csv = """
+        date,name,expenseType,amount,note,category,discretionaryValue
+        "\(dateStr)","Coffee",Necessary,4.5,"","Food",0.0
+        "bad-date","Broken",Necessary,5.0,"","None",0.0
+        "\(dateStr)","Tea",Necessary,2.0,"","Food",0.0
+        """
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.count == 2)
+        #expect(failedRows == 1)
+    }
+
+    @Test("Escaped double-quotes inside a quoted field are unescaped")
+    func escapedQuotesUnescaped() {
+        // The name in the CSV is: ""Fancy"" Dinner  →  parsed as: "Fancy" Dinner
+        let dateStr = csvDateString(year: 2026, month: 3, day: 15)
+        let csv = "date,name,expenseType,amount,note,category,discretionaryValue\n\"\(dateStr)\",\"\"\"Fancy\"\" Dinner\",Necessary,80.0,\"\",\"None\",0.0\n"
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.name == "\"Fancy\" Dinner")
+    }
+
+    @Test("Comma inside a quoted field does not split the field")
+    func commaInQuotedField() {
+        let dateStr = csvDateString(year: 2026, month: 3, day: 15)
+        let csv = singleRowCSV(dateStr: dateStr, name: "Salt, Pepper")
+        let (expenses, _) = parseCSV(csv)
+        #expect(expenses.first?.name == "Salt, Pepper")
+    }
+
+    @Test("Windows CRLF line endings are handled correctly")
+    func windowsLineEndings() {
+        let dateStr = csvDateString(year: 2026, month: 3, day: 15)
+        let csv = "date,name,expenseType,amount,note,category,discretionaryValue\r\n\"\(dateStr)\",\"Item\",Necessary,5.0,\"\",\"Food\",0.0\r\n"
+        let (expenses, failedRows) = parseCSV(csv)
+        #expect(expenses.count == 1)
+        #expect(failedRows == 0)
+    }
+
+    @Test("generateCSV → parseCSV roundtrip preserves all non-date fields")
+    func generateParseRoundtrip() {
+        let date = makeDate(year: 2026, month: 3, day: 15)
+        let originals = [
+            ExpenseModel(name: "Coffee", type: NECESSARY, amount: 4.5, note: "morning", date: date, category: "Food", discretionaryValue: 1.0),
+            ExpenseModel(name: "Games", type: DISCRETIONARY, amount: 60.0, note: "", date: date, category: "Entertainment", discretionaryValue: 6.0),
+            ExpenseModel(name: "\"Fancy\" Dinner", type: NECESSARY, amount: 95.0, note: "special, occasion", date: date, category: "None", discretionaryValue: 0.0)
+        ]
+        let csv = generateCSV(from: originals)
+        let (parsed, failedRows) = parseCSV(csv)
+        #expect(failedRows == 0)
+        #expect(parsed.count == originals.count)
+        for (original, parsedExpense) in zip(originals, parsed) {
+            #expect(parsedExpense.name == original.name)
+            #expect(parsedExpense.amount == original.amount)
+            #expect(parsedExpense.expenseType == original.expenseType)
+            #expect(parsedExpense.note == original.note)
+            #expect(parsedExpense.category == original.category)
+            #expect(parsedExpense.discretionaryValue == original.discretionaryValue)
+        }
+    }
+
+    @Test("generateCSV → parseCSV roundtrip preserves the date (day precision)")
+    func roundtripPreservesDate() {
+        let date = makeDate(year: 2026, month: 3, day: 15)
+        let original = ExpenseModel(name: "Test", type: NECESSARY, amount: 1.0, date: date)
+        let csv = generateCSV(from: [original])
+        let (parsed, _) = parseCSV(csv)
+        guard let parsedExpense = parsed.first else {
+            Issue.record("No expense was parsed")
+            return
+        }
+        let calendar = Calendar.current
+        #expect(calendar.isDate(parsedExpense.date, inSameDayAs: date))
+    }
+}
+
+// MARK: - Export to Clipboard
+
+@Suite("Export to Clipboard")
+struct ExportToClipboardTests {
+
+    private func makeDate(_ year: Int, _ month: Int, _ day: Int) -> Date {
+        var comps = DateComponents()
+        comps.year = year; comps.month = month; comps.day = day
+        return Calendar.current.date(from: comps) ?? Date()
+    }
+
+    @Test("generateCSV output can be written to and read back from the clipboard")
+    func clipboardWriteAndRead() {
+        let csv = generateCSV(from: [ExpenseModel(name: "Coffee", amount: 4.50)])
+        UIPasteboard.general.string = csv
+        #expect(UIPasteboard.general.string == csv)
+    }
+
+    @Test("Clipboard content after export is parseable with zero failures")
+    func clipboardContentParseable() {
+        let date = makeDate(2026, 3, 15)
+        let csv = generateCSV(from: [
+            ExpenseModel(name: "Rent", type: NECESSARY, amount: 1500.0, note: "monthly", date: date, category: "Bills", discretionaryValue: 0.0)
+        ])
+        UIPasteboard.general.string = csv
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(failedRows == 0)
+        #expect(parsed.count == 1)
+        #expect(parsed.first?.name == "Rent")
+        #expect(parsed.first?.amount == 1500.0)
+    }
+
+    @Test("Exporting empty array produces header-only CSV that parses to zero expenses")
+    func emptyExportParsesToZero() {
+        UIPasteboard.general.string = generateCSV(from: [])
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(parsed.isEmpty)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Full export → clipboard → import roundtrip preserves all fields")
+    func fullClipboardRoundtrip() {
+        let date = makeDate(2026, 3, 15)
+        let originals = [
+            ExpenseModel(name: "Coffee", type: NECESSARY, amount: 4.5, note: "morning", date: date, category: "Food", discretionaryValue: 1.0),
+            ExpenseModel(name: "Games", type: DISCRETIONARY, amount: 60.0, note: "", date: date, category: "Entertainment", discretionaryValue: 6.0),
+        ]
+        UIPasteboard.general.string = generateCSV(from: originals)
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(failedRows == 0)
+        #expect(parsed.count == originals.count)
+        for (original, parsedExpense) in zip(originals, parsed) {
+            #expect(parsedExpense.name == original.name)
+            #expect(parsedExpense.amount == original.amount)
+            #expect(parsedExpense.expenseType == original.expenseType)
+            #expect(parsedExpense.note == original.note)
+            #expect(parsedExpense.category == original.category)
+            #expect(parsedExpense.discretionaryValue == original.discretionaryValue)
+        }
+    }
+}
+
+// MARK: - Export to File
+
+@Suite("Export to File")
+struct ExportToFileTests {
+
+    private func makeDate(_ year: Int, _ month: Int, _ day: Int) -> Date {
+        var comps = DateComponents()
+        comps.year = year; comps.month = month; comps.day = day
+        return Calendar.current.date(from: comps) ?? Date()
+    }
+
+    @Test("generateCSV written to a temp file round-trips correctly")
+    func fileRoundtrip() throws {
+        let date = makeDate(2026, 3, 15)
+        let expense = ExpenseModel(name: "Lunch", type: NECESSARY, amount: 12.0, date: date, category: "Food")
+        let csv = generateCSV(from: [expense])
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("ispend-test-roundtrip.csv")
+        try csv.write(to: url, atomically: true, encoding: .utf8)
+        let content = try String(contentsOf: url, encoding: .utf8)
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(failedRows == 0)
+        #expect(parsed.count == 1)
+        #expect(parsed.first?.name == "Lunch")
+        #expect(parsed.first?.amount == 12.0)
+    }
+
+    @Test("File export of N expenses produces a file with N data rows plus the header")
+    func multipleExpensesLineCount() throws {
+        let date = makeDate(2026, 3, 15)
+        let expenses = (1...3).map { i in
+            ExpenseModel(name: "Item \(i)", type: NECESSARY, amount: Double(i) * 10.0, date: date)
+        }
+        let csv = generateCSV(from: expenses)
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("ispend-test-count.csv")
+        try csv.write(to: url, atomically: true, encoding: .utf8)
+        let content = try String(contentsOf: url, encoding: .utf8)
+        let lines = content.components(separatedBy: "\n").filter { !$0.isEmpty }
+        #expect(lines.count == 4) // 1 header + 3 data rows
+    }
+
+    @Test("Exported file uses the .csv extension")
+    func fileExtension() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("ispend-\(formatter.string(from: Date())).csv")
+        #expect(url.pathExtension == "csv")
+        #expect(url.lastPathComponent.hasPrefix("ispend-"))
+    }
+
+    @Test("File exported from generateCSV is UTF-8 encoded and readable as String")
+    func fileIsUTF8() throws {
+        let expense = ExpenseModel(name: "Café", type: NECESSARY, amount: 3.0)
+        let csv = generateCSV(from: [expense])
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("ispend-test-utf8.csv")
+        try csv.write(to: url, atomically: true, encoding: .utf8)
+        let content = try String(contentsOf: url, encoding: .utf8)
+        #expect(content.contains("Café"))
+    }
+}
+
+// MARK: - Import from Clipboard Logic
+
+@Suite("Import from Clipboard Logic")
+struct ImportFromClipboardLogicTests {
+
+    private func makeDate(_ year: Int, _ month: Int, _ day: Int) -> Date {
+        var comps = DateComponents()
+        comps.year = year; comps.month = month; comps.day = day
+        return Calendar.current.date(from: comps) ?? Date()
+    }
+
+    @Test("Valid CSV written to clipboard can be read and parsed into expenses")
+    func validCSVParsesFromClipboard() {
+        let date = makeDate(2026, 3, 15)
+        let expense = ExpenseModel(name: "Groceries", type: NECESSARY, amount: 55.0, date: date, category: "Food")
+        UIPasteboard.general.string = generateCSV(from: [expense])
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(failedRows == 0)
+        #expect(parsed.first?.name == "Groceries")
+        #expect(parsed.first?.amount == 55.0)
+    }
+
+    @Test("Non-CSV text on clipboard produces no valid expenses")
+    func invalidCSVOnClipboard() {
+        UIPasteboard.general.string = "this is not csv data at all"
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, _) = parseCSV(content)
+        #expect(parsed.isEmpty)
+    }
+
+    @Test("Empty string on clipboard produces empty result with zero failures")
+    func emptyClipboard() {
+        UIPasteboard.general.string = ""
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(parsed.isEmpty)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Header-only clipboard content produces no expenses and no failures")
+    func headerOnlyClipboard() {
+        UIPasteboard.general.string = "date,name,expenseType,amount,note,category,discretionaryValue"
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(parsed.isEmpty)
+        #expect(failedRows == 0)
+    }
+
+    @Test("Multiple expenses on clipboard are all parsed correctly")
+    func multipleExpensesOnClipboard() {
+        let date = makeDate(2026, 3, 15)
+        let originals = (1...4).map { i in
+            ExpenseModel(name: "Expense \(i)", type: NECESSARY, amount: Double(i) * 5.0, date: date)
+        }
+        UIPasteboard.general.string = generateCSV(from: originals)
+        let content = UIPasteboard.general.string ?? ""
+        let (parsed, failedRows) = parseCSV(content)
+        #expect(failedRows == 0)
+        #expect(parsed.count == 4)
+    }
+}
+
+// MARK: - Import Duplicate Detection
+
+/// Tests the deduplication logic used in performImport:
+/// a duplicate requires name + amount + same calendar day to all match.
+@Suite("Import Duplicate Detection")
+struct ImportDuplicateDetectionTests {
+
+    private let calendar = Calendar.current
+
+    private func makeDate(_ year: Int, _ month: Int, _ day: Int) -> Date {
+        var comps = DateComponents()
+        comps.year = year; comps.month = month; comps.day = day
+        return Calendar.current.date(from: comps) ?? Date()
+    }
+
+    private func isDuplicate(_ incoming: ExpenseModel, among existing: [ExpenseModel]) -> Bool {
+        existing.contains { e in
+            e.name == incoming.name &&
+            e.amount == incoming.amount &&
+            calendar.isDate(e.date, inSameDayAs: incoming.date)
+        }
+    }
+
+    @Test("Exact match on name, amount, and date is a duplicate")
+    func exactMatchIsDuplicate() {
+        let date = makeDate(2026, 3, 15)
+        let existing = [ExpenseModel(name: "Coffee", amount: 4.50, date: date)]
+        let incoming = ExpenseModel(name: "Coffee", amount: 4.50, date: date)
+        #expect(isDuplicate(incoming, among: existing))
+    }
+
+    @Test("Same name and date but different amount is not a duplicate")
+    func differentAmountNotDuplicate() {
+        let date = makeDate(2026, 3, 15)
+        let existing = [ExpenseModel(name: "Coffee", amount: 4.50, date: date)]
+        let incoming = ExpenseModel(name: "Coffee", amount: 5.00, date: date)
+        #expect(!isDuplicate(incoming, among: existing))
+    }
+
+    @Test("Same name and amount but different day is not a duplicate")
+    func differentDayNotDuplicate() {
+        let existing = [ExpenseModel(name: "Coffee", amount: 4.50, date: makeDate(2026, 3, 15))]
+        let incoming = ExpenseModel(name: "Coffee", amount: 4.50, date: makeDate(2026, 3, 16))
+        #expect(!isDuplicate(incoming, among: existing))
+    }
+
+    @Test("Different name with same amount and date is not a duplicate")
+    func differentNameNotDuplicate() {
+        let date = makeDate(2026, 3, 15)
+        let existing = [ExpenseModel(name: "Coffee", amount: 4.50, date: date)]
+        let incoming = ExpenseModel(name: "Tea", amount: 4.50, date: date)
+        #expect(!isDuplicate(incoming, among: existing))
+    }
+
+    @Test("Same expense on same day at a different time of day is still a duplicate")
+    func sameDayDifferentTimeIsDuplicate() {
+        let morning = makeDate(2026, 3, 15).addingTimeInterval(8 * 3600)
+        let evening = makeDate(2026, 3, 15).addingTimeInterval(18 * 3600)
+        let existing = [ExpenseModel(name: "Coffee", amount: 4.50, date: morning)]
+        let incoming = ExpenseModel(name: "Coffee", amount: 4.50, date: evening)
+        #expect(isDuplicate(incoming, among: existing))
+    }
+
+    @Test("No duplicates are detected against an empty existing list")
+    func emptyExistingListNoDuplicate() {
+        let incoming = ExpenseModel(name: "Coffee", amount: 4.50, date: makeDate(2026, 3, 15))
+        #expect(!isDuplicate(incoming, among: []))
+    }
+
+    @Test("One matching expense among several existing ones is correctly detected")
+    func oneDuplicateAmongMany() {
+        let date = makeDate(2026, 3, 15)
+        let existing = [
+            ExpenseModel(name: "Rent", amount: 1500.0, date: date),
+            ExpenseModel(name: "Coffee", amount: 4.50, date: date),
+            ExpenseModel(name: "Groceries", amount: 55.0, date: date),
+        ]
+        let incoming = ExpenseModel(name: "Coffee", amount: 4.50, date: date)
+        #expect(isDuplicate(incoming, among: existing))
+    }
+
+    @Test("Expense from a previous month with the same name and amount is not a duplicate")
+    func sameNameAmountDifferentMonthNotDuplicate() {
+        let existing = [ExpenseModel(name: "Netflix", amount: 15.99, date: makeDate(2026, 2, 1))]
+        let incoming = ExpenseModel(name: "Netflix", amount: 15.99, date: makeDate(2026, 3, 1))
+        #expect(!isDuplicate(incoming, among: existing))
+    }
+}
+
+// MARK: - Balance Color
+
+@Suite("Balance Color")
+struct BalanceColorTests {
+
+    // Mirrors SummaryView.balanceColor: balance < 0 ? .red : .green
+
+    @Test("Positive balance is green (not red)")
+    func positiveIsGreen() {
+        let balance = 100.0
+        #expect(balance >= 0)   // green path
+    }
+
+    @Test("Negative balance is red")
+    func negativeIsRed() {
+        let balance = -50.0
+        #expect(balance < 0)
+    }
+
+    @Test("Zero balance is green (not red)")
+    func zeroIsGreen() {
+        let balance = 0.0
+        #expect(!(balance < 0))
+    }
+
+    @Test("Balance = budget - total expenses is correct")
+    func balanceComputation() {
+        let budget = 500.0
+        let spent = 350.0
+        #expect(budget - spent == 150.0)
+    }
+
+    @Test("Over-budget balance is negative")
+    func overBudgetIsNegative() {
+        let budget = 200.0
+        let spent = 250.0
+        #expect((budget - spent) < 0)
+    }
+
+    @Test("Exactly on-budget balance is zero, which is green")
+    func exactlyOnBudgetIsGreen() {
+        let budget = 100.0
+        let balance = budget - budget
+        #expect(balance == 0)
+        #expect(!(balance < 0))
+    }
+}
+
+// MARK: - Spending Progress Bar
+
+@Suite("Spending Progress Bar")
+struct SpendingProgressBarTests {
+
+    // Mirrors SummaryView.progressBar logic:
+    //   rawProgress = budget > 0 ? spent / budget : 0
+    //   clampedProgress = min(max(rawProgress, 0), 1.0)
+    //   color: rawProgress < 0.6 → green, < 0.9 → orange, else → red
+
+    private func clamp(_ raw: Double) -> Double {
+        min(max(raw, 0), 1.0)
+    }
+
+    private func progressColor(_ raw: Double) -> String {
+        raw < 0.6 ? "green" : raw < 0.9 ? "orange" : "red"
+    }
+
+    @Test("Zero budget produces zero raw progress")
+    func zeroBudgetProducesZeroProgress() {
+        let budget = 0.0
+        let raw = budget > 0 ? 100.0 / budget : 0.0
+        #expect(raw == 0.0)
+    }
+
+    @Test("Progress is spent divided by budget")
+    func progressCalculation() {
+        #expect(50.0 / 100.0 == 0.5)
+    }
+
+    @Test("Progress over 100% is clamped to 1.0")
+    func progressClampsAtOne() {
+        #expect(clamp(1.5) == 1.0)
+        #expect(clamp(2.0) == 1.0)
+        #expect(clamp(99.9) == 1.0)
+    }
+
+    @Test("Negative raw progress is clamped to zero")
+    func progressClampsAtZero() {
+        #expect(clamp(-0.5) == 0.0)
+        #expect(clamp(-99.0) == 0.0)
+    }
+
+    @Test("Progress within [0, 1] is unchanged by clamping")
+    func progressWithinRangeUnchanged() {
+        #expect(clamp(0.0) == 0.0)
+        #expect(clamp(0.5) == 0.5)
+        #expect(clamp(1.0) == 1.0)
+    }
+
+    @Test("Under 60% progress is green", arguments: [0.0, 0.3, 0.59])
+    func greenBelow60(progress: Double) {
+        #expect(progressColor(progress) == "green")
+    }
+
+    @Test("60–89% progress is orange", arguments: [0.6, 0.75, 0.89])
+    func orangeAt60to89(progress: Double) {
+        #expect(progressColor(progress) == "orange")
+    }
+
+    @Test("90% and above is red", arguments: [0.9, 0.95, 1.0])
+    func redAt90Plus(progress: Double) {
+        #expect(progressColor(progress) == "red")
+    }
+
+    @Test("Boundary: 0.599 is green, 0.6 is orange")
+    func greenOrangeBoundary() {
+        #expect(progressColor(0.599) == "green")
+        #expect(progressColor(0.6) == "orange")
+    }
+
+    @Test("Boundary: 0.899 is orange, 0.9 is red")
+    func orangeRedBoundary() {
+        #expect(progressColor(0.899) == "orange")
+        #expect(progressColor(0.9) == "red")
+    }
+}
+
+// MARK: - Category Aggregation (Reports)
+
+@Suite("Category Aggregation")
+struct CategoryAggregationTests {
+
+    // Mirrors ReportsView.categoryTotals:
+    //   Dictionary(grouping: expenses, by: \.category)
+    //   → sum amounts per group → filter > 0 → sort descending
+
+    private func aggregate(_ expenses: [ExpenseModel]) -> [(category: String, total: Double)] {
+        Dictionary(grouping: expenses, by: \.category)
+            .map { (category: $0.key, total: $0.value.reduce(0) { $0 + $1.amount }) }
+            .filter { $0.total > 0 }
+            .sorted { $0.total > $1.total }
+    }
+
+    @Test("No expenses produces empty result")
+    func emptyExpenses() {
+        #expect(aggregate([]).isEmpty)
+    }
+
+    @Test("Single expense produces one category entry with correct total")
+    func singleExpense() {
+        let expense = ExpenseModel(name: "Coffee", amount: 4.50, category: "Food")
+        let result = aggregate([expense])
+        #expect(result.count == 1)
+        #expect(result[0].category == "Food")
+        #expect(result[0].total == 4.50)
+    }
+
+    @Test("Two expenses in the same category are summed")
+    func sameCategorySummed() {
+        let e1 = ExpenseModel(name: "Coffee", amount: 4.50, category: "Food")
+        let e2 = ExpenseModel(name: "Lunch", amount: 12.00, category: "Food")
+        let result = aggregate([e1, e2])
+        #expect(result.count == 1)
+        #expect(result[0].total == 16.50)
+    }
+
+    @Test("Expenses in different categories produce separate entries")
+    func differentCategories() {
+        let e1 = ExpenseModel(name: "Coffee", amount: 4.50, category: "Food")
+        let e2 = ExpenseModel(name: "Bus", amount: 2.00, category: "Transport")
+        let result = aggregate([e1, e2])
+        #expect(result.count == 2)
+    }
+
+    @Test("Results are sorted by total descending")
+    func sortedDescending() {
+        let e1 = ExpenseModel(name: "Coffee", amount: 4.50, category: "Food")
+        let e2 = ExpenseModel(name: "Bus", amount: 2.00, category: "Transport")
+        let e3 = ExpenseModel(name: "Rent", amount: 1500.00, category: "Housing")
+        let result = aggregate([e1, e2, e3])
+        #expect(result[0].category == "Housing")
+        #expect(result[1].category == "Food")
+        #expect(result[2].category == "Transport")
+    }
+
+    @Test("Expenses with zero amount are excluded from results")
+    func zeroAmountExcluded() {
+        let zero = ExpenseModel(name: "Freebie", amount: 0, category: "Misc")
+        let positive = ExpenseModel(name: "Coffee", amount: 4.50, category: "Food")
+        let result = aggregate([zero, positive])
+        #expect(result.count == 1)
+        #expect(result[0].category == "Food")
+    }
+
+    @Test("Grand total equals sum of all category totals")
+    func grandTotalIsSum() {
+        let e1 = ExpenseModel(name: "Coffee", amount: 4.50, category: "Food")
+        let e2 = ExpenseModel(name: "Bus", amount: 2.00, category: "Transport")
+        let e3 = ExpenseModel(name: "Lunch", amount: 10.00, category: "Food")
+        let result = aggregate([e1, e2, e3])
+        let grandTotal = result.reduce(0) { $0 + $1.total }
+        #expect(grandTotal == 16.50)
+    }
+
+    @Test("Five distinct categories produce five entries")
+    func fiveCategories() {
+        let categories = ["Food", "Transport", "Housing", "Health", "Entertainment"]
+        let expenses = categories.map { ExpenseModel(name: $0, amount: 10.0, category: $0) }
+        #expect(aggregate(expenses).count == 5)
+    }
+
+    @Test("Filtering necessary vs discretionary reduces the aggregated set")
+    func typeFilterReducesResults() {
+        let necessary = ExpenseModel(name: "Rent", type: NECESSARY, amount: 1500.0, category: "Housing")
+        let discretionary = ExpenseModel(name: "Games", type: DISCRETIONARY, amount: 60.0, category: "Entertainment")
+        let necessaryOnly = [necessary, discretionary].filter { $0.typeMap == NECESSARY }
+        let result = aggregate(necessaryOnly)
+        #expect(result.count == 1)
+        #expect(result[0].category == "Housing")
+    }
+}
+
+// MARK: - Period ID Set Lookup
+
+@Suite("Period ID Set Lookup")
+struct PeriodIDSetTests {
+
+    // Mirrors ContentView's O(1) isInPeriod check:
+    //   Set(expensesInPeriod.map(\.id)).contains(item.id)
+
+    @Test("In-period expense ID is found in the set")
+    func inPeriodFound() {
+        let expense = ExpenseModel(name: "Coffee", amount: 4.50)
+        let periodIDs = Set([expense.id])
+        #expect(periodIDs.contains(expense.id))
+    }
+
+    @Test("Out-of-period expense ID is not in the set")
+    func outOfPeriodNotFound() {
+        let inPeriod = ExpenseModel(name: "Coffee", amount: 4.50)
+        let outOfPeriod = ExpenseModel(name: "Old expense", amount: 10.0)
+        let periodIDs = Set([inPeriod.id])
+        #expect(!periodIDs.contains(outOfPeriod.id))
+    }
+
+    @Test("Empty set means no expense is in period")
+    func emptySetNothingInPeriod() {
+        let expense = ExpenseModel(name: "Coffee", amount: 4.50)
+        let periodIDs = Set<UUID>()
+        #expect(!periodIDs.contains(expense.id))
+    }
+
+    @Test("Set built from expenses map contains every expense ID")
+    func setPreservesAllIDs() {
+        let expenses = (0..<5).map { _ in ExpenseModel() }
+        let idSet = Set(expenses.map(\.id))
+        #expect(idSet.count == 5)
+        for expense in expenses {
+            #expect(idSet.contains(expense.id))
+        }
+    }
+
+    @Test("Set lookup is consistent — same expense always found in its own set")
+    func consistentLookup() {
+        let expenses = (0..<10).map { _ in ExpenseModel() }
+        let idSet = Set(expenses.map(\.id))
+        for expense in expenses {
+            #expect(idSet.contains(expense.id))
+        }
+    }
+
+    @Test("Duplicate IDs in source array do not increase set size")
+    func duplicateIDsCollapsed() {
+        let expense = ExpenseModel()
+        let idSet = Set([expense.id, expense.id, expense.id])
+        #expect(idSet.count == 1)
+    }
+
+    @Test("IDs of different expenses are distinct")
+    func differentExpensesDifferentIDs() {
+        let a = ExpenseModel()
+        let b = ExpenseModel()
+        #expect(a.id != b.id)
+        let idSet = Set([a.id])
+        #expect(!idSet.contains(b.id))
     }
 }

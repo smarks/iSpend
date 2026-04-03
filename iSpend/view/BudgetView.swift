@@ -19,18 +19,48 @@ struct BudgetsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                LabeledContent("Necessary Budget") {
-                    TextField("Amount", value: $necessaryBudget.amount, format: .localCurrency)
-                        .multilineTextAlignment(.trailing)
-                        .keyboardType(.decimalPad)
+                Section("Necessary Budget") {
+                    LabeledContent("Amount") {
+                        TextField("Amount", value: $necessaryBudget.amount, format: .localCurrency)
+                            .multilineTextAlignment(.trailing)
+                            .keyboardType(.decimalPad)
+                    }
+                    Picker("Period", selection: $necessaryBudget.periodMap) {
+                        ForEach(BudgetPeriod.allCases, id: \.intValue) { period in
+                            Text(period.rawValue).tag(period.intValue)
+                        }
+                    }
+                    if necessaryBudget.budgetPeriod == .custom {
+                        LabeledContent("Days in Period") {
+                            TextField("Days", value: $necessaryBudget.customPeriodDays, format: .number)
+                                .multilineTextAlignment(.trailing)
+                                .keyboardType(.numberPad)
+                        }
+                    }
                 }
-                LabeledContent("Discretionary Budget") {
-                    TextField("Amount", value: $discretionaryBudget.amount, format: .localCurrency)
-                        .multilineTextAlignment(.trailing)
-                        .keyboardType(.decimalPad)
+
+                Section("Discretionary Budget") {
+                    LabeledContent("Amount") {
+                        TextField("Amount", value: $discretionaryBudget.amount, format: .localCurrency)
+                            .multilineTextAlignment(.trailing)
+                            .keyboardType(.decimalPad)
+                    }
+                    Picker("Period", selection: $discretionaryBudget.periodMap) {
+                        ForEach(BudgetPeriod.allCases, id: \.intValue) { period in
+                            Text(period.rawValue).tag(period.intValue)
+                        }
+                    }
+                    if discretionaryBudget.budgetPeriod == .custom {
+                        LabeledContent("Days in Period") {
+                            TextField("Days", value: $discretionaryBudget.customPeriodDays, format: .number)
+                                .multilineTextAlignment(.trailing)
+                                .keyboardType(.numberPad)
+                        }
+                    }
                 }
             }
             .navigationTitle("Set Budgets")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {

@@ -24,18 +24,48 @@ struct ExpenseModelViewEditor: View {
 
     let types = [ExpenseType.necessary, ExpenseType.discretionary]
 
-    private var messageToReflectOn: String {
-        mediations.randomElement()?.text ?? "Take a moment to reflect on this purchase."
-    }
+    @State private var messageToReflectOn: String = ""
 
     private var categoryPicker: some View {
-        Picker("Category", selection: $expenseModel.category) {
-            Text("None").tag("None")
-            ForEach(categories, id: \.text) { category in
-                Text(category.text).tag(category.text)
+        VStack(alignment: .leading, spacing: 8) {
+            Picker("Category", selection: $selectedCategory) {
+                Text("None").tag("None")
+                ForEach(categories, id: \.text) { category in
+                    Text(category.text).tag(category.text)
+                }
+                Text("New Category…").tag("__new__")
+            }
+            .pickerStyle(MenuPickerStyle())
+            .onChange(of: selectedCategory) { _, newValue in
+                if newValue == "__new__" {
+                    isAddingNewCategory = true
+                    newCategoryText = ""
+                } else {
+                    isAddingNewCategory = false
+                    expenseModel.category = newValue
+                }
+            }
+
+            if isAddingNewCategory {
+                TextField("Type new category name", text: $newCategoryText)
+                    .submitLabel(.done)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .focused($isNewCategoryFocused)
+                    .onSubmit { finaliseNewCategory() }
+                    .onAppear { isNewCategoryFocused = true }
             }
         }
-        .pickerStyle(MenuPickerStyle())
+    }
+
+    private func finaliseNewCategory() {
+        let trimmed = newCategoryText.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return }
+        expenseModel.category = trimmed
+        if !categories.contains(where: { $0.text.lowercased() == trimmed.lowercased() }) {
+            modelContext.insert(EditableListItem(text: trimmed, type: CATEGORY))
+        }
+        isAddingNewCategory = false
+        selectedCategory = trimmed
     }
 
     private var datePicker: some View {
@@ -45,8 +75,13 @@ struct ExpenseModelViewEditor: View {
     init(expenseModel: ExpenseModel, isNew: Bool = false) {
         self.expenseModel = expenseModel
         self.isNew = isNew
-        if isNew {
-            expenseModel.discretionaryValue = 1
+        self._selectedCategory = State(initialValue: expenseModel.category)
+        // Normalize discretionaryValue to the slider range 1...7.
+        // Handles new expenses (default is 0) and old expenses saved before
+        // the slider existed. Seed based on typeMap so the slider starts in
+        // the right zone (necessary → 2 "Important", discretionary → 5 "Discretionary").
+        if expenseModel.discretionaryValue < 1 || expenseModel.discretionaryValue > 7 {
+            expenseModel.discretionaryValue = expenseModel.typeMap == DISCRETIONARY ? 5 : 2
         }
     }
 
@@ -55,12 +90,26 @@ struct ExpenseModelViewEditor: View {
     }
 
     private var typeColor: Color {
-        if expenseModel.discretionaryValue <= 3 {
-            return Color.green
-        } else if expenseModel.discretionaryValue <= 5 {
-            return Color.orange
-        } else {
-            return Color.red
+        // Must stay in sync with ExpenseModelView.priorityColor
+        switch expenseModel.discretionaryValue {
+        case ...3: return .green
+        case 4:    return .yellow
+        case 5:    return .orange
+        case 6:    return Color(red: 0.95, green: 0.42, blue: 0.32)  // warm red
+        default:   return .red
+        }
+    }
+
+    private var priorityLabel: String {
+        switch expenseModel.discretionaryValue {
+        case 1: return "Essential"
+        case 2: return "Important"
+        case 3: return "Necessary"
+        case 4: return "Could Skip"
+        case 5: return "Discretionary"
+        case 6: return "Indulgent"
+        case 7: return "Luxury"
+        default: return "–"
         }
     }
 
@@ -82,7 +131,12 @@ struct ExpenseModelViewEditor: View {
         }
     }
 
+    @State private var selectedCategory: String
+    @State private var isAddingNewCategory = false
+    @State private var newCategoryText = ""
+
     @FocusState private var isFocused: Bool
+    @FocusState private var isNewCategoryFocused: Bool
 
     var body: some View {
         NavigationStack {
@@ -110,32 +164,32 @@ struct ExpenseModelViewEditor: View {
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
 
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 4) {
                     HStack {
                         Text("Priority:")
-                        Text(expenseModel.expenseType.rawValue)
-                            .fontWeight(.bold)
-                            .foregroundColor(typeColor)
                         Spacer()
-                        Text(String(format: "%.0f", expenseModel.discretionaryValue))
-                            .foregroundColor(.secondary)
+                        Text(priorityLabel)
+                            .fontWeight(.semibold)
+                            .foregroundColor(typeColor)
+                            .animation(.easeInOut(duration: 0.15), value: priorityLabel)
                     }
 
                     Slider(value: $expenseModel.discretionaryValue, in: 1...7, step: 1)
-                        .accentColor(typeColor)
+                        .tint(typeColor)
                         .onChange(of: expenseModel.discretionaryValue) { _, newValue in
                             expenseModel.typeMap = newValue > 3 ? DISCRETIONARY : NECESSARY
                         }
-                }
 
-                typePicker
-                    .onChange(of: expenseModel.expenseType) {
-                        if expenseModel.expenseType == .necessary {
-                            expenseModel.discretionaryValue = 1
-                        } else {
-                            expenseModel.discretionaryValue = 7
-                        }
+                    HStack {
+                        Text("Essential")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text("Luxury")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
+                }
 
                 TextField("Notes", text: $expenseModel.note)
                     .submitLabel(.done)
@@ -146,13 +200,20 @@ struct ExpenseModelViewEditor: View {
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
             .scrollDismissesKeyboard(.interactively)
+            .onAppear {
+                if messageToReflectOn.isEmpty {
+                    messageToReflectOn = mediations.randomElement()?.text ?? "Take a moment to reflect on this purchase."
+                }
+            }
             .navigationTitle("Expense Editor")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") {
                         saveActivity()
                         dismiss()
-                    }.disabled(disableSave)
+                    }
+                    .disabled(disableSave)
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Cancel") {
@@ -165,6 +226,7 @@ struct ExpenseModelViewEditor: View {
     }
 
     private func saveActivity() {
+        if isAddingNewCategory { finaliseNewCategory() }
         if isNew {
             modelContext.insert(expenseModel)
         }

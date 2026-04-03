@@ -33,6 +33,7 @@ struct SettingsView: View {
 
     @State private var showBudgetView: Bool = false
     @State private var showDataManagementView: Bool = false
+    @State private var showReportsView: Bool = false
     @State private var showCategoriesView: Bool = false
     @State private var showMediationsView: Bool = false
     @State private var showAboutView: Bool = false
@@ -62,6 +63,11 @@ struct SettingsView: View {
                             showBudgetView = true
                         } label: {
                             Text("Budgets")
+                        }
+                        Button {
+                            showReportsView = true
+                        } label: {
+                            Text("Reports")
                         }
                         Button {
                             showDataManagementView = true
@@ -103,11 +109,16 @@ struct SettingsView: View {
                     Button("Done") {
                         dismiss()
                     }
+                    .buttonStyle(.borderless)
                 }
             }
         }
         .sheet(isPresented: $showBudgetView) {
             BudgetsView(necessaryBudget: necessaryBudget, discretionaryBudget: discretionaryBudget)
+                .environment(\.modelContext, modelContext)
+        }
+        .sheet(isPresented: $showReportsView) {
+            ReportsView()
                 .environment(\.modelContext, modelContext)
         }
         .sheet(isPresented: $showDataManagementView) {
@@ -130,17 +141,18 @@ struct SettingsView: View {
 
 enum AppIconProvider {
     static func appIcon(in bundle: Bundle = .main) -> String {
-        if let iconFileName = bundle.object(forInfoDictionaryKey: "CFBundleIconFile") as? String {
+        if let iconFileName = bundle.object(forInfoDictionaryKey: "CFBundleIconFile") as? String,
+           !iconFileName.isEmpty {
             return iconFileName
         }
 
-        guard let icons = bundle.object(forInfoDictionaryKey: "CFBundleIcons") as? [String: Any],
-              let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
-              let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
-              let iconFileName = iconFiles.last else {
-            fatalError("Could not find icons in bundle")
+        if let icons = bundle.object(forInfoDictionaryKey: "CFBundleIcons") as? [String: Any],
+           let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
+           let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+           let iconFileName = iconFiles.last {
+            return iconFileName
         }
 
-        return iconFileName
+        return "" // Fallback: AboutView should handle an empty string gracefully
     }
 }

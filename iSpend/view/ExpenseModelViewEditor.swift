@@ -37,14 +37,23 @@ struct ExpenseModelViewEditor: View {
         return names
     }
 
+    /// Flat list of every picker option so ForEach drives the entire menu.
+    /// Avoids a SwiftUI quirk where static items after ForEach can vanish.
+    private var allCategoryOptions: [(id: String, label: String)] {
+        var opts: [(id: String, label: String)] = [("None", "None")]
+        for name in categoryNames {
+            opts.append((name, name))
+        }
+        opts.append(("__new__", "New Category…"))
+        return opts
+    }
+
     private var categoryPicker: some View {
         VStack(alignment: .leading, spacing: 8) {
             Picker("Category", selection: $selectedCategory) {
-                Text("None").tag("None")
-                ForEach(categoryNames, id: \.self) { name in
-                    Text(name).tag(name)
+                ForEach(allCategoryOptions, id: \.id) { option in
+                    Text(option.label).tag(option.id)
                 }
-                Text("New Category…").tag("__new__")
             }
             .pickerStyle(MenuPickerStyle())
             .onChange(of: selectedCategory) { _, newValue in
@@ -204,6 +213,7 @@ struct ExpenseModelViewEditor: View {
                             Button {
                                 expenseModel.discretionaryValue = Double(level)
                                 expenseModel.typeMap = level > 3 ? DISCRETIONARY : NECESSARY
+                                UIImpactFeedbackGenerator(style: level > 3 ? .medium : .light).impactOccurred()
                             } label: {
                                 Circle()
                                     .fill(colorForLevel(level))

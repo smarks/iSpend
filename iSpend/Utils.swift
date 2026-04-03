@@ -20,8 +20,10 @@ func separateNumbersAndLetters(from input: String) -> (letters: String, number: 
     }
 
     let number = numberString.flatMap { Double($0) }
-    let letters = input.replacingOccurrences(of: numberString ?? "", with: "")
-        .trimmingCharacters(in: .whitespacesAndNewlines)
+    var letters = input.replacingOccurrences(of: numberString ?? "", with: "")
+    // Strip currency symbols left behind after extracting the number
+    let currencySymbols = CharacterSet(charactersIn: Locale.current.currencySymbol ?? "$")
+    letters = letters.trimmingCharacters(in: currencySymbols.union(.whitespacesAndNewlines))
 
     return (letters, number)
 }

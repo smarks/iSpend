@@ -109,21 +109,17 @@ struct ExpenseModelViewEditor: View {
 
     private var typeColor: Color {
         // Must stay in sync with ExpenseModelView.priorityColor
-        switch expenseModel.discretionaryValue {
-        case ...3: return .green
-        case 4:    return .yellow
-        case 5:    return .orange
-        case 6:    return Color(red: 0.95, green: 0.42, blue: 0.32)  // warm red
-        default:   return .red
-        }
+        colorForLevel(Int(expenseModel.discretionaryValue))
     }
 
     private func colorForLevel(_ level: Int) -> Color {
         switch level {
-        case 1...3: return .green
-        case 4:     return .yellow
-        case 5:     return .orange
-        case 6:     return Color(red: 0.95, green: 0.42, blue: 0.32)
+        case 1:     return .green
+        case 2:     return Color(red: 0.6, green: 0.8, blue: 0.2)   // lime
+        case 3:     return .yellow
+        case 4:     return .orange
+        case 5:     return Color(red: 0.95, green: 0.5, blue: 0.2)  // dark orange
+        case 6:     return Color(red: 0.95, green: 0.35, blue: 0.3) // warm red
         default:    return .red
         }
     }
@@ -136,7 +132,7 @@ struct ExpenseModelViewEditor: View {
         case 4: return "Could Skip"
         case 5: return "Discretionary"
         case 6: return "Indulgent"
-        case 7: return "Luxury"
+        case 7: return "Don't Do It"
         default: return "–"
         }
     }

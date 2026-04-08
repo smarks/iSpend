@@ -58,6 +58,7 @@
 		221B32422BA0ACAE0060BDF1 /* Fastfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Fastfile; sourceTree = "<group>"; };
 		221B32432BA0ACAE0060BDF1 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		221B32442BA0ACAE0060BDF1 /* report.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = report.xml; sourceTree = "<group>"; };
+		224A460F2F85F11700670749 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		2253AB512E7DD19B002CE388 /* CloudSyncStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudSyncStatusView.swift; sourceTree = "<group>"; };
 		2258BCF92E7B63740093F84B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		2270D4E62B9B8167004D26B8 /* AddItemTestCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemTestCase.swift; sourceTree = "<group>"; };
@@ -178,6 +179,7 @@
 		2276FD942A70512900E0B60F /* iSpend */ = {
 			isa = PBXGroup;
 			children = (
+				224A460F2F85F11700670749 /* Info.plist */,
 				2276FDE72A70526200E0B60F /* iSpendApp.swift */,
 				2206E40A2C6BA499000B5AE4 /* view */,
 				2206E4092C6BA485000B5AE4 /* model */,
@@ -418,7 +420,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 29;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
@@ -439,7 +441,7 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 29;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
@@ -461,7 +463,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 29;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
@@ -483,7 +485,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 29;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
@@ -633,7 +635,7 @@
 				CODE_SIGN_ENTITLEMENTS = iSpend/iSpend.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 29;
 				DEVELOPMENT_ASSET_PATHS = "\"iSpend/Preview Content\"";
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				ENABLE_APP_SANDBOX = YES;
@@ -650,6 +652,7 @@
 				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = iSpend/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "iSpend-CBT";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -687,7 +690,7 @@
 				CODE_SIGN_ENTITLEMENTS = iSpend/iSpend.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 29;
 				DEVELOPMENT_ASSET_PATHS = "\"iSpend/Preview Content\"";
 				DEVELOPMENT_TEAM = NJ55UC9QDK;
 				ENABLE_APP_SANDBOX = YES;
@@ -704,6 +707,7 @@
 				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = iSpend/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "iSpend-CBT";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

@@ -26,23 +26,22 @@ struct ExpenseModelViewEditor: View {
 
     @State private var messageToReflectOn: String = ""
 
-    /// All known category names from the query, plus the expense's current
-    /// category if it was deleted from Settings (prevents an orphaned selection).
-    private var categoryNames: [String] {
-        var names = categories.map(\.text)
-        let current = expenseModel.category
-        if current != "None" && !names.contains(current) {
-            names.append(current)
-        }
-        return names
-    }
-
-    /// Flat list of every picker option so ForEach drives the entire menu.
-    /// Avoids a SwiftUI quirk where static items after ForEach can vanish.
+    /// Flat list of every picker option with guaranteed-unique ids.
+    /// "None" and "New Category…" are hardcoded; saved categories fill the middle.
     private var allCategoryOptions: [(id: String, label: String)] {
+        let reserved: Set<String> = ["None", "__new__"]
+        // Deduplicate and exclude reserved ids so nothing collides.
+        var seen = reserved
         var opts: [(id: String, label: String)] = [("None", "None")]
-        for name in categoryNames {
+        for name in categories.map(\.text) {
+            guard !name.isEmpty, !seen.contains(name) else { continue }
+            seen.insert(name)
             opts.append((name, name))
+        }
+        // Include the expense's current category if it was deleted from Settings.
+        let current = expenseModel.category
+        if !seen.contains(current) {
+            opts.append((current, current))
         }
         opts.append(("__new__", "New Category…"))
         return opts
